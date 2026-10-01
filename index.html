@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Next-Gen Mobile Store</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- Bcrypt JS for Client-side Hashing Simulation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        },
+                        dark: {
+                            bg: '#0b0f19',
+                            card: '#111827',
+                            border: '#1f2937',
+                            input: '#1d283a'
+                        }
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                        'red-lightning': 'redLightning 1.5s ease-in-out infinite alternate',
+                        'float': 'float 3s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                        'slide-up': 'slideUp 0.4s ease-out forwards',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { opacity: 0.6, transform: 'scale(1)' },
+                            '50%': { opacity: 1, transform: 'scale(1.05)' },
+                        },
+                        redLightning: {
+                            '0%': { boxShadow: '0 0 5px #ef4444, 0 0 10px #ef4444', borderColor: '#ef4444' },
+                            '100%': { boxShadow: '0 0 20px #dc2626, 0 0 30px #dc2626', borderColor: '#f87171' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: 0 },
+                            '100%': { opacity: 1 },
+                        },
+                        slideUp: {
+                            '0%': { opacity: 0, transform: 'translateY(20px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #f3f4f6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { inline-size: 8px; }
+        ::-webkit-scrollbar-track { background: #0b0f19; }
+        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #374151; }
+
+        .glass-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-nav {
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-block-end: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glow-effect-hover:hover {
+            box-shadow: 0 0 30px 0px rgba(99, 102, 241, 0.45);
+        }
+
+        .red-glow-card {
+            animation: redLightning 1.5s ease-in-out infinite alternate;
+        }
+
+        .product-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <header class="glass-nav sticky top-0 z-40 w-full transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center shadow-lg shadow-brand-500/30">
+                        <i data-lucide="smartphone" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-white via-gray-200 to-brand-500 bg-clip-text text-transparent">NEXUS</span>
+                        <span class="text-xs block font-medium text-brand-500 tracking-widest uppercase -mt-1">MOBILE EGYPT</span>
+                    </div>
+                </div>
+
+                <!-- Search Bar (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
+                    <i data-lucide="search" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Search iPhone, Galaxy, Pixel, Xiaomi..." 
+                        class="w-full pl-11 pr-4 py-2.5 bg-dark-input/80 border border-gray-700/60 rounded-full text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
+                </div>
+
+                <!-- Contact & Admin Actions -->
+                <div class="flex items-center gap-3">
+                    <button onclick="handleAdminDashboardClick()" id="adminToggleBtn" 
+                        class="px-3.5 py-2 rounded-xl border border-gray-700/80 bg-gray-800/50 hover:bg-gray-700/60 text-xs sm:text-sm font-semibold text-gray-300 hover:text-white transition-all flex items-center gap-2">
+                        <i data-lucide="shield" class="w-4 h-4 text-brand-500"></i>
+                        <span id="adminBtnText">Admin Dashboard</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative overflow-hidden pt-8 pb-12">
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-brand-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div class="max-w-xl text-center lg:text-left">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-500 border border-brand-500/20 mb-4">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Direct Seller Deals • Egypt
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight mb-4">
+                        Find Best Smartphone <br><span class="bg-gradient-to-r from-brand-500 via-indigo-300 to-purple-400 bg-clip-text text-transparent">Deals in EGP</span>
+                    </h1>
+                    <p class="text-gray-400 text-sm sm:text-base leading-relaxed mb-6">
+                        Browse premium smartphones with instant discounted rates. Connect directly with sellers through WhatsApp, Facebook, or Instagram for immediate inquiries!
+                    </p>
+                    <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+                        <a href="#catalog" onclick="filterByOffers(false)" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-lg shadow-brand-500/30 transition-all flex items-center gap-2">
+                            Browse All Devices
+                        </a>
+                        <a href="#catalog" onclick="filterByOffers(true)" class="px-6 py-3 rounded-xl bg-red-600/80 hover:bg-red-600 text-white text-sm font-semibold border border-red-500 shadow-lg shadow-red-500/30 transition-all flex items-center gap-2">
+                            <i data-lucide="zap" class="w-4 h-4 text-amber-300 fill-amber-300"></i> Discount Offers
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Showcase Visual -->
+                <div class="relative w-full max-w-sm flex justify-center">
+                    <div class="relative w-64 h-80 sm:w-72 sm:h-96 rounded-3xl p-4 glass-card border border-white/20 animate-float shadow-2xl flex flex-col justify-between">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Top Deal</span>
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30 flex items-center gap-1">
+                                <i data-lucide="zap" class="w-3 h-3 text-red-400"></i> Offer
+                            </span>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80" alt="Featured Mobile" class="w-44 h-44 object-contain mx-auto drop-shadow-2xl">
+                        <div>
+                            <h3 class="text-lg font-bold text-white">iPhone 15 Pro Max</h3>
+                            <div class="flex items-center gap-2">
+                                <p class="text-red-400 font-extrabold text-xl">54,000 EGP</p>
+                                <p class="text-xs text-gray-500 line-through">60,000 EGP</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main id="catalog" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+        <!-- Customer View Section -->
+        <div id="customerView">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        Device Catalog <span id="productCount" class="text-xs bg-gray-800 text-gray-400 px-2.5 py-1 rounded-full border border-gray-700">0 Items</span>
+                    </h2>
+                    <p class="text-sm text-gray-400">Browse phones or click special discount offers below</p>
+                </div>
+
+                <!-- Navigation Tabs & Filters Bar -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="bg-dark-card border border-gray-700 p-1 rounded-xl flex items-center gap-1">
+                        <button id="tabAll" onclick="setOffersTab(false)" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-600 text-white">
+                            All Devices
+                        </button>
+                        <button id="tabOffers" onclick="setOffersTab(true)" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-gray-400 hover:text-white flex items-center gap-1">
+                            <i data-lucide="zap" class="w-3.5 h-3.5 text-red-500"></i> Hot Offers
+                        </button>
+                    </div>
+
+                    <div class="relative">
+                        <select id="brandFilter" onchange="applyFilters()" class="appearance-none bg-dark-card border border-gray-700 rounded-xl px-4 py-2.5 pr-8 text-sm text-gray-200 focus:outline-none focus:border-brand-500 cursor-pointer">
+                            <option value="All">All Brands</option>
+                            <option value="Apple">Apple</option>
+                            <option value="Samsung">Samsung</option>
+                            <option value="Google">Google</option>
+                            <option value="Xiaomi">Xiaomi</option>
+                            <option value="OnePlus">OnePlus</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                    </div>
+
+                    <button onclick="resetFilters()" class="p-2.5 rounded-xl border border-gray-700 bg-dark-card hover:bg-gray-800 text-gray-400 hover:text-white transition-all">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center py-16 glass-card rounded-3xl border border-gray-800">
+                <i data-lucide="search-x" class="w-16 h-16 text-gray-500 mx-auto mb-4"></i>
+                <h3 class="text-xl font-bold text-white mb-2">No Smartphones Found</h3>
+                <p class="text-gray-400 text-sm max-w-md mx-auto mb-6">No devices found for the selected category or filter criteria.</p>
+                <button onclick="resetFilters()" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold transition-all">Clear Filters</button>
+            </div>
+        </div>
+
+        <!-- Admin View Section -->
+        <div id="adminView" class="hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i data-lucide="sliders" class="w-6 h-6 text-brand-500"></i> Admin Product Dashboard
+                    </h2>
+                    <p class="text-sm text-gray-400">Manage listings, add social media links, upload images, or extract posts with AI.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="openCredentialsModal()" class="px-4 py-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700 border border-gray-700 text-gray-200 text-sm font-semibold transition-all flex items-center gap-2">
+                        <i data-lucide="key" class="w-4 h-4 text-brand-500"></i> Credentials
+                    </button>
+                    <button onclick="openProductModal()" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-lg transition-all flex items-center gap-2">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Add New Phone
+                    </button>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-300">
+                        <thead class="bg-gray-800/80 text-gray-400 uppercase text-xs tracking-wider border-b border-gray-700">
+                            <tr>
+                                <th class="px-6 py-4">Phone</th>
+                                <th class="px-6 py-4">Brand</th>
+                                <th class="px-6 py-4">Price (EGP)</th>
+                                <th class="px-6 py-4">Discount Offer</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminProductTable" class="divide-y divide-gray-800"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Admin Login Modal -->
+    <div id="adminLoginModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full rounded-3xl border border-white/10 p-6 sm:p-8 relative shadow-2xl animate-slide-up">
+            <button onclick="closeAdminLoginModal()" class="absolute top-4 right-4 p-2 rounded-full bg-gray-800/80 hover:bg-gray-700 text-gray-300 hover:text-white transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-brand-600/20 border border-brand-500/30 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <i data-lucide="lock" class="w-6 h-6 text-brand-500"></i>
+                </div>
+                <h3 class="text-xl font-extrabold text-white">Admin Login</h3>
+                <p class="text-xs text-gray-400 mt-1">Credentials: <span class="text-brand-500 font-mono">admin</span> / <span class="text-brand-500 font-mono">admin123</span></p>
+            </div>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Username</label>
+                    <input type="text" id="loginUsername" required placeholder="admin" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <button type="submit" id="loginSubmitBtn" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm shadow-lg transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="log-in" class="w-4 h-4"></i> Login
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Credentials Modal -->
+    <div id="credentialsModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full rounded-3xl border border-white/10 p-6 sm:p-8 relative shadow-2xl animate-slide-up">
+            <button onclick="closeCredentialsModal()" class="absolute top-4 right-4 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-center mb-6">
+                <h3 class="text-xl font-extrabold text-white">Update Password</h3>
+            </div>
+            <form onsubmit="handleUpdateCredentials(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Current Password</label>
+                    <input type="password" id="currPassword" required class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">New Username</label>
+                    <input type="text" id="newUsername" required class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">New Password</label>
+                    <input type="password" id="newPassword" required class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                </div>
+                <button type="submit" id="updateCredsBtn" class="w-full py-3 rounded-xl bg-amber-600 text-white font-semibold text-sm">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contact Seller Modal -->
+    <div id="contactSellerModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full rounded-3xl border border-white/10 p-6 relative shadow-2xl animate-slide-up">
+            <button onclick="closeContactModal()" class="absolute top-4 right-4 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-brand-600/20 border border-brand-500/30 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <i data-lucide="message-square" class="w-6 h-6 text-brand-500"></i>
+                </div>
+                <h3 class="text-xl font-extrabold text-white">Contact Seller</h3>
+                <p id="contactDeviceTitle" class="text-xs text-brand-400 mt-1 font-semibold"></p>
+            </div>
+
+            <div class="space-y-3">
+                <a id="sellerWhatsappLink" target="_blank" class="w-full py-3 px-4 rounded-xl bg-emerald-600/80 hover:bg-emerald-600 border border-emerald-500 text-white font-semibold text-sm transition-all flex items-center justify-center gap-3">
+                    <i data-lucide="phone-call" class="w-5 h-5"></i> Chat on WhatsApp
+                </a>
+                <a id="sellerFacebookLink" target="_blank" class="w-full py-3 px-4 rounded-xl bg-blue-600/80 hover:bg-blue-600 border border-blue-500 text-white font-semibold text-sm transition-all flex items-center justify-center gap-3">
+                    <i data-lucide="facebook" class="w-5 h-5"></i> Facebook Page / Post
+                </a>
+                <a id="sellerInstagramLink" target="_blank" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 text-white font-semibold text-sm transition-all flex items-center justify-center gap-3">
+                    <i data-lucide="instagram" class="w-5 h-5"></i> Instagram Profile
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="productDetailModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-3xl w-full rounded-3xl border border-white/10 overflow-hidden relative shadow-2xl animate-slide-up max-h-[90vh] flex flex-col md:flex-row">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="w-full md:w-1/2 bg-gray-900/60 p-8 flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-800">
+                <img id="detailImage" src="" alt="Phone Detail" class="w-full h-64 md:h-80 object-contain drop-shadow-2xl">
+            </div>
+            <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto">
+                <div>
+                    <span id="detailBrand" class="text-xs font-bold uppercase text-brand-500"></span>
+                    <h2 id="detailTitle" class="text-2xl font-extrabold text-white mt-1 mb-2"></h2>
+                    <div id="detailPriceContainer" class="flex items-baseline gap-2 mb-4"></div>
+                    <p id="detailDescription" class="text-gray-300 text-sm leading-relaxed mb-6"></p>
+                    <div class="space-y-2 mb-6">
+                        <div class="flex justify-between text-xs py-1.5 border-b border-gray-800"><span class="text-gray-400">Processor:</span><span id="specChip" class="text-gray-200 font-semibold"></span></div>
+                        <div class="flex justify-between text-xs py-1.5 border-b border-gray-800"><span class="text-gray-400">Display:</span><span id="specScreen" class="text-gray-200 font-semibold"></span></div>
+                        <div class="flex justify-between text-xs py-1.5 border-b border-gray-800"><span class="text-gray-400">Storage Options:</span><span id="specStorage" class="text-gray-200 font-semibold"></span></div>
+                    </div>
+                </div>
+                <button id="detailContactBtn" class="w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm shadow-lg transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i> Contact Seller
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Product Form Modal -->
+    <div id="adminModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-2xl w-full rounded-3xl border border-white/10 p-6 sm:p-8 relative shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto">
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <h3 id="adminModalTitle" class="text-xl font-extrabold text-white mb-4">Add / Edit Smartphone</h3>
+
+            <!-- AI Social Media Autofill Assistant -->
+            <div class="mb-6 p-4 rounded-2xl bg-brand-900/30 border border-brand-500/30">
+                <div class="flex items-center gap-2 mb-2 text-brand-400 font-bold text-xs uppercase tracking-wider">
+                    <i data-lucide="bot" class="w-4 h-4"></i> AI Assistant: Fill Product from Social Post
+                </div>
+                <p class="text-xs text-gray-400 mb-3">Paste a Facebook, Instagram or WhatsApp sales post text below to automatically fill the device form fields!</p>
+                <div class="flex gap-2">
+                    <textarea id="aiRawInput" rows="2" placeholder="e.g. iPhone 15 Pro Max 256GB Titanium for sale, original price 60000 EGP, special offer 54000 EGP. A17 Pro chip. WhatsApp 201000000000" class="w-full px-3 py-2 bg-dark-input border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500"></textarea>
+                    <button type="button" onclick="runAIAssistantExtract()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold rounded-xl flex flex-col items-center justify-center gap-1 shrink-0">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i> Auto Fill
+                    </button>
+                </div>
+            </div>
+
+            <form id="productForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                <input type="hidden" id="editProductId">
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Phone Model Title</label>
+                    <input type="text" id="formTitle" required placeholder="e.g. Samsung Galaxy S24 Ultra" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Brand</label>
+                        <input type="text" id="formBrand" required placeholder="e.g. Apple, Samsung, Xiaomi" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Standard Price (EGP)</label>
+                        <input type="number" id="formPrice" required placeholder="45000" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                    </div>
+                </div>
+
+                <!-- Discount Offer Config -->
+                <div class="p-4 rounded-xl bg-red-950/20 border border-red-500/30 space-y-3">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="formHasDiscount" onchange="toggleDiscountInputs(this.checked)" class="w-4 h-4 text-red-600 rounded bg-dark-input border-gray-700 focus:ring-red-500">
+                        <label for="formHasDiscount" class="text-xs font-bold text-red-400 flex items-center gap-1">
+                            <i data-lucide="zap" class="w-3.5 h-3.5"></i> Enable Red Lightning Discount Offer
+                        </label>
+                    </div>
+                    <div id="discountFields" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">Discount Price (EGP)</label>
+                            <input type="number" id="formDiscountPrice" placeholder="39000" class="w-full px-4 py-2 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image Sources: Upload or URL -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Phone Image Options</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <input type="url" id="formImage" placeholder="Image URL (https://...)" onchange="handleImageUrlInput(this.value)" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                        <div class="relative flex items-center">
+                            <input type="file" id="formImageFile" accept="image/*" onchange="handleFileUpload(event)" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gray-800 file:text-brand-400 hover:file:bg-gray-700 cursor-pointer">
+                        </div>
+                    </div>
+                    <div id="imagePreviewContainer" class="mt-2 hidden">
+                        <img id="imagePreview" src="" class="h-20 w-20 object-contain rounded-lg bg-gray-900 border border-gray-700">
+                    </div>
+                </div>
+
+                <!-- Social Media Contact Links -->
+                <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800 space-y-3">
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">Seller Social Links</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <input type="text" id="formWhatsapp" placeholder="WhatsApp (e.g. 201012345678)" class="w-full px-3 py-2 bg-dark-input border border-gray-700 rounded-xl text-xs text-white">
+                        <input type="url" id="formFacebook" placeholder="Facebook Post or Page URL" class="w-full px-3 py-2 bg-dark-input border border-gray-700 rounded-xl text-xs text-white">
+                        <input type="url" id="formInstagram" placeholder="Instagram Profile or Post URL" class="w-full px-3 py-2 bg-dark-input border border-gray-700 rounded-xl text-xs text-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Processor</label>
+                        <input type="text" id="formChip" required placeholder="Snapdragon 8 Gen 3" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Display Specs</label>
+                        <input type="text" id="formScreen" required placeholder="6.8 Amoled 120Hz" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Storage Options</label>
+                    <input type="text" id="formStorage" required placeholder="256GB / 512GB" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Description</label>
+                    <textarea id="formDescription" rows="2" required placeholder="Device condition, warranty details..." class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-gray-800">
+                    <button type="button" onclick="closeProductModal()" class="px-5 py-2.5 rounded-xl border border-gray-700 text-gray-300 text-sm font-semibold">Cancel</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold">Save Device</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="border-t border-gray-800/80 bg-dark-bg/80 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center">
+                    <i data-lucide="smartphone" class="w-4 h-4 text-white"></i>
+                </div>
+                <span class="font-extrabold text-white text-sm">NEXUS MOBILE EGYPT</span>
+            </div>
+            <p class="text-xs text-gray-500">© 2026 NEXUS Store. Prices listed in Egyptian Pounds (EGP).</p>
+        </div>
+    </footer>
+
+    <script>
+        // Default Products configured for EGP Currency and Direct Seller Links
+        const initialProducts = [
+            {
+                id: '1',
+                title: 'iPhone 15 Pro Max',
+                brand: 'Apple',
+                price: 60000,
+                hasDiscount: true,
+                discountPrice: 54000,
+                image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80',
+                chip: 'A17 Pro Bionic',
+                screen: '6.7" Super Retina XDR 120Hz',
+                storage: '256GB / 512GB / 1TB',
+                description: 'Titanium design, A17 Pro chip, Action button, and 5x Optical Zoom camera.',
+                whatsapp: '201000000000',
+                facebook: 'https://facebook.com',
+                instagram: 'https://instagram.com'
+            },
+            {
+                id: '2',
+                title: 'Samsung Galaxy S24 Ultra',
+                brand: 'Samsung',
+                price: 65000,
+                hasDiscount: true,
+                discountPrice: 58500,
+                image: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80',
+                chip: 'Snapdragon 8 Gen 3',
+                screen: '6.8" Dynamic AMOLED 2X',
+                storage: '256GB / 512GB',
+                description: 'Built-in S Pen stylus with Galaxy AI features and 200MP camera.',
+                whatsapp: '201000000000',
+                facebook: 'https://facebook.com',
+                instagram: 'https://instagram.com'
+            },
+            {
+                id: '3',
+                title: 'Google Pixel 8 Pro',
+                brand: 'Google',
+                price: 48000,
+                hasDiscount: false,
+                discountPrice: 0,
+                image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=600&q=80',
+                chip: 'Google Tensor G3',
+                screen: '6.7" Super Actua display',
+                storage: '128GB / 256GB',
+                description: 'Unmatched AI photo computational features and pure Android experience.',
+                whatsapp: '201000000000',
+                facebook: 'https://facebook.com',
+                instagram: 'https://instagram.com'
+            },
+            {
+                id: '4',
+                title: 'Xiaomi 14 Ultra',
+                brand: 'Xiaomi',
+                price: 52000,
+                hasDiscount: true,
+                discountPrice: 47000,
+                image: 'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?auto=format&fit=crop&w=600&q=80',
+                chip: 'Snapdragon 8 Gen 3',
+                screen: '6.73" WQHD+ AMOLED',
+                storage: '512GB / 16GB RAM',
+                description: 'Leica Quad camera system with 1-inch sensor & 90W fast charging.',
+                whatsapp: '201000000000',
+                facebook: 'https://facebook.com',
+                instagram: 'https://instagram.com'
+            }
+        ];
+
+        // Service & Credentials
+        const BackendServer = {
+            async init() {
+                if (!localStorage.getItem('nexus_admin_user')) {
+                    const defaultHash = dcodeIO.bcrypt.hashSync('admin123', 10);
+                    localStorage.setItem('nexus_admin_user', JSON.stringify({
+                        username: 'admin',
+                        passwordHash: defaultHash
+                    }));
+                }
+            },
+            async login(username, password) {
+                const storedUser = JSON.parse(localStorage.getItem('nexus_admin_user'));
+                if (username !== storedUser.username) return { success: false, message: 'Invalid credentials' };
+                const isPasswordValid = await dcodeIO.bcrypt.compare(password, storedUser.passwordHash);
+                if (!isPasswordValid) return { success: false, message: 'Invalid credentials' };
+                const token = btoa(JSON.stringify({ username: storedUser.username, exp: Date.now() + 7200000 }));
+                sessionStorage.setItem('nexus_admin_token', token);
+                return { success: true, token };
+            },
+            isAuthenticated() {
+                const token = sessionStorage.getItem('nexus_admin_token');
+                if (!token) return false;
+                try {
+                    const parsed = JSON.parse(atob(token));
+                    return parsed.exp > Date.now();
+                } catch (e) {
+                    return false;
+                }
+            },
+            logout() { sessionStorage.removeItem('nexus_admin_token'); },
+            async updateCredentials(currPassword, newUsername, newPassword) {
+                if (!this.isAuthenticated()) return { success: false, message: 'Unauthorized' };
+                const storedUser = JSON.parse(localStorage.getItem('nexus_admin_user'));
+                const isPasswordValid = await dcodeIO.bcrypt.compare(currPassword, storedUser.passwordHash);
+                if (!isPasswordValid) return { success: false, message: 'Current password incorrect' };
+                const newHash = await dcodeIO.bcrypt.hash(newPassword, 10);
+                localStorage.setItem('nexus_admin_user', JSON.stringify({ username: newUsername, passwordHash: newHash }));
+                return { success: true };
+            }
+        };
+
+        // State variables
+        let products = JSON.parse(localStorage.getItem('nexus_products')) || initialProducts;
+        let currentView = 'customer';
+        let searchQuery = '';
+        let showOnlyOffers = false;
+        let activeUploadedImageBase64 = '';
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            await BackendServer.init();
+            renderProducts();
+            lucide.createIcons();
+        });
+
+        function saveProducts() {
+            localStorage.setItem('nexus_products', JSON.stringify(products));
+        }
+
+        function setOffersTab(offersOnly) {
+            showOnlyOffers = offersOnly;
+            const tabAll = document.getElementById('tabAll');
+            const tabOffers = document.getElementById('tabOffers');
+
+            if (offersOnly) {
+                tabOffers.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-red-600 text-white flex items-center gap-1 shadow-lg shadow-red-500/30";
+                tabAll.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-gray-400 hover:text-white";
+            } else {
+                tabAll.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-600 text-white";
+                tabOffers.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-gray-400 hover:text-white flex items-center gap-1";
+            }
+            renderProducts();
+        }
+
+        function filterByOffers(offersOnly) {
+            setOffersTab(offersOnly);
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const emptyState = document.getElementById('emptyState');
+            const countElem = document.getElementById('productCount');
+            const brandVal = document.getElementById('brandFilter').value;
+
+            let filtered = products.filter(p => {
+                const matchesBrand = brandVal === 'All' || p.brand === brandVal;
+                const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      p.chip.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      p.brand.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesOffers = !showOnlyOffers || (p.hasDiscount && p.discountPrice > 0);
+                return matchesBrand && matchesSearch && matchesOffers;
+            });
+
+            countElem.innerText = `${filtered.length} Items`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = filtered.map(p => {
+                const isDiscount = p.hasDiscount && p.discountPrice > 0;
+                const cardGlowClass = isDiscount ? 'red-glow-card' : 'glow-effect-hover';
+
+                return `
+                <div class="product-card glass-card rounded-2xl p-5 border border-white/5 flex flex-col justify-between group ${cardGlowClass}">
+                    <div>
+                        <div class="relative w-full h-48 bg-gray-900/40 rounded-xl p-4 mb-4 flex items-center justify-center overflow-hidden">
+                            ${isDiscount ? `
+                                <span class="absolute top-2 left-2 px-2.5 py-1 rounded-md text-[11px] font-extrabold uppercase tracking-wider bg-red-600 text-white shadow-lg flex items-center gap-1 animate-pulse">
+                                    <i data-lucide="zap" class="w-3 h-3 fill-amber-300 text-amber-300"></i> Hot Deal
+                                </span>
+                            ` : ''}
+                            <img src="${p.image}" alt="${p.title}" class="h-36 object-contain group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80'">
+                        </div>
+                        <span class="text-xs font-bold text-brand-500 uppercase tracking-widest">${p.brand}</span>
+                        <h3 class="text-lg font-bold text-white group-hover:text-brand-500 transition-colors">${p.title}</h3>
+                        <p class="text-xs text-gray-400 line-clamp-2 mt-1 mb-3">${p.description}</p>
+                    </div>
+                    <div>
+                        <div class="flex items-baseline justify-between mb-4">
+                            <div>
+                                ${isDiscount ? `
+                                    <span class="text-xl font-extrabold text-red-400">${p.discountPrice.toLocaleString()} EGP</span>
+                                    <span class="text-xs text-gray-500 line-through block">${p.price.toLocaleString()} EGP</span>
+                                ` : `
+                                    <span class="text-xl font-extrabold text-white">${p.price.toLocaleString()} EGP</span>
+                                `}
+                            </div>
+                            <span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">${p.chip}</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="openDetailModal('${p.id}')" class="flex-1 py-2.5 rounded-xl border border-gray-700 hover:border-gray-600 bg-gray-800/50 hover:bg-gray-800 text-xs font-semibold text-gray-300 transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="eye" class="w-3.5 h-3.5"></i> Details
+                            </button>
+                            <button onclick="openContactSellerModal('${p.id}')" class="flex-1 py-2.5 rounded-xl ${isDiscount ? 'bg-red-600 hover:bg-red-500' : 'bg-brand-600 hover:bg-brand-500'} text-white text-xs font-semibold shadow-md transition-all flex items-center justify-center gap-1">
+                                <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Contact
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+
+            lucide.createIcons();
+        }
+
+        function renderAdminTable() {
+            const tableBody = document.getElementById('adminProductTable');
+            tableBody.innerHTML = products.map(p => `
+                <tr class="hover:bg-gray-800/40 transition-colors">
+                    <td class="px-6 py-4 flex items-center gap-3">
+                        <img src="${p.image}" class="w-10 h-10 object-contain rounded bg-gray-900 p-1">
+                        <div>
+                            <div class="font-bold text-white">${p.title}</div>
+                            <div class="text-xs text-gray-400">${p.chip}</div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 font-semibold text-gray-300">${p.brand}</td>
+                    <td class="px-6 py-4 font-bold text-white">${p.price.toLocaleString()} EGP</td>
+                    <td class="px-6 py-4">
+                        ${p.hasDiscount ? `<span class="text-xs font-bold px-2 py-1 bg-red-500/20 text-red-400 rounded-lg border border-red-500/30">${p.discountPrice.toLocaleString()} EGP</span>` : `<span class="text-xs text-gray-500">None</span>`}
+                    </td>
+                    <td class="px-6 py-4 text-right space-x-2">
+                        <button onclick="editProduct('${p.id}')" class="p-2 rounded-lg bg-gray-800 hover:bg-brand-600 text-gray-300 hover:text-white transition-all">
+                            <i data-lucide="edit" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="deleteProduct('${p.id}')" class="p-2 rounded-lg bg-gray-800 hover:bg-red-600 text-gray-300 hover:text-white transition-all">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // Contact Seller Action
+        function openContactSellerModal(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('contactDeviceTitle').innerText = `${product.title} (${product.hasDiscount ? product.discountPrice : product.price} EGP)`;
+
+            const encodedMsg = encodeURIComponent(`Hello, I am inquiring about buying the ${product.title} listed for ${product.hasDiscount ? product.discountPrice : product.price} EGP.`);
+            
+            const waNum = product.whatsapp ? product.whatsapp.replace(/[^0-9]/g, '') : '201000000000';
+            document.getElementById('sellerWhatsappLink').href = `https://wa.me/${waNum}?text=${encodedMsg}`;
+            document.getElementById('sellerFacebookLink').href = product.facebook || 'https://facebook.com';
+            document.getElementById('sellerInstagramLink').href = product.instagram || 'https://instagram.com';
+
+            document.getElementById('contactSellerModal').classList.remove('hidden');
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactSellerModal').classList.add('hidden');
+        }
+
+        // Image Handling
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                activeUploadedImageBase64 = e.target.result;
+                document.getElementById('imagePreview').src = activeUploadedImageBase64;
+                document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                document.getElementById('formImage').value = '';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleImageUrlInput(val) {
+            if (val) {
+                activeUploadedImageBase64 = '';
+                document.getElementById('imagePreview').src = val;
+                document.getElementById('imagePreviewContainer').classList.remove('hidden');
+            }
+        }
+
+        function toggleDiscountInputs(enabled) {
+            const fields = document.getElementById('discountFields');
+            if (enabled) fields.classList.remove('hidden');
+            else fields.classList.add('hidden');
+        }
+
+        // AI Social Media Post Parsing Assistant
+        function runAIAssistantExtract() {
+            const text = document.getElementById('aiRawInput').value;
+            if (!text) {
+                showToast('Please paste social media post text first!', 'error');
+                return;
+            }
+
+            // Simple pattern-matching simulation for extraction
+            if (text.toLowerCase().includes('iphone')) {
+                document.getElementById('formBrand').value = 'Apple';
+            } else if (text.toLowerCase().includes('samsung') || text.toLowerCase().includes('galaxy')) {
+                document.getElementById('formBrand').value = 'Samsung';
+            } else if (text.toLowerCase().includes('xiaomi')) {
+                document.getElementById('formBrand').value = 'Xiaomi';
+            }
+
+            const titleMatch = text.match(/(iphone\s+[0-9]+\s*pro\s*max|iphone\s+[0-9]+|samsung\s+galaxy\s+[a-z0-9\s]+|xiaomi\s+[a-z0-9\s]+)/i);
+            if (titleMatch) document.getElementById('formTitle').value = titleMatch[0];
+
+            const priceMatches = text.match(/(\d+[\d,]*)\s*(egp|pound|LE|l\.e)/ig);
+            if (priceMatches && priceMatches.length > 0) {
+                const nums = text.match(/\d+/g).map(Number).filter(n => n > 1000);
+                if (nums.length >= 2) {
+                    nums.sort((a,b) => b-a);
+                    document.getElementById('formPrice').value = nums[0];
+                    document.getElementById('formHasDiscount').checked = true;
+                    toggleDiscountInputs(true);
+                    document.getElementById('formDiscountPrice').value = nums[1];
+                } else if (nums.length === 1) {
+                    document.getElementById('formPrice').value = nums[0];
+                }
+            }
+
+            const phoneMatch = text.match(/(20\d{10}|\d{11})/);
+            if (phoneMatch) document.getElementById('formWhatsapp').value = phoneMatch[0];
+
+            showToast('AI filled product fields from social post!', 'success');
+        }
+
+        // Admin Auth Flow
+        function handleAdminDashboardClick() {
+            if (currentView === 'admin') {
+                BackendServer.logout();
+                currentView = 'customer';
+                document.getElementById('adminView').classList.add('hidden');
+                document.getElementById('customerView').classList.remove('hidden');
+                document.getElementById('adminBtnText').innerText = 'Admin Dashboard';
+                showToast('Logged out');
+                renderProducts();
+            } else {
+                if (BackendServer.isAuthenticated()) showAdminView();
+                else openAdminLoginModal();
+            }
+        }
+
+        function showAdminView() {
+            currentView = 'admin';
+            document.getElementById('customerView').classList.add('hidden');
+            document.getElementById('adminView').classList.remove('hidden');
+            document.getElementById('adminBtnText').innerText = 'Logout Admin';
+            renderAdminTable();
+        }
+
+        function openAdminLoginModal() {
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('adminLoginModal').classList.remove('hidden');
+        }
+
+        function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); }
+
+        async function handleAdminLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUsername').value;
+            const pass = document.getElementById('loginPassword').value;
+
+            const result = await BackendServer.login(user, pass);
+            if (result.success) {
+                closeAdminLoginModal();
+                showAdminView();
+                showToast('Authenticated!', 'success');
+            } else {
+                showToast(result.message, 'error');
+            }
+        }
+
+        function openCredentialsModal() {
+            document.getElementById('currPassword').value = '';
+            document.getElementById('newUsername').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('credentialsModal').classList.remove('hidden');
+        }
+
+        function closeCredentialsModal() { document.getElementById('credentialsModal').classList.add('hidden'); }
+
+        async function handleUpdateCredentials(e) {
+            e.preventDefault();
+            const currPass = document.getElementById('currPassword').value;
+            const newUser = document.getElementById('newUsername').value;
+            const newPass = document.getElementById('newPassword').value;
+
+            const res = await BackendServer.updateCredentials(currPass, newUser, newPass);
+            if (res.success) {
+                closeCredentialsModal();
+                showToast('Credentials updated!', 'success');
+            } else {
+                showToast(res.message, 'error');
+            }
+        }
+
+        // Search and Filters
+        function handleSearch(val) {
+            searchQuery = val;
+            renderProducts();
+        }
+
+        function applyFilters() { renderProducts(); }
+
+        function resetFilters() {
+            document.getElementById('brandFilter').value = 'All';
+            document.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+            searchQuery = '';
+            setOffersTab(false);
+            showToast('Filters reset');
+        }
+
+        function openDetailModal(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('detailImage').src = product.image;
+            document.getElementById('detailBrand').innerText = product.brand;
+            document.getElementById('detailTitle').innerText = product.title;
+            
+            const priceContainer = document.getElementById('detailPriceContainer');
+            if (product.hasDiscount && product.discountPrice > 0) {
+                priceContainer.innerHTML = `
+                    <span class="text-2xl font-extrabold text-red-400">${product.discountPrice.toLocaleString()} EGP</span>
+                    <span class="text-sm text-gray-500 line-through">${product.price.toLocaleString()} EGP</span>
+                `;
+            } else {
+                priceContainer.innerHTML = `<span class="text-2xl font-extrabold text-white">${product.price.toLocaleString()} EGP</span>`;
+            }
+
+            document.getElementById('detailDescription').innerText = product.description;
+            document.getElementById('specChip').innerText = product.chip;
+            document.getElementById('specScreen').innerText = product.screen;
+            document.getElementById('specStorage').innerText = product.storage;
+
+            const contactBtn = document.getElementById('detailContactBtn');
+            contactBtn.onclick = () => { closeDetailModal(); openContactSellerModal(product.id); };
+
+            document.getElementById('productDetailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() { document.getElementById('productDetailModal').classList.add('hidden'); }
+
+        function openProductModal(productId = null) {
+            if (!BackendServer.isAuthenticated()) return;
+            const modal = document.getElementById('adminModal');
+            const form = document.getElementById('productForm');
+            const titleElem = document.getElementById('adminModalTitle');
+
+            form.reset();
+            activeUploadedImageBase64 = '';
+            document.getElementById('imagePreviewContainer').classList.add('hidden');
+            toggleDiscountInputs(false);
+
+            if (productId) {
+                const product = products.find(p => p.id === productId);
+                if (product) {
+                    titleElem.innerText = 'Edit Smartphone';
+                    document.getElementById('editProductId').value = product.id;
+                    document.getElementById('formTitle').value = product.title;
+                    document.getElementById('formBrand').value = product.brand;
+                    document.getElementById('formPrice').value = product.price;
+                    document.getElementById('formHasDiscount').checked = !!product.hasDiscount;
+                    toggleDiscountInputs(!!product.hasDiscount);
+                    document.getElementById('formDiscountPrice').value = product.discountPrice || '';
+                    document.getElementById('formImage').value = product.image;
+                    document.getElementById('imagePreview').src = product.image;
+                    document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                    document.getElementById('formWhatsapp').value = product.whatsapp || '';
+                    document.getElementById('formFacebook').value = product.facebook || '';
+                    document.getElementById('formInstagram').value = product.instagram || '';
+                    document.getElementById('formChip').value = product.chip;
+                    document.getElementById('formScreen').value = product.screen;
+                    document.getElementById('formStorage').value = product.storage;
+                    document.getElementById('formDescription').value = product.description;
+                }
+            } else {
+                titleElem.innerText = 'Add New Smartphone';
+                document.getElementById('editProductId').value = '';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeProductModal() { document.getElementById('adminModal').classList.add('hidden'); }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            if (!BackendServer.isAuthenticated()) return;
+
+            const editId = document.getElementById('editProductId').value;
+            const hasDiscount = document.getElementById('formHasDiscount').checked;
+            const imageUrl = activeUploadedImageBase64 || document.getElementById('formImage').value || 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80';
+
+            const productData = {
+                id: editId || Date.now().toString(),
+                title: document.getElementById('formTitle').value,
+                brand: document.getElementById('formBrand').value,
+                price: parseFloat(document.getElementById('formPrice').value),
+                hasDiscount: hasDiscount,
+                discountPrice: hasDiscount ? parseFloat(document.getElementById('formDiscountPrice').value || 0) : 0,
+                image: imageUrl,
+                whatsapp: document.getElementById('formWhatsapp').value,
+                facebook: document.getElementById('formFacebook').value,
+                instagram: document.getElementById('formInstagram').value,
+                chip: document.getElementById('formChip').value,
+                screen: document.getElementById('formScreen').value,
+                storage: document.getElementById('formStorage').value,
+                description: document.getElementById('formDescription').value
+            };
+
+            if (editId) {
+                const index = products.findIndex(p => p.id === editId);
+                if (index !== -1) products[index] = productData;
+                showToast('Device updated!');
+            } else {
+                products.unshift(productData);
+                showToast('Device added to catalog!');
+            }
+
+            saveProducts();
+            closeProductModal();
+            renderAdminTable();
+            renderProducts();
+        }
+
+        function editProduct(id) { openProductModal(id); }
+
+        function deleteProduct(id) {
+            if (!BackendServer.isAuthenticated()) return;
+            if (confirm('Remove device listing?')) {
+                products = products.filter(p => p.id !== id);
+                saveProducts();
+                renderAdminTable();
+                renderProducts();
+                showToast('Listing removed', 'error');
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bgColor = type === 'error' ? 'bg-red-600' : type === 'success' ? 'bg-emerald-600' : 'bg-brand-600';
+            toast.className = `pointer-events-auto ${bgColor} text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 animate-fade-in transition-all duration-300`;
+            toast.innerHTML = `<i data-lucide="info" class="w-4 h-4"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
