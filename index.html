@@ -540,17 +540,16 @@
             }
         ];
 
-        // --- SUPABASE CONFIGURATION ---
+        // --- SUPABASE CONFIGURATION (CONNECTED) ---
         const SUPABASE_URL = "https://cpfpiuckpcnfbyzoyepm.supabase.co";
-        // REPLACE WITH YOUR REAL SUPABASE KEY (FROM STEP 2)
-        const SUPABASE_KEY = "sb_publishable_DFa7Om4Knq_CeV9tvoeiuw_W5LBfyUV"; 
+        const SUPABASE_KEY = "sb_publishable_DFa7Om4Knq_CeV9tvoeiuw_W5LBfyUV______________________";
 
         let supabase = null;
-        if (window.supabase && SUPABASE_KEY !== "PASTE_YOUR_PUBLIC_ANON_KEY_HERE") {
+        if (window.supabase) {
             try {
                 supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
             } catch (e) {
-                console.warn("Supabase init skipped, running in local mode.");
+                console.warn("Supabase client failed, running in local fallback mode.");
             }
         }
 
@@ -565,7 +564,6 @@
                 }
             },
             async login(username, password) {
-                // Check database first if available
                 if (supabase) {
                     const { data } = await supabase.from('admin_users').select('*').eq('username', username).maybeSingle();
                     if (data && data.password_hash) {
@@ -578,7 +576,6 @@
                     }
                 }
                 
-                // Fallback to local admin
                 const storedUser = JSON.parse(localStorage.getItem('nexus_admin_user'));
                 if (username !== storedUser.username) return { success: false, message: 'Invalid credentials' };
                 const isPasswordValid = await dcodeIO.bcrypt.compare(password, storedUser.passwordHash);
@@ -648,7 +645,7 @@
                     saveProductsLocally();
                 }
             } catch (err) {
-                console.warn("Could not sync products from cloud, showing local cache.");
+                console.warn("Cloud connection busy, using cached data.");
             }
         }
 
