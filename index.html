@@ -6,9 +6,9 @@
     <title>NEXUS - Next-Gen Mobile Store</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons (Fixed Integration) -->
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <!-- Bcrypt JS -->
+    <!-- Bcrypt JS for Secure Hashing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -540,12 +540,18 @@
             }
         ];
 
-        // Supabase Settings (Optional Client Integration)
+        // --- SUPABASE CONFIGURATION ---
         const SUPABASE_URL = "https://cpfpiuckpcnfbyzoyepm.supabase.co";
-        const SUPABASE_KEY = "YOUR_ANON_KEY_HERE";
-        let supabaseClient = null;
-        if (window.supabase && SUPABASE_KEY !== "YOUR_ANON_KEY_HERE") {
-            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // REPLACE WITH YOUR REAL SUPABASE KEY (FROM STEP 2)
+        const SUPABASE_KEY = "sb_publishable_DFa7Om4Knq_CeV9tvoeiuw_W5LBfyUV"; 
+
+        let supabase = null;
+        if (window.supabase && SUPABASE_KEY !== "PASTE_YOUR_PUBLIC_ANON_KEY_HERE") {
+            try {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            } catch (e) {
+                console.warn("Supabase init skipped, running in local mode.");
+            }
         }
 
         const BackendServer = {
@@ -559,6 +565,20 @@
                 }
             },
             async login(username, password) {
+                // Check database first if available
+                if (supabase) {
+                    const { data } = await supabase.from('admin_users').select('*').eq('username', username).maybeSingle();
+                    if (data && data.password_hash) {
+                        const valid = await dcodeIO.bcrypt.compare(password, data.password_hash);
+                        if (valid) {
+                            const token = btoa(JSON.stringify({ username: data.username, exp: Date.now() + 7200000 }));
+                            sessionStorage.setItem('nexus_admin_token', token);
+                            return { success: true, token };
+                        }
+                    }
+                }
+                
+                // Fallback to local admin
                 const storedUser = JSON.parse(localStorage.getItem('nexus_admin_user'));
                 if (username !== storedUser.username) return { success: false, message: 'Invalid credentials' };
                 const isPasswordValid = await dcodeIO.bcrypt.compare(password, storedUser.passwordHash);
@@ -585,6 +605,10 @@
                 if (!isPasswordValid) return { success: false, message: 'Current password incorrect' };
                 const newHash = await dcodeIO.bcrypt.hash(newPassword, 10);
                 localStorage.setItem('nexus_admin_user', JSON.stringify({ username: newUsername, passwordHash: newHash }));
+                
+                if (supabase) {
+                    await supabase.from('admin_users').upsert({ username: newUsername, password_hash: newHash });
+                }
                 return { success: true };
             }
         };
@@ -597,13 +621,38 @@
 
         window.addEventListener('DOMContentLoaded', async () => {
             await BackendServer.init();
+            await fetchCloudProducts();
             renderProducts();
-            if (window.lucide) {
-                lucide.createIcons();
-            }
+            if (window.lucide) lucide.createIcons();
         });
 
-        function saveProducts() {
+        async function fetchCloudProducts() {
+            if (!supabase) return;
+            try {
+                const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+                if (!error && data && data.length > 0) {
+                    products = data.map(p => ({
+                        id: p.id,
+                        title: p.title,
+                        price: p.price,
+                        color: p.color,
+                        isTaxExempt: p.is_tax_exempt,
+                        hasDiscount: p.has_discount,
+                        discountPrice: p.discount_price,
+                        images: p.images || [],
+                        whatsapp: p.whatsapp,
+                        telegram: p.telegram,
+                        storage: p.storage,
+                        description: p.description
+                    }));
+                    saveProductsLocally();
+                }
+            } catch (err) {
+                console.warn("Could not sync products from cloud, showing local cache.");
+            }
+        }
+
+        function saveProductsLocally() {
             localStorage.setItem('nexus_products', JSON.stringify(products));
         }
 
@@ -1019,7 +1068,7 @@
 
         function closeProductModal() { document.getElementById('adminModal').classList.add('hidden'); }
 
-        function handleFormSubmit(e) {
+        async function handleFormSubmit(e) {
             e.preventDefault();
             if (!BackendServer.isAuthenticated()) return;
 
@@ -1048,13 +1097,38 @@
                 if (index !== -1) {
                     products[index] = productData;
                 }
-                showToast('Device updated!');
             } else {
                 products.unshift(productData);
-                showToast('Device added to catalog!');
             }
 
-            saveProducts();
+            saveProductsLocally();
+
+            if (supabase) {
+                const cloudPayload = {
+                    id: productData.id,
+                    title: productData.title,
+                    price: productData.price,
+                    color: productData.color,
+                    is_tax_exempt: productData.isTaxExempt,
+                    has_discount: productData.hasDiscount,
+                    discount_price: productData.discountPrice,
+                    images: productData.images,
+                    whatsapp: productData.whatsapp,
+                    telegram: productData.telegram,
+                    storage: productData.storage,
+                    description: productData.description
+                };
+
+                const { error } = await supabase.from('products').upsert(cloudPayload);
+                if (!error) {
+                    showToast(editId ? 'Device updated across all devices!' : 'Device added to all devices!');
+                } else {
+                    showToast('Saved locally. Cloud sync error: ' + error.message, 'error');
+                }
+            } else {
+                showToast(editId ? 'Device updated locally!' : 'Device added locally!');
+            }
+
             closeProductModal();
             renderAdminTable();
             renderProducts();
@@ -1062,11 +1136,16 @@
 
         function editProduct(id) { openProductModal(id); }
 
-        function deleteProduct(id) {
+        async function deleteProduct(id) {
             if (!BackendServer.isAuthenticated()) return;
             if (confirm('Remove device listing?')) {
                 products = products.filter(p => p.id !== id);
-                saveProducts();
+                saveProductsLocally();
+                
+                if (supabase) {
+                    await supabase.from('products').delete().eq('id', id);
+                }
+
                 renderAdminTable();
                 renderProducts();
                 showToast('Listing removed', 'error');
