@@ -450,11 +450,12 @@
     </footer>
 
     <script>
-        // ======= استبدل رابط المشرف هنا بنطاق مشروعك الخاص من Supabase =======
-        const SUPABASE_URL = "https://cpfpiuckpcnfbyzoyepm.supabase.co/rest/v1/";
-        // المفتاح المأخوذ من خيار Publishable key
-        const SUPABASE_KEY = "sb_publishable_DFa70m4Knq_CeV9tvoeiuw_W5LBf...";
+        // 1. رابط المشرف (تم التصحيح وحذف rest/v1/)
+        const SUPABASE_URL = "https://cpfpiuckpcnfbyzoyepm.supabase.co";
         
+        // 2. المرجو استبدال النص الأسفل بالمفتاح الكامل الظاهر في Supabase المسمى Publishable Key
+        const SUPABASE_KEY = "ضع_المفتاح_الكامل_هنا_بدون_أقواس"; 
+
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let products = [];
@@ -469,24 +470,30 @@
         });
 
         async function fetchProducts() {
-            const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
-            if (!error && data) {
-                products = data.map(p => ({
-                    id: p.id,
-                    title: p.title,
-                    price: p.price,
-                    color: p.color,
-                    isTaxExempt: p.is_tax_exempt,
-                    hasDiscount: p.has_discount,
-                    discountPrice: p.discount_price,
-                    images: p.images || [],
-                    whatsapp: p.whatsapp,
-                    telegram: p.telegram,
-                    storage: p.storage,
-                    description: p.description
-                }));
-                renderProducts();
-                if (currentView === 'admin') renderAdminTable();
+            try {
+                const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+                if (!error && data) {
+                    products = data.map(p => ({
+                        id: p.id,
+                        title: p.title,
+                        price: p.price,
+                        color: p.color,
+                        isTaxExempt: p.is_tax_exempt,
+                        hasDiscount: p.has_discount,
+                        discountPrice: p.discount_price,
+                        images: p.images || [],
+                        whatsapp: p.whatsapp,
+                        telegram: p.telegram,
+                        storage: p.storage,
+                        description: p.description
+                    }));
+                    renderProducts();
+                    if (currentView === 'admin') renderAdminTable();
+                } else if (error) {
+                    console.error('Supabase fetch error:', error);
+                }
+            } catch (err) {
+                console.error('Connection error:', err);
             }
         }
 
