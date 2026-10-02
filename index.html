@@ -9,17 +9,17 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <!-- Bcrypt JS for Client-side Hashing Simulation -->
+    <!-- Bcrypt JS for Secure Hashing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', '"Cairo"', 'sans-serif'],
                     },
                     colors: {
                         brand: {
@@ -74,7 +74,7 @@
         body {
             background-color: #0b0f19;
             color: #f3f4f6;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', 'Cairo', sans-serif;
             overflow-x: hidden;
         }
 
@@ -120,7 +120,6 @@
     <header class="glass-nav sticky top-0 z-40 w-full transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <!-- Logo -->
                 <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center shadow-lg shadow-brand-500/30">
                         <i data-lucide="smartphone" class="w-6 h-6 text-white"></i>
@@ -131,14 +130,12 @@
                     </div>
                 </div>
 
-                <!-- Search Bar (Desktop) -->
                 <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
                     <i data-lucide="search" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"></i>
                     <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Search iPhone, Galaxy, Pixel, Xiaomi..." 
                         class="w-full pl-11 pr-4 py-2.5 bg-dark-input/80 border border-gray-700/60 rounded-full text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
                 </div>
 
-                <!-- Contact & Admin Actions -->
                 <div class="flex items-center gap-3">
                     <button onclick="handleAdminDashboardClick()" id="adminToggleBtn" 
                         class="px-3.5 py-2 rounded-xl border border-gray-700/80 bg-gray-800/50 hover:bg-gray-700/60 text-xs sm:text-sm font-semibold text-gray-300 hover:text-white transition-all flex items-center gap-2">
@@ -162,7 +159,7 @@
                         Find Best Smartphone <br><span class="bg-gradient-to-r from-brand-500 via-indigo-300 to-purple-400 bg-clip-text text-transparent">Deals in EGP</span>
                     </h1>
                     <p class="text-gray-400 text-sm sm:text-base leading-relaxed mb-6">
-                        Browse premium smartphones with instant discounted rates. Connect directly with sellers through WhatsApp, Facebook, or Instagram for immediate inquiries!
+                        Browse premium smartphones with instant discounted rates. Connect directly with sellers through WhatsApp or Telegram for immediate inquiries!
                     </p>
                     <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
                         <a href="#catalog" onclick="filterByOffers(false)" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-lg shadow-brand-500/30 transition-all flex items-center gap-2">
@@ -174,7 +171,6 @@
                     </div>
                 </div>
 
-                <!-- Showcase Visual -->
                 <div class="relative w-full max-w-sm flex justify-center">
                     <div class="relative w-64 h-80 sm:w-72 sm:h-96 rounded-3xl p-4 glass-card border border-white/20 animate-float shadow-2xl flex flex-col justify-between">
                         <div class="flex justify-between items-center">
@@ -198,7 +194,6 @@
     </section>
 
     <main id="catalog" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
-        <!-- Customer View Section -->
         <div id="customerView">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
                 <div>
@@ -208,7 +203,7 @@
                     <p class="text-sm text-gray-400">Browse phones or click special discount offers below</p>
                 </div>
 
-                <!-- Navigation Tabs & Filters Bar -->
+                <!-- Navigation Tabs & Manual Price Filter Bar -->
                 <div class="flex flex-wrap items-center gap-3">
                     <div class="bg-dark-card border border-gray-700 p-1 rounded-xl flex items-center gap-1">
                         <button id="tabAll" onclick="setOffersTab(false)" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-600 text-white">
@@ -219,16 +214,12 @@
                         </button>
                     </div>
 
-                    <div class="relative">
-                        <select id="brandFilter" onchange="applyFilters()" class="appearance-none bg-dark-card border border-gray-700 rounded-xl px-4 py-2.5 pr-8 text-sm text-gray-200 focus:outline-none focus:border-brand-500 cursor-pointer">
-                            <option value="All">All Brands</option>
-                            <option value="Apple">Apple</option>
-                            <option value="Samsung">Samsung</option>
-                            <option value="Google">Google</option>
-                            <option value="Xiaomi">Xiaomi</option>
-                            <option value="OnePlus">OnePlus</option>
-                        </select>
-                        <i data-lucide="chevron-down" class="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                    <!-- Manual Price Range Inputs -->
+                    <div class="flex items-center gap-1.5 bg-dark-card border border-gray-700 px-3 py-1.5 rounded-xl">
+                        <span class="text-xs font-bold text-gray-400">EGP:</span>
+                        <input type="number" id="minPriceInput" oninput="applyFilters()" placeholder="من" class="w-16 bg-dark-input border border-gray-700/80 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-brand-500">
+                        <span class="text-xs text-gray-500">-</span>
+                        <input type="number" id="maxPriceInput" oninput="applyFilters()" placeholder="إلى" class="w-16 bg-dark-input border border-gray-700/80 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-brand-500">
                     </div>
 
                     <button onclick="resetFilters()" class="p-2.5 rounded-xl border border-gray-700 bg-dark-card hover:bg-gray-800 text-gray-400 hover:text-white transition-all">
@@ -237,10 +228,8 @@
                 </div>
             </div>
 
-            <!-- Product Grid -->
             <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
 
-            <!-- Empty State -->
             <div id="emptyState" class="hidden text-center py-16 glass-card rounded-3xl border border-gray-800">
                 <i data-lucide="search-x" class="w-16 h-16 text-gray-500 mx-auto mb-4"></i>
                 <h3 class="text-xl font-bold text-white mb-2">No Smartphones Found</h3>
@@ -249,14 +238,13 @@
             </div>
         </div>
 
-        <!-- Admin View Section -->
         <div id="adminView" class="hidden">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <div>
                     <h2 class="text-2xl font-bold text-white flex items-center gap-2">
                         <i data-lucide="sliders" class="w-6 h-6 text-brand-500"></i> Admin Product Dashboard
                     </h2>
-                    <p class="text-sm text-gray-400">Manage listings, add social media links, upload images, or extract posts with AI.</p>
+                    <p class="text-sm text-gray-400">Manage listings, upload up to 5 images, or extract posts with AI Assistant.</p>
                 </div>
                 <div class="flex gap-3">
                     <button onclick="openCredentialsModal()" class="px-4 py-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700 border border-gray-700 text-gray-200 text-sm font-semibold transition-all flex items-center gap-2">
@@ -274,7 +262,8 @@
                         <thead class="bg-gray-800/80 text-gray-400 uppercase text-xs tracking-wider border-b border-gray-700">
                             <tr>
                                 <th class="px-6 py-4">Phone</th>
-                                <th class="px-6 py-4">Brand</th>
+                                <th class="px-6 py-4">Color</th>
+                                <th class="px-6 py-4">Tax Status</th>
                                 <th class="px-6 py-4">Price (EGP)</th>
                                 <th class="px-6 py-4">Discount Offer</th>
                                 <th class="px-6 py-4 text-right">Actions</th>
@@ -297,13 +286,13 @@
                 <div class="w-12 h-12 bg-brand-600/20 border border-brand-500/30 rounded-2xl flex items-center justify-center mx-auto mb-3">
                     <i data-lucide="lock" class="w-6 h-6 text-brand-500"></i>
                 </div>
-                <h3 class="text-xl font-extrabold text-white">Admin Login</h3>
-                <p class="text-xs text-gray-400 mt-1">Credentials: <span class="text-brand-500 font-mono">admin</span> / <span class="text-brand-500 font-mono">admin123</span></p>
+                <h3 class="text-xl font-extrabold text-white">Admin Authentication</h3>
+                <p class="text-xs text-gray-400 mt-1">Protected Dashboard Access</p>
             </div>
             <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-300 mb-1">Username</label>
-                    <input type="text" id="loginUsername" required placeholder="admin" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                    <input type="text" id="loginUsername" required placeholder="Enter admin username" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-300 mb-1">Password</label>
@@ -323,7 +312,7 @@
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div class="text-center mb-6">
-                <h3 class="text-xl font-extrabold text-white">Update Password</h3>
+                <h3 class="text-xl font-extrabold text-white">Update Admin Credentials</h3>
             </div>
             <form onsubmit="handleUpdateCredentials(event)" class="space-y-4">
                 <div>
@@ -338,7 +327,7 @@
                     <label class="block text-xs font-semibold text-gray-300 mb-1">New Password</label>
                     <input type="password" id="newPassword" required class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
                 </div>
-                <button type="submit" id="updateCredsBtn" class="w-full py-3 rounded-xl bg-amber-600 text-white font-semibold text-sm">Save Changes</button>
+                <button type="submit" id="updateCredsBtn" class="w-full py-3 rounded-xl bg-amber-600 text-white font-semibold text-sm">Save Encrypted Changes</button>
             </form>
         </div>
     </div>
@@ -361,11 +350,8 @@
                 <a id="sellerWhatsappLink" target="_blank" class="w-full py-3 px-4 rounded-xl bg-emerald-600/80 hover:bg-emerald-600 border border-emerald-500 text-white font-semibold text-sm transition-all flex items-center justify-center gap-3">
                     <i data-lucide="phone-call" class="w-5 h-5"></i> Chat on WhatsApp
                 </a>
-                <a id="sellerFacebookLink" target="_blank" class="w-full py-3 px-4 rounded-xl bg-blue-600/80 hover:bg-blue-600 border border-blue-500 text-white font-semibold text-sm transition-all flex items-center justify-center gap-3">
-                    <i data-lucide="facebook" class="w-5 h-5"></i> Facebook Page / Post
-                </a>
-                <a id="sellerInstagramLink" target="_blank" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 text-white font-semibold text-sm transition-all flex items-center justify-center gap-3">
-                    <i data-lucide="instagram" class="w-5 h-5"></i> Instagram Profile
+                <a id="sellerTelegramLink" target="_blank" class="w-full py-3 px-4 rounded-xl bg-sky-600/80 hover:bg-sky-600 border border-sky-500 text-white font-semibold text-sm transition-all flex items-center justify-center gap-3">
+                    <i data-lucide="send" class="w-5 h-5"></i> Chat on Telegram
                 </a>
             </div>
         </div>
@@ -377,19 +363,23 @@
             <button onclick="closeDetailModal()" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <div class="w-full md:w-1/2 bg-gray-900/60 p-8 flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-800">
-                <img id="detailImage" src="" alt="Phone Detail" class="w-full h-64 md:h-80 object-contain drop-shadow-2xl">
+            
+            <div class="w-full md:w-1/2 bg-gray-900/60 p-6 flex flex-col items-center justify-between border-b md:border-b-0 md:border-r border-gray-800">
+                <img id="detailImage" src="" alt="Phone Detail" class="w-full h-64 md:h-72 object-contain drop-shadow-2xl">
+                <div id="detailThumbnails" class="flex gap-2 mt-4 overflow-x-auto max-w-full py-1"></div>
             </div>
+
             <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto">
                 <div>
-                    <span id="detailBrand" class="text-xs font-bold uppercase text-brand-500"></span>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span id="detailTaxBadge" class="hidden text-[10px] font-extrabold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">معفي ضريبة / Zero Fees</span>
+                    </div>
                     <h2 id="detailTitle" class="text-2xl font-extrabold text-white mt-1 mb-2"></h2>
                     <div id="detailPriceContainer" class="flex items-baseline gap-2 mb-4"></div>
                     <p id="detailDescription" class="text-gray-300 text-sm leading-relaxed mb-6"></p>
                     <div class="space-y-2 mb-6">
-                        <div class="flex justify-between text-xs py-1.5 border-b border-gray-800"><span class="text-gray-400">Processor:</span><span id="specChip" class="text-gray-200 font-semibold"></span></div>
-                        <div class="flex justify-between text-xs py-1.5 border-b border-gray-800"><span class="text-gray-400">Display:</span><span id="specScreen" class="text-gray-200 font-semibold"></span></div>
-                        <div class="flex justify-between text-xs py-1.5 border-b border-gray-800"><span class="text-gray-400">Storage Options:</span><span id="specStorage" class="text-gray-200 font-semibold"></span></div>
+                        <div class="flex justify-between text-xs py-1.5 border-b border-gray-800"><span class="text-gray-400">Color / اللون:</span><span id="specColor" class="text-gray-200 font-semibold"></span></div>
+                        <div class="flex justify-between text-xs py-1.5 border-b border-gray-800"><span class="text-gray-400">Storage / المساحة:</span><span id="specStorage" class="text-gray-200 font-semibold"></span></div>
                     </div>
                 </div>
                 <button id="detailContactBtn" class="w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm shadow-lg transition-all flex items-center justify-center gap-2">
@@ -408,14 +398,14 @@
             
             <h3 id="adminModalTitle" class="text-xl font-extrabold text-white mb-4">Add / Edit Smartphone</h3>
 
-            <!-- AI Social Media Autofill Assistant -->
+            <!-- Multilingual Arabic & English AI Assistant -->
             <div class="mb-6 p-4 rounded-2xl bg-brand-900/30 border border-brand-500/30">
                 <div class="flex items-center gap-2 mb-2 text-brand-400 font-bold text-xs uppercase tracking-wider">
-                    <i data-lucide="bot" class="w-4 h-4"></i> AI Assistant: Fill Product from Social Post
+                    <i data-lucide="bot" class="w-4 h-4"></i> AI Assistant: Intelligent Post Extractor (عربي / English)
                 </div>
-                <p class="text-xs text-gray-400 mb-3">Paste a Facebook, Instagram or WhatsApp sales post text below to automatically fill the device form fields!</p>
+                <p class="text-xs text-gray-400 mb-3">Paste Arabic or English sales post below to auto-fill fields!</p>
                 <div class="flex gap-2">
-                    <textarea id="aiRawInput" rows="2" placeholder="e.g. iPhone 15 Pro Max 256GB Titanium for sale, original price 60000 EGP, special offer 54000 EGP. A17 Pro chip. WhatsApp 201000000000" class="w-full px-3 py-2 bg-dark-input border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500"></textarea>
+                    <textarea id="aiRawInput" rows="2" placeholder="مثال: ايفون 15 برو ماكس 256 جيجا اسود تيتانيوم للبيع، معفي ضريبة، السعر 54000 بدلا من 60000. واتساب 01000000000" class="w-full px-3 py-2 bg-dark-input border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500"></textarea>
                     <button type="button" onclick="runAIAssistantExtract()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold rounded-xl flex flex-col items-center justify-center gap-1 shrink-0">
                         <i data-lucide="sparkles" class="w-4 h-4"></i> Auto Fill
                     </button>
@@ -426,22 +416,29 @@
                 <input type="hidden" id="editProductId">
 
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">Phone Model Title</label>
-                    <input type="text" id="formTitle" required placeholder="e.g. Samsung Galaxy S24 Ultra" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none">
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Phone Model Title / اسم الجهاز</label>
+                    <input type="text" id="formTitle" required placeholder="e.g. iPhone 15 Pro Max / آيفون 15 برو ماكس" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none">
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-300 mb-1">Brand</label>
-                        <input type="text" id="formBrand" required placeholder="e.g. Apple, Samsung, Xiaomi" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
-                    </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 mb-1">Standard Price (EGP)</label>
                         <input type="number" id="formPrice" required placeholder="45000" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
                     </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Color / اللون</label>
+                        <input type="text" id="formColor" required placeholder="e.g. Natural Titanium / أسود تيتانيوم" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                    </div>
                 </div>
 
-                <!-- Discount Offer Config -->
+                <!-- Tax Exemption Checkbox -->
+                <div class="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/30 flex items-center gap-2">
+                    <input type="checkbox" id="formIsTaxExempt" class="w-4 h-4 text-emerald-600 rounded bg-dark-input border-gray-700 focus:ring-emerald-500">
+                    <label for="formIsTaxExempt" class="text-xs font-bold text-emerald-400 flex items-center gap-1 cursor-pointer">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i> جهاز معفي من الضريبة (Zero Fees / Tax Exempt)
+                    </label>
+                </div>
+
                 <div class="p-4 rounded-xl bg-red-950/20 border border-red-500/30 space-y-3">
                     <div class="flex items-center gap-2">
                         <input type="checkbox" id="formHasDiscount" onchange="toggleDiscountInputs(this.checked)" class="w-4 h-4 text-red-600 rounded bg-dark-input border-gray-700 focus:ring-red-500">
@@ -457,49 +454,31 @@
                     </div>
                 </div>
 
-                <!-- Image Sources: Upload or URL -->
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">Phone Image Options</label>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <input type="url" id="formImage" placeholder="Image URL (https://...)" onchange="handleImageUrlInput(this.value)" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
-                        <div class="relative flex items-center">
-                            <input type="file" id="formImageFile" accept="image/*" onchange="handleFileUpload(event)" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gray-800 file:text-brand-400 hover:file:bg-gray-700 cursor-pointer">
-                        </div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Phone Images (Up to 5 photos)</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
+                        <input type="file" id="formImageFiles" accept="image/*" multiple onchange="handleMultiFileUpload(event)" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gray-800 file:text-brand-400 hover:file:bg-gray-700 cursor-pointer">
+                        <input type="text" id="formImageUrls" placeholder="Or enter URLs separated by comma" onchange="handleMultiUrlInput(this.value)" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-xs text-white">
                     </div>
-                    <div id="imagePreviewContainer" class="mt-2 hidden">
-                        <img id="imagePreview" src="" class="h-20 w-20 object-contain rounded-lg bg-gray-900 border border-gray-700">
-                    </div>
+                    <div id="multiImagePreviewContainer" class="flex flex-wrap gap-2 pt-2"></div>
                 </div>
 
-                <!-- Social Media Contact Links -->
                 <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800 space-y-3">
-                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">Seller Social Links</label>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">Seller Direct Links</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <input type="text" id="formWhatsapp" placeholder="WhatsApp (e.g. 201012345678)" class="w-full px-3 py-2 bg-dark-input border border-gray-700 rounded-xl text-xs text-white">
-                        <input type="url" id="formFacebook" placeholder="Facebook Post or Page URL" class="w-full px-3 py-2 bg-dark-input border border-gray-700 rounded-xl text-xs text-white">
-                        <input type="url" id="formInstagram" placeholder="Instagram Profile or Post URL" class="w-full px-3 py-2 bg-dark-input border border-gray-700 rounded-xl text-xs text-white">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-300 mb-1">Processor</label>
-                        <input type="text" id="formChip" required placeholder="Snapdragon 8 Gen 3" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-300 mb-1">Display Specs</label>
-                        <input type="text" id="formScreen" required placeholder="6.8 Amoled 120Hz" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                        <input type="text" id="formTelegram" placeholder="Telegram Username / Link" class="w-full px-3 py-2 bg-dark-input border border-gray-700 rounded-xl text-xs text-white">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">Storage Options</label>
-                    <input type="text" id="formStorage" required placeholder="256GB / 512GB" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Storage Options / المساحة</label>
+                    <input type="text" id="formStorage" required placeholder="128GB / 256GB / 512GB" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">Description</label>
-                    <textarea id="formDescription" rows="2" required placeholder="Device condition, warranty details..." class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white"></textarea>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Description / الوصف</label>
+                    <textarea id="formDescription" rows="2" required placeholder="Device condition, warranty details / حالة الجهاز، الضمان..." class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white"></textarea>
                 </div>
 
                 <div class="flex justify-end gap-3 pt-4 border-t border-gray-800">
@@ -518,80 +497,52 @@
                 </div>
                 <span class="font-extrabold text-white text-sm">NEXUS MOBILE EGYPT</span>
             </div>
+            
             <p class="text-xs text-gray-500">© 2026 NEXUS Store. Prices listed in Egyptian Pounds (EGP).</p>
+
+            <div class="flex items-center gap-3">
+                <a href="https://wa.me/201000000000" target="_blank" class="w-9 h-9 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 hover:bg-emerald-600 hover:text-white transition-all flex items-center justify-center">
+                    <i data-lucide="phone-call" class="w-4 h-4"></i>
+                </a>
+                <a href="https://t.me/nexus_mobile" target="_blank" class="w-9 h-9 rounded-xl bg-sky-600/20 border border-sky-500/40 text-sky-400 hover:bg-sky-600 hover:text-white transition-all flex items-center justify-center">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                </a>
+            </div>
         </div>
     </footer>
 
     <script>
-        // Default Products configured for EGP Currency and Direct Seller Links
         const initialProducts = [
             {
                 id: '1',
                 title: 'iPhone 15 Pro Max',
-                brand: 'Apple',
                 price: 60000,
                 hasDiscount: true,
                 discountPrice: 54000,
-                image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80',
-                chip: 'A17 Pro Bionic',
-                screen: '6.7" Super Retina XDR 120Hz',
+                isTaxExempt: true,
+                color: 'Natural Titanium / أسود تيتانيوم',
+                images: ['https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80'],
                 storage: '256GB / 512GB / 1TB',
                 description: 'Titanium design, A17 Pro chip, Action button, and 5x Optical Zoom camera.',
                 whatsapp: '201000000000',
-                facebook: 'https://facebook.com',
-                instagram: 'https://instagram.com'
+                telegram: 'nexus_store'
             },
             {
                 id: '2',
                 title: 'Samsung Galaxy S24 Ultra',
-                brand: 'Samsung',
                 price: 65000,
                 hasDiscount: true,
                 discountPrice: 58500,
-                image: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80',
-                chip: 'Snapdragon 8 Gen 3',
-                screen: '6.8" Dynamic AMOLED 2X',
+                isTaxExempt: false,
+                color: 'Titanium Black / أسود',
+                images: ['https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80'],
                 storage: '256GB / 512GB',
                 description: 'Built-in S Pen stylus with Galaxy AI features and 200MP camera.',
                 whatsapp: '201000000000',
-                facebook: 'https://facebook.com',
-                instagram: 'https://instagram.com'
-            },
-            {
-                id: '3',
-                title: 'Google Pixel 8 Pro',
-                brand: 'Google',
-                price: 48000,
-                hasDiscount: false,
-                discountPrice: 0,
-                image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=600&q=80',
-                chip: 'Google Tensor G3',
-                screen: '6.7" Super Actua display',
-                storage: '128GB / 256GB',
-                description: 'Unmatched AI photo computational features and pure Android experience.',
-                whatsapp: '201000000000',
-                facebook: 'https://facebook.com',
-                instagram: 'https://instagram.com'
-            },
-            {
-                id: '4',
-                title: 'Xiaomi 14 Ultra',
-                brand: 'Xiaomi',
-                price: 52000,
-                hasDiscount: true,
-                discountPrice: 47000,
-                image: 'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?auto=format&fit=crop&w=600&q=80',
-                chip: 'Snapdragon 8 Gen 3',
-                screen: '6.73" WQHD+ AMOLED',
-                storage: '512GB / 16GB RAM',
-                description: 'Leica Quad camera system with 1-inch sensor & 90W fast charging.',
-                whatsapp: '201000000000',
-                facebook: 'https://facebook.com',
-                instagram: 'https://instagram.com'
+                telegram: 'nexus_store'
             }
         ];
 
-        // Service & Credentials
         const BackendServer = {
             async init() {
                 if (!localStorage.getItem('nexus_admin_user')) {
@@ -633,12 +584,11 @@
             }
         };
 
-        // State variables
         let products = JSON.parse(localStorage.getItem('nexus_products')) || initialProducts;
         let currentView = 'customer';
         let searchQuery = '';
         let showOnlyOffers = false;
-        let activeUploadedImageBase64 = '';
+        let activeUploadedImages = [];
 
         window.addEventListener('DOMContentLoaded', async () => {
             await BackendServer.init();
@@ -665,23 +615,28 @@
             renderProducts();
         }
 
-        function filterByOffers(offersOnly) {
-            setOffersTab(offersOnly);
-        }
+        function filterByOffers(offersOnly) { setOffersTab(offersOnly); }
 
         function renderProducts() {
             const grid = document.getElementById('productGrid');
             const emptyState = document.getElementById('emptyState');
             const countElem = document.getElementById('productCount');
-            const brandVal = document.getElementById('brandFilter').value;
+            
+            const minPriceVal = parseFloat(document.getElementById('minPriceInput').value);
+            const maxPriceVal = parseFloat(document.getElementById('maxPriceInput').value);
 
             let filtered = products.filter(p => {
-                const matchesBrand = brandVal === 'All' || p.brand === brandVal;
+                const currentPrice = p.hasDiscount && p.discountPrice > 0 ? p.discountPrice : p.price;
+                
+                let matchesPrice = true;
+                if (!isNaN(minPriceVal)) matchesPrice = matchesPrice && currentPrice >= minPriceVal;
+                if (!isNaN(maxPriceVal)) matchesPrice = matchesPrice && currentPrice <= maxPriceVal;
+
                 const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                      p.chip.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                      p.brand.toLowerCase().includes(searchQuery.toLowerCase());
+                                      (p.color && p.color.toLowerCase().includes(searchQuery.toLowerCase()));
                 const matchesOffers = !showOnlyOffers || (p.hasDiscount && p.discountPrice > 0);
-                return matchesBrand && matchesSearch && matchesOffers;
+                
+                return matchesSearch && matchesOffers && matchesPrice;
             });
 
             countElem.innerText = `${filtered.length} Items`;
@@ -696,6 +651,7 @@
             grid.innerHTML = filtered.map(p => {
                 const isDiscount = p.hasDiscount && p.discountPrice > 0;
                 const cardGlowClass = isDiscount ? 'red-glow-card' : 'glow-effect-hover';
+                const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.image || '');
 
                 return `
                 <div class="product-card glass-card rounded-2xl p-5 border border-white/5 flex flex-col justify-between group ${cardGlowClass}">
@@ -706,10 +662,15 @@
                                     <i data-lucide="zap" class="w-3 h-3 fill-amber-300 text-amber-300"></i> Hot Deal
                                 </span>
                             ` : ''}
-                            <img src="${p.image}" alt="${p.title}" class="h-36 object-contain group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80'">
+                            ${p.isTaxExempt ? `
+                                <span class="absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                                    Zero Fees / معفي
+                                </span>
+                            ` : ''}
+                            <img src="${mainImg}" alt="${p.title}" class="h-36 object-contain group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80'">
                         </div>
-                        <span class="text-xs font-bold text-brand-500 uppercase tracking-widest">${p.brand}</span>
                         <h3 class="text-lg font-bold text-white group-hover:text-brand-500 transition-colors">${p.title}</h3>
+                        <div class="text-xs text-brand-400 font-semibold my-1">${p.color || ''}</div>
                         <p class="text-xs text-gray-400 line-clamp-2 mt-1 mb-3">${p.description}</p>
                     </div>
                     <div>
@@ -722,7 +683,7 @@
                                     <span class="text-xl font-extrabold text-white">${p.price.toLocaleString()} EGP</span>
                                 `}
                             </div>
-                            <span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">${p.chip}</span>
+                            <span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">${p.storage || ''}</span>
                         </div>
                         <div class="flex gap-2">
                             <button onclick="openDetailModal('${p.id}')" class="flex-1 py-2.5 rounded-xl border border-gray-700 hover:border-gray-600 bg-gray-800/50 hover:bg-gray-800 text-xs font-semibold text-gray-300 transition-all flex items-center justify-center gap-1.5">
@@ -741,16 +702,21 @@
 
         function renderAdminTable() {
             const tableBody = document.getElementById('adminProductTable');
-            tableBody.innerHTML = products.map(p => `
+            tableBody.innerHTML = products.map(p => {
+                const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.image || '');
+                return `
                 <tr class="hover:bg-gray-800/40 transition-colors">
                     <td class="px-6 py-4 flex items-center gap-3">
-                        <img src="${p.image}" class="w-10 h-10 object-contain rounded bg-gray-900 p-1">
+                        <img src="${mainImg}" class="w-10 h-10 object-contain rounded bg-gray-900 p-1">
                         <div>
                             <div class="font-bold text-white">${p.title}</div>
-                            <div class="text-xs text-gray-400">${p.chip}</div>
+                            <div class="text-xs text-gray-400">${p.storage || ''}</div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 font-semibold text-gray-300">${p.brand}</td>
+                    <td class="px-6 py-4 font-semibold text-gray-300">${p.color || '-'}</td>
+                    <td class="px-6 py-4">
+                        ${p.isTaxExempt ? `<span class="text-xs font-bold px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg border border-emerald-500/30">معفي / Zero Fees</span>` : `<span class="text-xs text-gray-500">غير معفي</span>`}
+                    </td>
                     <td class="px-6 py-4 font-bold text-white">${p.price.toLocaleString()} EGP</td>
                     <td class="px-6 py-4">
                         ${p.hasDiscount ? `<span class="text-xs font-bold px-2 py-1 bg-red-500/20 text-red-400 rounded-lg border border-red-500/30">${p.discountPrice.toLocaleString()} EGP</span>` : `<span class="text-xs text-gray-500">None</span>`}
@@ -764,12 +730,11 @@
                         </button>
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
 
             lucide.createIcons();
         }
 
-        // Contact Seller Action
         function openContactSellerModal(id) {
             const product = products.find(p => p.id === id);
             if (!product) return;
@@ -780,37 +745,56 @@
             
             const waNum = product.whatsapp ? product.whatsapp.replace(/[^0-9]/g, '') : '201000000000';
             document.getElementById('sellerWhatsappLink').href = `https://wa.me/${waNum}?text=${encodedMsg}`;
-            document.getElementById('sellerFacebookLink').href = product.facebook || 'https://facebook.com';
-            document.getElementById('sellerInstagramLink').href = product.instagram || 'https://instagram.com';
+            
+            const tgUser = product.telegram ? product.telegram.replace('@', '') : 'nexus_mobile';
+            document.getElementById('sellerTelegramLink').href = `https://t.me/${tgUser}`;
 
             document.getElementById('contactSellerModal').classList.remove('hidden');
         }
 
-        function closeContactModal() {
-            document.getElementById('contactSellerModal').classList.add('hidden');
+        function closeContactModal() { document.getElementById('contactSellerModal').classList.add('hidden'); }
+
+        function handleMultiFileUpload(event) {
+            const files = Array.from(event.target.files).slice(0, 5 - activeUploadedImages.length);
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (activeUploadedImages.length < 5) {
+                        activeUploadedImages.push(e.target.result);
+                        renderImagePreviews();
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
         }
 
-        // Image Handling
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                activeUploadedImageBase64 = e.target.result;
-                document.getElementById('imagePreview').src = activeUploadedImageBase64;
-                document.getElementById('imagePreviewContainer').classList.remove('hidden');
-                document.getElementById('formImage').value = '';
-            };
-            reader.readAsDataURL(file);
+        function handleMultiUrlInput(val) {
+            if (!val) return;
+            const urls = val.split(',').map(u => u.trim()).filter(u => u);
+            urls.forEach(url => {
+                if (activeUploadedImages.length < 5) {
+                    activeUploadedImages.push(url);
+                }
+            });
+            renderImagePreviews();
         }
 
-        function handleImageUrlInput(val) {
-            if (val) {
-                activeUploadedImageBase64 = '';
-                document.getElementById('imagePreview').src = val;
-                document.getElementById('imagePreviewContainer').classList.remove('hidden');
-            }
+        function removeImage(index) {
+            activeUploadedImages.splice(index, 1);
+            renderImagePreviews();
+        }
+
+        function renderImagePreviews() {
+            const container = document.getElementById('multiImagePreviewContainer');
+            container.innerHTML = activeUploadedImages.map((src, idx) => `
+                <div class="relative w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 overflow-hidden">
+                    <img src="${src}" class="w-full h-full object-contain">
+                    <button type="button" onclick="removeImage(${idx})" class="absolute top-0 right-0 bg-red-600 text-white rounded-bl p-0.5 text-xs">
+                        <i data-lucide="x" class="w-3 h-3"></i>
+                    </button>
+                </div>
+            `).join('');
+            lucide.createIcons();
         }
 
         function toggleDiscountInputs(enabled) {
@@ -819,31 +803,20 @@
             else fields.classList.add('hidden');
         }
 
-        // AI Social Media Post Parsing Assistant
         function runAIAssistantExtract() {
             const text = document.getElementById('aiRawInput').value;
             if (!text) {
-                showToast('Please paste social media post text first!', 'error');
+                showToast('الرجاء إدخال نص المنشور أولاً!', 'error');
                 return;
             }
 
-            // Simple pattern-matching simulation for extraction
-            if (text.toLowerCase().includes('iphone')) {
-                document.getElementById('formBrand').value = 'Apple';
-            } else if (text.toLowerCase().includes('samsung') || text.toLowerCase().includes('galaxy')) {
-                document.getElementById('formBrand').value = 'Samsung';
-            } else if (text.toLowerCase().includes('xiaomi')) {
-                document.getElementById('formBrand').value = 'Xiaomi';
-            }
+            const titleMatch = text.match(/(iphone\s+[0-9]+\s*(pro\s*max|pro|plus)?|آيفون\s+[0-9]+\s*(برو\s*ماكس|برو|بلس)?|سامسونج\s+جلاكسي\s+[a-z0-9\sأ-ي]+|samsung\s+galaxy\s+[a-z0-9\s]+|شاومي\s+[a-z0-9\sأ-ي]+|xiaomi\s+[a-z0-9\s]+|بكسل\s+[0-9]+|pixel\s+[0-9]+)/i);
+            if (titleMatch) document.getElementById('formTitle').value = titleMatch[0].trim();
 
-            const titleMatch = text.match(/(iphone\s+[0-9]+\s*pro\s*max|iphone\s+[0-9]+|samsung\s+galaxy\s+[a-z0-9\s]+|xiaomi\s+[a-z0-9\s]+)/i);
-            if (titleMatch) document.getElementById('formTitle').value = titleMatch[0];
-
-            const priceMatches = text.match(/(\d+[\d,]*)\s*(egp|pound|LE|l\.e)/ig);
-            if (priceMatches && priceMatches.length > 0) {
-                const nums = text.match(/\d+/g).map(Number).filter(n => n > 1000);
+            const prices = text.match(/\b\d{4,6}\b/g);
+            if (prices) {
+                const nums = prices.map(Number).sort((a,b) => b-a);
                 if (nums.length >= 2) {
-                    nums.sort((a,b) => b-a);
                     document.getElementById('formPrice').value = nums[0];
                     document.getElementById('formHasDiscount').checked = true;
                     toggleDiscountInputs(true);
@@ -853,13 +826,25 @@
                 }
             }
 
-            const phoneMatch = text.match(/(20\d{10}|\d{11})/);
-            if (phoneMatch) document.getElementById('formWhatsapp').value = phoneMatch[0];
+            if (/معفي|بدون ضريبة|zero fees|tax exempt|بدون جمارك/i.test(text)) {
+                document.getElementById('formIsTaxExempt').checked = true;
+            }
 
-            showToast('AI filled product fields from social post!', 'success');
+            const colorMatch = text.match(/(اسود|أسود|أبيض|ابيض|تيتانيوم|أزرق|ازرق|ذهبي|رمادي|كحلي|تيتانيوم طبيعي|natural titanium|black|white|blue|gold|grey)/i);
+            if (colorMatch) document.getElementById('formColor').value = colorMatch[0].trim();
+
+            const storageMatch = text.match(/(128|256|512|1TB|١٢٨|٢٥٦|٥١٢)\s*(جيجا|جيجابايت|GB|تيرابايت)/i);
+            if (storageMatch) document.getElementById('formStorage').value = storageMatch[0].trim();
+
+            const waMatch = text.match(/(20\d{10}|01\d{9}|\d{11})/);
+            if (waMatch) document.getElementById('formWhatsapp').value = waMatch[0];
+
+            const tgMatch = text.match(/@([a-zA-Z0-9_]+)/);
+            if (tgMatch) document.getElementById('formTelegram').value = tgMatch[1];
+
+            showToast('تم استخراج البيانات وتعبئة الحقول بنجاح!', 'success');
         }
 
-        // Admin Auth Flow
         function handleAdminDashboardClick() {
             if (currentView === 'admin') {
                 BackendServer.logout();
@@ -930,16 +915,12 @@
             }
         }
 
-        // Search and Filters
-        function handleSearch(val) {
-            searchQuery = val;
-            renderProducts();
-        }
-
+        function handleSearch(val) { searchQuery = val; renderProducts(); }
         function applyFilters() { renderProducts(); }
 
         function resetFilters() {
-            document.getElementById('brandFilter').value = 'All';
+            document.getElementById('minPriceInput').value = '';
+            document.getElementById('maxPriceInput').value = '';
             document.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
             searchQuery = '';
             setOffersTab(false);
@@ -950,8 +931,20 @@
             const product = products.find(p => p.id === id);
             if (!product) return;
 
-            document.getElementById('detailImage').src = product.image;
-            document.getElementById('detailBrand').innerText = product.brand;
+            const imgs = product.images && product.images.length > 0 ? product.images : [product.image || ''];
+            
+            const detailImg = document.getElementById('detailImage');
+            detailImg.src = imgs[0];
+
+            const thumbsContainer = document.getElementById('detailThumbnails');
+            thumbsContainer.innerHTML = imgs.map((src, i) => `
+                <img src="${src}" onclick="document.getElementById('detailImage').src='${src}'" class="w-12 h-12 object-contain rounded-lg bg-gray-800 border border-gray-700 cursor-pointer hover:border-brand-500">
+            `).join('');
+
+            const taxBadge = document.getElementById('detailTaxBadge');
+            if (product.isTaxExempt) taxBadge.classList.remove('hidden');
+            else taxBadge.classList.add('hidden');
+
             document.getElementById('detailTitle').innerText = product.title;
             
             const priceContainer = document.getElementById('detailPriceContainer');
@@ -965,9 +958,8 @@
             }
 
             document.getElementById('detailDescription').innerText = product.description;
-            document.getElementById('specChip').innerText = product.chip;
-            document.getElementById('specScreen').innerText = product.screen;
-            document.getElementById('specStorage').innerText = product.storage;
+            document.getElementById('specColor').innerText = product.color || '-';
+            document.getElementById('specStorage').innerText = product.storage || '-';
 
             const contactBtn = document.getElementById('detailContactBtn');
             contactBtn.onclick = () => { closeDetailModal(); openContactSellerModal(product.id); };
@@ -984,8 +976,8 @@
             const titleElem = document.getElementById('adminModalTitle');
 
             form.reset();
-            activeUploadedImageBase64 = '';
-            document.getElementById('imagePreviewContainer').classList.add('hidden');
+            activeUploadedImages = [];
+            renderImagePreviews();
             toggleDiscountInputs(false);
 
             if (productId) {
@@ -994,21 +986,20 @@
                     titleElem.innerText = 'Edit Smartphone';
                     document.getElementById('editProductId').value = product.id;
                     document.getElementById('formTitle').value = product.title;
-                    document.getElementById('formBrand').value = product.brand;
                     document.getElementById('formPrice').value = product.price;
+                    document.getElementById('formColor').value = product.color || '';
+                    document.getElementById('formIsTaxExempt').checked = !!product.isTaxExempt;
                     document.getElementById('formHasDiscount').checked = !!product.hasDiscount;
                     toggleDiscountInputs(!!product.hasDiscount);
                     document.getElementById('formDiscountPrice').value = product.discountPrice || '';
-                    document.getElementById('formImage').value = product.image;
-                    document.getElementById('imagePreview').src = product.image;
-                    document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                    
+                    activeUploadedImages = product.images && product.images.length > 0 ? [...product.images] : [product.image];
+                    renderImagePreviews();
+
                     document.getElementById('formWhatsapp').value = product.whatsapp || '';
-                    document.getElementById('formFacebook').value = product.facebook || '';
-                    document.getElementById('formInstagram').value = product.instagram || '';
-                    document.getElementById('formChip').value = product.chip;
-                    document.getElementById('formScreen').value = product.screen;
-                    document.getElementById('formStorage').value = product.storage;
-                    document.getElementById('formDescription').value = product.description;
+                    document.getElementById('formTelegram').value = product.telegram || '';
+                    document.getElementById('formStorage').value = product.storage || '';
+                    document.getElementById('formDescription').value = product.description || '';
                 }
             } else {
                 titleElem.innerText = 'Add New Smartphone';
@@ -1026,28 +1017,29 @@
 
             const editId = document.getElementById('editProductId').value;
             const hasDiscount = document.getElementById('formHasDiscount').checked;
-            const imageUrl = activeUploadedImageBase64 || document.getElementById('formImage').value || 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80';
+            
+            const finalImages = activeUploadedImages.length > 0 ? activeUploadedImages : ['https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80'];
 
             const productData = {
                 id: editId || Date.now().toString(),
                 title: document.getElementById('formTitle').value,
-                brand: document.getElementById('formBrand').value,
                 price: parseFloat(document.getElementById('formPrice').value),
+                color: document.getElementById('formColor').value,
+                isTaxExempt: document.getElementById('formIsTaxExempt').checked,
                 hasDiscount: hasDiscount,
                 discountPrice: hasDiscount ? parseFloat(document.getElementById('formDiscountPrice').value || 0) : 0,
-                image: imageUrl,
+                images: finalImages,
                 whatsapp: document.getElementById('formWhatsapp').value,
-                facebook: document.getElementById('formFacebook').value,
-                instagram: document.getElementById('formInstagram').value,
-                chip: document.getElementById('formChip').value,
-                screen: document.getElementById('formScreen').value,
+                telegram: document.getElementById('formTelegram').value,
                 storage: document.getElementById('formStorage').value,
                 description: document.getElementById('formDescription').value
             };
 
             if (editId) {
                 const index = products.findIndex(p => p.id === editId);
-                if (index !== -1) products[index] = productData;
+                if (index !== -1) {
+                    products[index] = productData;
+                }
                 showToast('Device updated!');
             } else {
                 products.unshift(productData);
