@@ -6,10 +6,9 @@
     <title>NEXUS - Next-Gen Mobile Store</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Lucide Icons (Fixed Integration) -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <!-- Bcrypt JS for Secure Hashing -->
+    <!-- Bcrypt JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -205,7 +204,6 @@
                     <p class="text-sm text-gray-400">Browse phones or click special discount offers below</p>
                 </div>
 
-                <!-- Navigation Tabs & Manual Price Filter Bar -->
                 <div class="flex flex-wrap items-center gap-3">
                     <div class="bg-dark-card border border-gray-700 p-1 rounded-xl flex items-center gap-1">
                         <button id="tabAll" onclick="setOffersTab(false)" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-600 text-white">
@@ -216,7 +214,6 @@
                         </button>
                     </div>
 
-                    <!-- Manual Price Range Inputs -->
                     <div class="flex items-center gap-1.5 bg-dark-card border border-gray-700 px-3 py-1.5 rounded-xl">
                         <span class="text-xs font-bold text-gray-400">EGP:</span>
                         <input type="number" id="minPriceInput" oninput="applyFilters()" placeholder="من" class="w-16 bg-dark-input border border-gray-700/80 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-brand-500">
@@ -400,7 +397,6 @@
             
             <h3 id="adminModalTitle" class="text-xl font-extrabold text-white mb-4">Add / Edit Smartphone</h3>
 
-            <!-- Multilingual Arabic & English AI Assistant -->
             <div class="mb-6 p-4 rounded-2xl bg-brand-900/30 border border-brand-500/30">
                 <div class="flex items-center gap-2 mb-2 text-brand-400 font-bold text-xs uppercase tracking-wider">
                     <i data-lucide="bot" class="w-4 h-4"></i> AI Assistant: Intelligent Post Extractor (عربي / English)
@@ -433,7 +429,6 @@
                     </div>
                 </div>
 
-                <!-- Tax Exemption Checkbox -->
                 <div class="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/30 flex items-center gap-2">
                     <input type="checkbox" id="formIsTaxExempt" class="w-4 h-4 text-emerald-600 rounded bg-dark-input border-gray-700 focus:ring-emerald-500">
                     <label for="formIsTaxExempt" class="text-xs font-bold text-emerald-400 flex items-center gap-1 cursor-pointer">
@@ -514,61 +509,61 @@
     </footer>
 
     <script>
-        // ======= إعدادات الربط بقاعدة بيانات Supabase =======
-        const SUPABASE_URL = "https://cpfpiuckpcnfbyzoyepm.supabase.co";
-        // ضع المفتاح الكامل المسمى Publishable Key من لوحة تحكم Supabase بين العلامتين
-        const SUPABASE_KEY = "ضع_المفتاح_الكامل_هنا_بدون_أقواس"; 
-
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        let products = [];
-        let currentView = 'customer';
-        let searchQuery = '';
-        let showOnlyOffers = false;
-        let activeUploadedImages = [];
-
-        window.addEventListener('DOMContentLoaded', async () => {
-            await fetchProducts();
-            lucide.createIcons();
-        });
-
-        async function fetchProducts() {
-            try {
-                const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
-                if (!error && data) {
-                    products = data.map(p => ({
-                        id: p.id,
-                        title: p.title,
-                        price: p.price,
-                        color: p.color,
-                        isTaxExempt: p.is_tax_exempt,
-                        hasDiscount: p.has_discount,
-                        discountPrice: p.discount_price,
-                        images: p.images || [],
-                        whatsapp: p.whatsapp,
-                        telegram: p.telegram,
-                        storage: p.storage,
-                        description: p.description
-                    }));
-                    renderProducts();
-                    if (currentView === 'admin') renderAdminTable();
-                } else if (error) {
-                    console.error('Supabase fetch error:', error);
-                }
-            } catch (err) {
-                console.error('Connection error:', err);
+        const initialProducts = [
+            {
+                id: '1',
+                title: 'iPhone 15 Pro Max',
+                price: 60000,
+                hasDiscount: true,
+                discountPrice: 54000,
+                isTaxExempt: true,
+                color: 'Natural Titanium / أسود تيتانيوم',
+                images: ['https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80'],
+                storage: '256GB / 512GB / 1TB',
+                description: 'Titanium design, A17 Pro chip, Action button, and 5x Optical Zoom camera.',
+                whatsapp: '201000000000',
+                telegram: 'nexus_store'
+            },
+            {
+                id: '2',
+                title: 'Samsung Galaxy S24 Ultra',
+                price: 65000,
+                hasDiscount: true,
+                discountPrice: 58500,
+                isTaxExempt: false,
+                color: 'Titanium Black / أسود',
+                images: ['https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80'],
+                storage: '256GB / 512GB',
+                description: 'Built-in S Pen stylus with Galaxy AI features and 200MP camera.',
+                whatsapp: '201000000000',
+                telegram: 'nexus_store'
             }
+        ];
+
+        // Supabase Settings (Optional Client Integration)
+        const SUPABASE_URL = "https://cpfpiuckpcnfbyzoyepm.supabase.co";
+        const SUPABASE_KEY = "YOUR_ANON_KEY_HERE";
+        let supabaseClient = null;
+        if (window.supabase && SUPABASE_KEY !== "YOUR_ANON_KEY_HERE") {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         }
 
         const BackendServer = {
+            async init() {
+                if (!localStorage.getItem('nexus_admin_user')) {
+                    const defaultHash = dcodeIO.bcrypt.hashSync('admin123', 10);
+                    localStorage.setItem('nexus_admin_user', JSON.stringify({
+                        username: 'admin',
+                        passwordHash: defaultHash
+                    }));
+                }
+            },
             async login(username, password) {
-                const { data, error } = await supabase.from('admin_users').select('*').eq('username', username).single();
-                if (error || !data) return { success: false, message: 'Invalid credentials' };
-                
-                const isPasswordValid = await dcodeIO.bcrypt.compare(password, data.password_hash);
+                const storedUser = JSON.parse(localStorage.getItem('nexus_admin_user'));
+                if (username !== storedUser.username) return { success: false, message: 'Invalid credentials' };
+                const isPasswordValid = await dcodeIO.bcrypt.compare(password, storedUser.passwordHash);
                 if (!isPasswordValid) return { success: false, message: 'Invalid credentials' };
-                
-                const token = btoa(JSON.stringify({ username: data.username, exp: Date.now() + 7200000 }));
+                const token = btoa(JSON.stringify({ username: storedUser.username, exp: Date.now() + 7200000 }));
                 sessionStorage.setItem('nexus_admin_token', token);
                 return { success: true, token };
             },
@@ -585,25 +580,32 @@
             logout() { sessionStorage.removeItem('nexus_admin_token'); },
             async updateCredentials(currPassword, newUsername, newPassword) {
                 if (!this.isAuthenticated()) return { success: false, message: 'Unauthorized' };
-                const token = JSON.parse(atob(sessionStorage.getItem('nexus_admin_token')));
-                
-                const { data, error } = await supabase.from('admin_users').select('*').eq('username', token.username).single();
-                if (error || !data) return { success: false, message: 'User not found' };
-
-                const isPasswordValid = await dcodeIO.bcrypt.compare(currPassword, data.password_hash);
+                const storedUser = JSON.parse(localStorage.getItem('nexus_admin_user'));
+                const isPasswordValid = await dcodeIO.bcrypt.compare(currPassword, storedUser.passwordHash);
                 if (!isPasswordValid) return { success: false, message: 'Current password incorrect' };
-
                 const newHash = await dcodeIO.bcrypt.hash(newPassword, 10);
-                const { error: updateError } = await supabase.from('admin_users')
-                    .update({ username: newUsername, password_hash: newHash })
-                    .eq('id', data.id);
-
-                if (updateError) return { success: false, message: updateError.message };
-                
-                sessionStorage.setItem('nexus_admin_token', btoa(JSON.stringify({ username: newUsername, exp: Date.now() + 7200000 })));
+                localStorage.setItem('nexus_admin_user', JSON.stringify({ username: newUsername, passwordHash: newHash }));
                 return { success: true };
             }
         };
+
+        let products = JSON.parse(localStorage.getItem('nexus_products')) || initialProducts;
+        let currentView = 'customer';
+        let searchQuery = '';
+        let showOnlyOffers = false;
+        let activeUploadedImages = [];
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            await BackendServer.init();
+            renderProducts();
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
+
+        function saveProducts() {
+            localStorage.setItem('nexus_products', JSON.stringify(products));
+        }
 
         function setOffersTab(offersOnly) {
             showOnlyOffers = offersOnly;
@@ -649,6 +651,7 @@
             if (filtered.length === 0) {
                 grid.innerHTML = '';
                 emptyState.classList.remove('hidden');
+                if (window.lucide) lucide.createIcons();
                 return;
             }
 
@@ -702,7 +705,7 @@
                 </div>
             `}).join('');
 
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         }
 
         function renderAdminTable() {
@@ -737,7 +740,7 @@
                 </tr>
             `}).join('');
 
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         }
 
         function openContactSellerModal(id) {
@@ -799,7 +802,7 @@
                     </button>
                 </div>
             `).join('');
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         }
 
         function toggleDiscountInputs(enabled) {
@@ -1016,7 +1019,7 @@
 
         function closeProductModal() { document.getElementById('adminModal').classList.add('hidden'); }
 
-        async function handleFormSubmit(e) {
+        function handleFormSubmit(e) {
             e.preventDefault();
             if (!BackendServer.isAuthenticated()) return;
 
@@ -1030,9 +1033,9 @@
                 title: document.getElementById('formTitle').value,
                 price: parseFloat(document.getElementById('formPrice').value),
                 color: document.getElementById('formColor').value,
-                is_tax_exempt: document.getElementById('formIsTaxExempt').checked,
-                has_discount: hasDiscount,
-                discount_price: hasDiscount ? parseFloat(document.getElementById('formDiscountPrice').value || 0) : 0,
+                isTaxExempt: document.getElementById('formIsTaxExempt').checked,
+                hasDiscount: hasDiscount,
+                discountPrice: hasDiscount ? parseFloat(document.getElementById('formDiscountPrice').value || 0) : 0,
                 images: finalImages,
                 whatsapp: document.getElementById('formWhatsapp').value,
                 telegram: document.getElementById('formTelegram').value,
@@ -1040,29 +1043,33 @@
                 description: document.getElementById('formDescription').value
             };
 
-            const { error } = await supabase.from('products').upsert(productData);
-
-            if (!error) {
-                showToast(editId ? 'Device updated!' : 'Device added to catalog!');
-                await fetchProducts();
-                closeProductModal();
+            if (editId) {
+                const index = products.findIndex(p => p.id === editId);
+                if (index !== -1) {
+                    products[index] = productData;
+                }
+                showToast('Device updated!');
             } else {
-                showToast(error.message, 'error');
+                products.unshift(productData);
+                showToast('Device added to catalog!');
             }
+
+            saveProducts();
+            closeProductModal();
+            renderAdminTable();
+            renderProducts();
         }
 
         function editProduct(id) { openProductModal(id); }
 
-        async function deleteProduct(id) {
+        function deleteProduct(id) {
             if (!BackendServer.isAuthenticated()) return;
             if (confirm('Remove device listing?')) {
-                const { error } = await supabase.from('products').delete().eq('id', id);
-                if (!error) {
-                    showToast('Listing removed', 'error');
-                    await fetchProducts();
-                } else {
-                    showToast(error.message, 'error');
-                }
+                products = products.filter(p => p.id !== id);
+                saveProducts();
+                renderAdminTable();
+                renderProducts();
+                showToast('Listing removed', 'error');
             }
         }
 
@@ -1073,7 +1080,7 @@
             toast.className = `pointer-events-auto ${bgColor} text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 animate-fade-in transition-all duration-300`;
             toast.innerHTML = `<i data-lucide="info" class="w-4 h-4"></i><span>${message}</span>`;
             container.appendChild(toast);
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-2');
                 setTimeout(() => toast.remove(), 300);
