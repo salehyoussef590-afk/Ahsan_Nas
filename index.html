@@ -9,7 +9,7 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <!-- Bcrypt JS -->
+    <!-- Bcrypt JS for Secure Hashing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -20,10 +20,24 @@
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['"Plus Jakarta Sans"', '"Cairo"', 'sans-serif'] },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Cairo"', 'sans-serif'],
+                    },
                     colors: {
-                        brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81' },
-                        dark: { bg: '#0b0f19', card: '#111827', border: '#1f2937', input: '#1d283a' }
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        },
+                        dark: {
+                            bg: '#0b0f19',
+                            card: '#111827',
+                            border: '#1f2937',
+                            input: '#1d283a'
+                        }
                     },
                     animation: {
                         'pulse-glow': 'pulseGlow 2s infinite',
@@ -33,28 +47,72 @@
                         'slide-up': 'slideUp 0.4s ease-out forwards',
                     },
                     keyframes: {
-                        pulseGlow: { '0%, 100%': { opacity: 0.6, transform: 'scale(1)' }, '50%': { opacity: 1, transform: 'scale(1.05)' } },
-                        redLightning: { '0%': { boxShadow: '0 0 5px #ef4444, 0 0 10px #ef4444', borderColor: '#ef4444' }, '100%': { boxShadow: '0 0 20px #dc2626, 0 0 30px #dc2626', borderColor: '#f87171' } },
-                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-6px)' } },
-                        fadeIn: { '0%': { opacity: 0 }, '100%': { opacity: 1 } },
-                        slideUp: { '0%': { opacity: 0, transform: 'translateY(20px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } }
+                        pulseGlow: {
+                            '0%, 100%': { opacity: 0.6, transform: 'scale(1)' },
+                            '50%': { opacity: 1, transform: 'scale(1.05)' },
+                        },
+                        redLightning: {
+                            '0%': { boxShadow: '0 0 5px #ef4444, 0 0 10px #ef4444', borderColor: '#ef4444' },
+                            '100%': { boxShadow: '0 0 20px #dc2626, 0 0 30px #dc2626', borderColor: '#f87171' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: 0 },
+                            '100%': { opacity: 1 },
+                        },
+                        slideUp: {
+                            '0%': { opacity: 0, transform: 'translateY(20px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        }
                     }
                 }
             }
         }
     </script>
     <style>
-        body { background-color: #0b0f19; color: #f3f4f6; font-family: 'Plus Jakarta Sans', 'Cairo', sans-serif; overflow-x: hidden; }
+        body {
+            background-color: #0b0f19;
+            color: #f3f4f6;
+            font-family: 'Plus Jakarta Sans', 'Cairo', sans-serif;
+            overflow-x: hidden;
+        }
+
         ::-webkit-scrollbar { inline-size: 8px; }
         ::-webkit-scrollbar-track { background: #0b0f19; }
         ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #374151; }
-        .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .glass-nav { background: rgba(11, 15, 25, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-block-end: 1px solid rgba(255, 255, 255, 0.08); }
-        .glow-effect-hover:hover { box-shadow: 0 0 30px 0px rgba(99, 102, 241, 0.45); }
-        .red-glow-card { animation: redLightning 1.5s ease-in-out infinite alternate; }
-        .product-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .product-card:hover { transform: translateY(-8px); }
+
+        .glass-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-nav {
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-block-end: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glow-effect-hover:hover {
+            box-shadow: 0 0 30px 0px rgba(99, 102, 241, 0.45);
+        }
+
+        .red-glow-card {
+            animation: redLightning 1.5s ease-in-out infinite alternate;
+        }
+
+        .product-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
@@ -147,6 +205,7 @@
                     <p class="text-sm text-gray-400">Browse phones or click special discount offers below</p>
                 </div>
 
+                <!-- Navigation Tabs & Manual Price Filter Bar -->
                 <div class="flex flex-wrap items-center gap-3">
                     <div class="bg-dark-card border border-gray-700 p-1 rounded-xl flex items-center gap-1">
                         <button id="tabAll" onclick="setOffersTab(false)" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-600 text-white">
@@ -157,6 +216,7 @@
                         </button>
                     </div>
 
+                    <!-- Manual Price Range Inputs -->
                     <div class="flex items-center gap-1.5 bg-dark-card border border-gray-700 px-3 py-1.5 rounded-xl">
                         <span class="text-xs font-bold text-gray-400">EGP:</span>
                         <input type="number" id="minPriceInput" oninput="applyFilters()" placeholder="من" class="w-16 bg-dark-input border border-gray-700/80 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-brand-500">
@@ -340,6 +400,7 @@
             
             <h3 id="adminModalTitle" class="text-xl font-extrabold text-white mb-4">Add / Edit Smartphone</h3>
 
+            <!-- Multilingual Arabic & English AI Assistant -->
             <div class="mb-6 p-4 rounded-2xl bg-brand-900/30 border border-brand-500/30">
                 <div class="flex items-center gap-2 mb-2 text-brand-400 font-bold text-xs uppercase tracking-wider">
                     <i data-lucide="bot" class="w-4 h-4"></i> AI Assistant: Intelligent Post Extractor (عربي / English)
@@ -372,6 +433,7 @@
                     </div>
                 </div>
 
+                <!-- Tax Exemption Checkbox -->
                 <div class="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/30 flex items-center gap-2">
                     <input type="checkbox" id="formIsTaxExempt" class="w-4 h-4 text-emerald-600 rounded bg-dark-input border-gray-700 focus:ring-emerald-500">
                     <label for="formIsTaxExempt" class="text-xs font-bold text-emerald-400 flex items-center gap-1 cursor-pointer">
@@ -437,7 +499,9 @@
                 </div>
                 <span class="font-extrabold text-white text-sm">NEXUS MOBILE EGYPT</span>
             </div>
+            
             <p class="text-xs text-gray-500">© 2026 NEXUS Store. Prices listed in Egyptian Pounds (EGP).</p>
+
             <div class="flex items-center gap-3">
                 <a href="https://wa.me/201000000000" target="_blank" class="w-9 h-9 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 hover:bg-emerald-600 hover:text-white transition-all flex items-center justify-center">
                     <i data-lucide="phone-call" class="w-4 h-4"></i>
@@ -450,10 +514,9 @@
     </footer>
 
     <script>
-        // 1. رابط المشرف (تم التصحيح وحذف rest/v1/)
+        // ======= إعدادات الربط بقاعدة بيانات Supabase =======
         const SUPABASE_URL = "https://cpfpiuckpcnfbyzoyepm.supabase.co";
-        
-        // 2. المرجو استبدال النص الأسفل بالمفتاح الكامل الظاهر في Supabase المسمى Publishable Key
+        // ضع المفتاح الكامل المسمى Publishable Key من لوحة تحكم Supabase بين العلامتين
         const SUPABASE_KEY = "ضع_المفتاح_الكامل_هنا_بدون_أقواس"; 
 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -515,7 +578,9 @@
                 try {
                     const parsed = JSON.parse(atob(token));
                     return parsed.exp > Date.now();
-                } catch (e) { return false; }
+                } catch (e) {
+                    return false;
+                }
             },
             logout() { sessionStorage.removeItem('nexus_admin_token'); },
             async updateCredentials(currPassword, newUsername, newPassword) {
@@ -680,6 +745,7 @@
             if (!product) return;
 
             document.getElementById('contactDeviceTitle').innerText = `${product.title} (${product.hasDiscount ? product.discountPrice : product.price} EGP)`;
+
             const encodedMsg = encodeURIComponent(`Hello, I am inquiring about buying the ${product.title} listed for ${product.hasDiscount ? product.discountPrice : product.price} EGP.`);
             
             const waNum = product.whatsapp ? product.whatsapp.replace(/[^0-9]/g, '') : '201000000000';
@@ -711,7 +777,9 @@
             if (!val) return;
             const urls = val.split(',').map(u => u.trim()).filter(u => u);
             urls.forEach(url => {
-                if (activeUploadedImages.length < 5) activeUploadedImages.push(url);
+                if (activeUploadedImages.length < 5) {
+                    activeUploadedImages.push(url);
+                }
             });
             renderImagePreviews();
         }
@@ -930,7 +998,7 @@
                     toggleDiscountInputs(!!product.hasDiscount);
                     document.getElementById('formDiscountPrice').value = product.discountPrice || '';
                     
-                    activeUploadedImages = product.images && product.images.length > 0 ? [...product.images] : [];
+                    activeUploadedImages = product.images && product.images.length > 0 ? [...product.images] : (product.image ? [product.image] : []);
                     renderImagePreviews();
 
                     document.getElementById('formWhatsapp').value = product.whatsapp || '';
