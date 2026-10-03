@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS - Next-Gen Mobile Store</title>
+    <title>احسن ناس | Ahsan Nas - اليافطة الصفرا الاصلية مش التقليد</title>
+    <meta name="theme-color" content="#0b0f14">
+    <link rel="icon" href="logo-emblem.png" type="image/png">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <!-- Bcrypt JS for Secure Hashing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <!-- Supabase (cloud database, auth, image storage) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -21,22 +21,12 @@
                 extend: {
                     fontFamily: {
                         sans: ['"Plus Jakarta Sans"', '"Cairo"', 'sans-serif'],
+                        serif: ['"Playfair Display"', '"Cairo"', 'serif'],
                     },
                     colors: {
-                        brand: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            900: '#312e81',
-                        },
-                        dark: {
-                            bg: '#0b0f19',
-                            card: '#111827',
-                            border: '#1f2937',
-                            input: '#1d283a'
-                        }
+                        brand: { 50: '#faf4e4', 100: '#f1e4c0', 300: '#e3cd96', 400: '#d2b574', 500: '#bd9a55', 600: '#8f6e34', 700: '#715629', 900: '#3a2e18' },
+                        gray: { 50: '#f4f6f8', 100: '#e8ecf0', 200: '#d3d9e0', 300: '#b4bdc8', 400: '#8d98a6', 500: '#697585', 600: '#4d5866', 700: '#373f4b', 800: '#242b35', 900: '#151a21', 950: '#0c1015' },
+                        dark: { bg: '#0b0f14', card: '#121820', border: '#232c37', input: '#19212b' }
                     },
                     animation: {
                         'pulse-glow': 'pulseGlow 2s infinite',
@@ -73,33 +63,33 @@
     </script>
     <style>
         body {
-            background-color: #0b0f19;
+            background-color: #0b0f14;
             color: #f3f4f6;
             font-family: 'Plus Jakarta Sans', 'Cairo', sans-serif;
             overflow-x: hidden;
         }
 
         ::-webkit-scrollbar { inline-size: 8px; }
-        ::-webkit-scrollbar-track { background: #0b0f19; }
-        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #374151; }
+        ::-webkit-scrollbar-track { background: #0b0f14; }
+        ::-webkit-scrollbar-thumb { background: #232c37; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #373f4b; }
 
         .glass-card {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(20, 27, 35, 0.72);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .glass-nav {
-            background: rgba(11, 15, 25, 0.85);
+            background: rgba(11, 15, 20, 0.88);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-block-end: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .glow-effect-hover:hover {
-            box-shadow: 0 0 30px 0px rgba(99, 102, 241, 0.45);
+            box-shadow: 0 0 30px 0px rgba(222, 186, 110, 0.38);
         }
 
         .red-glow-card {
@@ -112,36 +102,62 @@
         .product-card:hover {
             transform: translateY(-8px);
         }
+    
+        /* ---------- Luxury & motion layer ---------- */
+        .font-lux { font-family: 'Playfair Display','Cairo',serif; letter-spacing: .01em; }
+        .font-ar { font-family: 'Aref Ruqaa','Cairo',serif; letter-spacing: 0; }
+        .gold-text { background: linear-gradient(180deg,#f1e2b8 0%,#d2b574 45%,#8f6e34 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        body { background-image: radial-gradient(1200px 600px at 50% -10%, rgba(120,140,160,.10), transparent 60%); }
+        .shine-text { background-size: 200% auto; animation: shineText 5s linear infinite alternate; }
+        @keyframes shineText { to { background-position: 100% center; } }
+        @keyframes revealUp { from { opacity: 0; transform: translateY(28px) scale(.98); } }
+        .reveal:not(.in) { opacity: 0; }
+        .reveal.in { animation: revealUp .8s cubic-bezier(.2,.7,.2,1) backwards; }
+        .spot { position: relative; overflow: hidden; }
+        .spot::before { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .3s;
+            background: radial-gradient(380px circle at var(--mx,50%) var(--my,50%), rgba(236,205,140,.14), transparent 60%); }
+        .spot:hover::before { opacity: 1; }
+        .lux-line { height: 1px; background: linear-gradient(90deg, transparent, rgba(222,186,110,.7), transparent); }
+        .glass-card { box-shadow: inset 0 1px 0 rgba(255,255,255,.06); }
+        .hero-orb { animation: orb 12s ease-in-out infinite alternate; }
+        @keyframes orb { to { transform: translate(60px,40px) scale(1.15); } }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+            .reveal:not(.in) { opacity: 1; }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+    
 
     <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
     <header class="glass-nav sticky top-0 z-40 w-full transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center shadow-lg shadow-brand-500/30">
-                        <i data-lucide="smartphone" class="w-6 h-6 text-white"></i>
-                    </div>
-                    <div>
-                        <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-white via-gray-200 to-brand-500 bg-clip-text text-transparent">NEXUS</span>
-                        <span class="text-xs block font-medium text-brand-500 tracking-widest uppercase -mt-1">MOBILE EGYPT</span>
+                <div class="flex items-center gap-3 cursor-pointer" onclick="resetFilters()">
+                    <img src="logo-emblem.png" alt="Ahsan Nas logo" class="w-12 h-12 shrink-0 rounded-full drop-shadow-lg">
+                    <div class="leading-tight">
+                        <div dir="rtl" class="font-ar text-2xl sm:text-3xl font-bold gold-text">احسن ناس</div>
+                        <div dir="rtl" class="text-[11px] sm:text-xs font-bold text-brand-400">اليافطة الصفرا الاصلية مش التقليد</div>
                     </div>
                 </div>
 
                 <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
                     <i data-lucide="search" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Search iPhone, Galaxy, Pixel, Xiaomi..." 
+                    <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Search signs, iPhone, Galaxy, Pixel..." 
                         class="w-full pl-11 pr-4 py-2.5 bg-dark-input/80 border border-gray-700/60 rounded-full text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <button onclick="handleAdminDashboardClick()" id="adminToggleBtn" 
-                        class="px-3.5 py-2 rounded-xl border border-gray-700/80 bg-gray-800/50 hover:bg-gray-700/60 text-xs sm:text-sm font-semibold text-gray-300 hover:text-white transition-all flex items-center gap-2">
-                        <i data-lucide="shield" class="w-4 h-4 text-brand-500"></i>
-                        <span id="adminBtnText">Admin Dashboard</span>
+                    <a href="#accessories" class="hidden sm:inline-flex px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-gray-300 hover:text-white transition-all items-center gap-2"><i data-lucide="headphones" class="w-4 h-4 text-brand-500"></i> Accessories</a>
+                    <button onclick="openCart()" aria-label="Open cart" class="relative px-3.5 py-2 rounded-xl border border-gray-700/80 bg-gray-800/50 hover:bg-gray-700/60 text-xs sm:text-sm font-semibold text-gray-300 hover:text-white transition-all flex items-center gap-2">
+                        <i data-lucide="shopping-cart" class="w-4 h-4 text-brand-500"></i><span class="hidden sm:inline">Cart</span>
+                        <span id="cartBadge" class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-red-600 text-white text-[10px] font-bold flex items-center justify-center">0</span>
+                    </button>
+                    <button onclick="openMenu()" aria-label="Open menu" class="px-3 py-2 rounded-xl border border-gray-700/80 bg-gray-800/50 hover:bg-gray-700/60 text-gray-300 hover:text-white transition-all flex items-center gap-2">
+                        <i data-lucide="menu" class="w-5 h-5 text-brand-500"></i>
+                        <span id="menuUserLabel" class="hidden sm:inline max-w-[110px] truncate text-xs font-semibold"></span>
                     </button>
                 </div>
             </div>
@@ -149,21 +165,21 @@
     </header>
 
     <section class="relative overflow-hidden pt-8 pb-12">
-        <div class="absolute -top-24 -left-24 w-96 h-96 bg-brand-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="hero-orb absolute -top-24 -left-24 w-96 h-96 bg-brand-600/20 rounded-full blur-3xl pointer-events-none"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="glass-card rounded-3xl p-6 sm:p-10 border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div class="animate-slide-up glass-card rounded-3xl p-6 sm:p-10 border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-8">
                 <div class="max-w-xl text-center lg:text-left">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-500 border border-brand-500/20 mb-4">
-                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Direct Seller Deals • Egypt
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Brass &amp; Gold Signs · Egypt
                     </span>
-                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight mb-4">
-                        Find Best Smartphone <br><span class="bg-gradient-to-r from-brand-500 via-indigo-300 to-purple-400 bg-clip-text text-transparent">Deals in EGP</span>
-                    </h1>
+                    <h1 dir="rtl" class="font-ar text-6xl sm:text-8xl font-bold leading-tight mb-1"><span class="gold-text">احسن ناس</span></h1>
+                    <div class="font-lux text-sm tracking-[0.5em] text-brand-400 mb-4">AHSAN NAS</div>
+                    <p dir="rtl" class="font-ar text-2xl sm:text-3xl font-bold text-brand-300 mb-5">اليافطة الصفرا الاصلية مش التقليد</p>
                     <p class="text-gray-400 text-sm sm:text-base leading-relaxed mb-6">
-                        Browse premium smartphones with instant discounted rates. Connect directly with sellers through WhatsApp or Telegram for immediate inquiries!
+                        Original brass-finish signs and premium smartphones, never the imitation. Order online, pay with InstaPay or e-wallet, and follow your order step by step.
                     </p>
                     <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
-                        <a href="#catalog" onclick="filterByOffers(false)" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-lg shadow-brand-500/30 transition-all flex items-center gap-2">
+                        <a href="#catalog" onclick="filterByOffers(false)" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-lg shadow-brand-500/30 transition-all flex items-center gap-2">
                             Browse All Devices
                         </a>
                         <a href="#catalog" onclick="filterByOffers(true)" class="px-6 py-3 rounded-xl bg-red-600/80 hover:bg-red-600 text-white text-sm font-semibold border border-red-500 shadow-lg shadow-red-500/30 transition-all flex items-center gap-2">
@@ -173,20 +189,10 @@
                 </div>
 
                 <div class="relative w-full max-w-sm flex justify-center">
-                    <div class="relative w-64 h-80 sm:w-72 sm:h-96 rounded-3xl p-4 glass-card border border-white/20 animate-float shadow-2xl flex flex-col justify-between">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Top Deal</span>
-                            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30 flex items-center gap-1">
-                                <i data-lucide="zap" class="w-3 h-3 text-red-400"></i> Offer
-                            </span>
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80" alt="Featured Mobile" class="w-44 h-44 object-contain mx-auto drop-shadow-2xl">
-                        <div>
-                            <h3 class="text-lg font-bold text-white">iPhone 15 Pro Max</h3>
-                            <div class="flex items-center gap-2">
-                                <p class="text-red-400 font-extrabold text-xl">54,000 EGP</p>
-                                <p class="text-xs text-gray-500 line-through">60,000 EGP</p>
-                            </div>
+                    <div class="relative w-64 sm:w-72 rounded-3xl overflow-hidden glass-card border border-brand-500/40 animate-float shadow-2xl">
+                        <img src="hero.jpg" alt="Ahsan Nas illuminated gold sign" class="w-full h-80 sm:h-[28rem] object-cover object-center">
+                        <div class="absolute inset-x-0 bottom-0 p-4" style="background:linear-gradient(to top, rgba(11,15,20,.92), transparent)">
+                            <div dir="rtl" class="font-ar text-lg font-bold text-brand-300">اليافطة الصفرا الاصلية مش التقليد</div>
                         </div>
                     </div>
                 </div>
@@ -198,12 +204,13 @@
         <div id="customerView">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
                 <div>
-                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <h2 class="font-lux text-2xl font-bold text-white flex items-center gap-2">
                         Device Catalog <span id="productCount" class="text-xs bg-gray-800 text-gray-400 px-2.5 py-1 rounded-full border border-gray-700">0 Items</span>
                     </h2>
                     <p class="text-sm text-gray-400">Browse phones or click special discount offers below</p>
                 </div>
 
+                <!-- Navigation Tabs & Manual Price Filter Bar -->
                 <div class="flex flex-wrap items-center gap-3">
                     <div class="bg-dark-card border border-gray-700 p-1 rounded-xl flex items-center gap-1">
                         <button id="tabAll" onclick="setOffersTab(false)" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-600 text-white">
@@ -214,6 +221,7 @@
                         </button>
                     </div>
 
+                    <!-- Manual Price Range Inputs -->
                     <div class="flex items-center gap-1.5 bg-dark-card border border-gray-700 px-3 py-1.5 rounded-xl">
                         <span class="text-xs font-bold text-gray-400">EGP:</span>
                         <input type="number" id="minPriceInput" oninput="applyFilters()" placeholder="من" class="w-16 bg-dark-input border border-gray-700/80 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-brand-500">
@@ -233,8 +241,22 @@
                 <i data-lucide="search-x" class="w-16 h-16 text-gray-500 mx-auto mb-4"></i>
                 <h3 class="text-xl font-bold text-white mb-2">No Smartphones Found</h3>
                 <p class="text-gray-400 text-sm max-w-md mx-auto mb-6">No devices found for the selected category or filter criteria.</p>
-                <button onclick="resetFilters()" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold transition-all">Clear Filters</button>
+                <button onclick="resetFilters()" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition-all">Clear Filters</button>
             </div>
+
+            <!-- ACCESSORIES -->
+            <section id="accessories" class="mt-20 scroll-mt-28">
+                <div class="lux-line mb-10"></div>
+                <div class="reveal mb-8 text-center sm:text-left">
+                    <span class="text-[11px] uppercase tracking-[0.3em] text-brand-500 font-semibold">The Finishing Touch</span>
+                    <h2 class="font-lux text-3xl sm:text-4xl font-bold text-white mt-2 flex items-center gap-3 justify-center sm:justify-start">
+                        Accessories <span id="accessoryCount" class="text-xs font-sans bg-gray-800 text-gray-400 px-2.5 py-1 rounded-full border border-gray-700">0 Items</span>
+                    </h2>
+                    <p class="text-sm text-gray-400 mt-1">Cases, chargers, audio and more, curated to complement your device.</p>
+                </div>
+                <div id="accessoryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+                <div id="accessoryEmpty" class="hidden text-center py-12 glass-card rounded-3xl text-gray-400 text-sm">New accessories are arriving soon.</div>
+            </section>
         </div>
 
         <div id="adminView" class="hidden">
@@ -249,7 +271,7 @@
                     <button onclick="openCredentialsModal()" class="px-4 py-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700 border border-gray-700 text-gray-200 text-sm font-semibold transition-all flex items-center gap-2">
                         <i data-lucide="key" class="w-4 h-4 text-brand-500"></i> Credentials
                     </button>
-                    <button onclick="openProductModal()" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-lg transition-all flex items-center gap-2">
+                    <button onclick="openProductModal()" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-lg transition-all flex items-center gap-2">
                         <i data-lucide="plus" class="w-4 h-4"></i> Add New Phone
                     </button>
                 </div>
@@ -263,12 +285,129 @@
                                 <th class="px-6 py-4">Phone</th>
                                 <th class="px-6 py-4">Color</th>
                                 <th class="px-6 py-4">Tax Status</th>
+                                <th class="px-6 py-4">Stock</th>
                                 <th class="px-6 py-4">Price (EGP)</th>
                                 <th class="px-6 py-4">Discount Offer</th>
                                 <th class="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="adminProductTable" class="divide-y divide-gray-800"></tbody>
+                    </table>
+                </div>
+            </div>
+
+                        <!-- Store Settings -->
+            <div class="mt-12 mb-4">
+                <h3 class="font-lux text-xl font-bold text-white flex items-center gap-2"><i data-lucide="settings" class="w-5 h-5 text-brand-500"></i> Store Settings</h3>
+                <p class="text-xs text-gray-400">Contact details, payment instructions and policies. Shown in the website footer and at checkout.</p>
+            </div>
+            <form id="settingsForm" onsubmit="saveSettings(event)" class="glass-card rounded-2xl border border-gray-800 p-5 sm:p-6 space-y-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">WhatsApp Number (with country code)</label>
+                        <input type="text" id="setWhatsapp" placeholder="201012345678" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Telegram Link or Username</label>
+                        <input type="text" id="setTelegram" placeholder="@ahsan_nas or https://t.me/ahsan_nas" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Physical Store Location / عنوان المحل</label>
+                    <input type="text" id="setLocation" maxlength="300" placeholder="Street, district, city" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">InstaPay Payment Details</label>
+                        <textarea id="setInstapay" rows="3" maxlength="500" placeholder="InstaPay address / name, e.g. ahsannas@instapay" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">E-Wallet Payment Details</label>
+                        <textarea id="setWallet" rows="3" maxlength="500" placeholder="Wallet number(s), e.g. Vodafone Cash 010xxxxxxxx" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500"></textarea>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-2">Social Media Links (footer bar)</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <input type="text" id="setFacebook" placeholder="Facebook page URL" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+                        <input type="text" id="setInstagram" placeholder="Instagram profile URL" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+                        <input type="text" id="setTiktok" placeholder="TikTok profile URL" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+                        <input type="text" id="setYoutube" placeholder="YouTube channel URL" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Website Policies / سياسات الموقع (returns, warranty, delivery...)</label>
+                    <textarea id="setPolicies" rows="8" maxlength="8000" placeholder="Write your policies here. Line breaks are kept." class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500"></textarea>
+                </div>
+                <div class="flex justify-end">
+                    <button type="submit" id="settingsSaveBtn" class="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-lg transition-all flex items-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Save Settings</button>
+                </div>
+            </form>
+
+            <!-- Pending Orders -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-12 mb-4">
+                <div>
+                    <h3 class="font-lux text-xl font-bold text-white flex items-center gap-2"><i data-lucide="inbox" class="w-5 h-5 text-amber-400"></i> Awaiting Verification <span id="pendingCount" class="text-xs font-sans bg-amber-500/20 text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/30">0</span></h3>
+                    <p class="text-xs text-gray-400">Open the order details and check the payment receipt, then press Verify. As admin you can also change any order's status or delete it. Verified orders move to the section below.</p>
+                </div>
+                <button onclick="loadAdminOrders()" class="px-4 py-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700 border border-gray-700 text-gray-200 text-sm font-semibold transition-all flex items-center gap-2"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh</button>
+            </div>
+            <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-300">
+                        <thead class="bg-gray-800/80 text-gray-400 uppercase text-xs tracking-wider border-b border-gray-700">
+                            <tr><th class="px-4 py-4">Order</th><th class="px-4 py-4">Customer</th><th class="px-4 py-4">Payment</th><th class="px-4 py-4">Items</th><th class="px-4 py-4">Total</th><th class="px-4 py-4">Receipt</th><th class="px-4 py-4 text-right">Actions</th></tr>
+                        </thead>
+                        <tbody id="adminPendingTable" class="divide-y divide-gray-800"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Accepted Orders -->
+            <div class="mt-12 mb-4">
+                <h3 class="font-lux text-xl font-bold text-white flex items-center gap-2"><i data-lucide="badge-check" class="w-5 h-5 text-emerald-400"></i> Verified Orders</h3>
+                <p class="text-xs text-gray-400">Every order you verified, saved in the database. Review full details here at any time, with or without the Gmail alert.</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                <div class="glass-card rounded-2xl border border-gray-800 p-4"><div class="text-[11px] uppercase tracking-widest text-gray-500">Verified orders</div><div id="accStatCount" class="text-2xl font-extrabold text-white mt-1">0</div></div>
+                <div class="glass-card rounded-2xl border border-gray-800 p-4"><div class="text-[11px] uppercase tracking-widest text-gray-500">Verified revenue</div><div id="accStatRevenue" class="text-2xl font-extrabold text-emerald-400 mt-1">0 EGP</div></div>
+                <div class="glass-card rounded-2xl border border-gray-800 p-4"><div class="text-[11px] uppercase tracking-widest text-gray-500">Delivered</div><div id="accStatDelivered" class="text-2xl font-extrabold text-white mt-1">0</div></div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                <input type="text" id="accSearch" oninput="renderAcceptedOrders()" placeholder="Search name, phone, order #, item..." class="flex-1 px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                <select id="accFilter" onchange="renderAcceptedOrders()" class="px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                    <option value="accepted">All verified</option>
+                    <option value="confirmed">Verified, not shipped yet</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Rejected / cancelled</option>
+                </select>
+            </div>
+            <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-300">
+                        <thead class="bg-gray-800/80 text-gray-400 uppercase text-xs tracking-wider border-b border-gray-700">
+                            <tr><th class="px-4 py-4">Order</th><th class="px-4 py-4">Customer</th><th class="px-4 py-4">Items</th><th class="px-4 py-4">Total</th><th class="px-4 py-4">Status</th><th class="px-4 py-4 text-right">Actions</th></tr>
+                        </thead>
+                        <tbody id="adminAcceptedTable" class="divide-y divide-gray-800"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-12 mb-4">
+                <div>
+                    <h3 class="font-lux text-xl font-bold text-white flex items-center gap-2"><i data-lucide="headphones" class="w-5 h-5 text-brand-500"></i> Accessories</h3>
+                    <p class="text-xs text-gray-400">Name, description and price. Saved to the cloud and shown in the Accessories section.</p>
+                </div>
+                <button onclick="openAccessoryModal()" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-lg transition-all flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Add Accessory</button>
+            </div>
+            <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-300">
+                        <thead class="bg-gray-800/80 text-gray-400 uppercase text-xs tracking-wider border-b border-gray-700">
+                            <tr><th class="px-6 py-4">Accessory</th><th class="px-6 py-4">Description</th><th class="px-6 py-4">Price</th><th class="px-6 py-4 text-right">Actions</th></tr>
+                        </thead>
+                        <tbody id="adminAccessoryTable" class="divide-y divide-gray-800"></tbody>
                     </table>
                 </div>
             </div>
@@ -290,14 +429,14 @@
             </div>
             <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">Username</label>
-                    <input type="text" id="loginUsername" required placeholder="Enter admin username" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Admin Email</label>
+                    <input type="text" id="loginUsername" required placeholder="admin@example.com" autocomplete="username" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-300 mb-1">Password</label>
-                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                    <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
                 </div>
-                <button type="submit" id="loginSubmitBtn" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm shadow-lg transition-all flex items-center justify-center gap-2">
+                <button type="submit" id="loginSubmitBtn" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-lg transition-all flex items-center justify-center gap-2">
                     <i data-lucide="log-in" class="w-4 h-4"></i> Login
                 </button>
             </form>
@@ -311,48 +450,20 @@
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div class="text-center mb-6">
-                <h3 class="text-xl font-extrabold text-white">Update Admin Credentials</h3>
+                <h3 class="text-xl font-extrabold text-white">Change Admin Password</h3>
             </div>
             <form onsubmit="handleUpdateCredentials(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-300 mb-1">Current Password</label>
                     <input type="password" id="currPassword" required class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">New Username</label>
-                    <input type="text" id="newUsername" required class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
-                </div>
+                
                 <div>
                     <label class="block text-xs font-semibold text-gray-300 mb-1">New Password</label>
-                    <input type="password" id="newPassword" required class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                    <input type="password" id="newPassword" required minlength="8" autocomplete="new-password" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
                 </div>
                 <button type="submit" id="updateCredsBtn" class="w-full py-3 rounded-xl bg-amber-600 text-white font-semibold text-sm">Save Encrypted Changes</button>
             </form>
-        </div>
-    </div>
-
-    <!-- Contact Seller Modal -->
-    <div id="contactSellerModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-md w-full rounded-3xl border border-white/10 p-6 relative shadow-2xl animate-slide-up">
-            <button onclick="closeContactModal()" class="absolute top-4 right-4 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-            <div class="text-center mb-6">
-                <div class="w-12 h-12 bg-brand-600/20 border border-brand-500/30 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                    <i data-lucide="message-square" class="w-6 h-6 text-brand-500"></i>
-                </div>
-                <h3 class="text-xl font-extrabold text-white">Contact Seller</h3>
-                <p id="contactDeviceTitle" class="text-xs text-brand-400 mt-1 font-semibold"></p>
-            </div>
-
-            <div class="space-y-3">
-                <a id="sellerWhatsappLink" target="_blank" class="w-full py-3 px-4 rounded-xl bg-emerald-600/80 hover:bg-emerald-600 border border-emerald-500 text-white font-semibold text-sm transition-all flex items-center justify-center gap-3">
-                    <i data-lucide="phone-call" class="w-5 h-5"></i> Chat on WhatsApp
-                </a>
-                <a id="sellerTelegramLink" target="_blank" class="w-full py-3 px-4 rounded-xl bg-sky-600/80 hover:bg-sky-600 border border-sky-500 text-white font-semibold text-sm transition-all flex items-center justify-center gap-3">
-                    <i data-lucide="send" class="w-5 h-5"></i> Chat on Telegram
-                </a>
-            </div>
         </div>
     </div>
 
@@ -379,11 +490,17 @@
                     <div class="space-y-2 mb-6">
                         <div class="flex justify-between text-xs py-1.5 border-b border-gray-800"><span class="text-gray-400">Color / اللون:</span><span id="specColor" class="text-gray-200 font-semibold"></span></div>
                         <div class="flex justify-between text-xs py-1.5 border-b border-gray-800"><span class="text-gray-400">Storage / المساحة:</span><span id="specStorage" class="text-gray-200 font-semibold"></span></div>
+                        <div class="flex justify-between text-xs py-1.5 border-b border-gray-800"><span class="text-gray-400">Stock / المتاح:</span><span id="specStock"></span></div>
                     </div>
                 </div>
-                <button id="detailContactBtn" class="w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm shadow-lg transition-all flex items-center justify-center gap-2">
-                    <i data-lucide="message-circle" class="w-4 h-4"></i> Contact Seller
-                </button>
+                <div class="flex gap-2">
+                    <button id="detailCartBtn" class="flex-1 py-3 px-3 rounded-xl border border-gray-700 bg-gray-800/60 hover:bg-gray-800 text-gray-200 font-semibold text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i data-lucide="shopping-cart" class="w-4 h-4"></i> Add to Cart
+                    </button>
+                    <button id="detailBuyBtn" class="flex-1 py-3 px-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i data-lucide="zap" class="w-4 h-4"></i> <span>Buy Now</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -397,6 +514,7 @@
             
             <h3 id="adminModalTitle" class="text-xl font-extrabold text-white mb-4">Add / Edit Smartphone</h3>
 
+            <!-- Multilingual Arabic & English AI Assistant -->
             <div class="mb-6 p-4 rounded-2xl bg-brand-900/30 border border-brand-500/30">
                 <div class="flex items-center gap-2 mb-2 text-brand-400 font-bold text-xs uppercase tracking-wider">
                     <i data-lucide="bot" class="w-4 h-4"></i> AI Assistant: Intelligent Post Extractor (عربي / English)
@@ -404,7 +522,7 @@
                 <p class="text-xs text-gray-400 mb-3">Paste Arabic or English sales post below to auto-fill fields!</p>
                 <div class="flex gap-2">
                     <textarea id="aiRawInput" rows="2" placeholder="مثال: ايفون 15 برو ماكس 256 جيجا اسود تيتانيوم للبيع، معفي ضريبة، السعر 54000 بدلا من 60000. واتساب 01000000000" class="w-full px-3 py-2 bg-dark-input border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500"></textarea>
-                    <button type="button" onclick="runAIAssistantExtract()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold rounded-xl flex flex-col items-center justify-center gap-1 shrink-0">
+                    <button type="button" onclick="runAIAssistantExtract()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl flex flex-col items-center justify-center gap-1 shrink-0">
                         <i data-lucide="sparkles" class="w-4 h-4"></i> Auto Fill
                     </button>
                 </div>
@@ -429,6 +547,7 @@
                     </div>
                 </div>
 
+                <!-- Tax Exemption Checkbox -->
                 <div class="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/30 flex items-center gap-2">
                     <input type="checkbox" id="formIsTaxExempt" class="w-4 h-4 text-emerald-600 rounded bg-dark-input border-gray-700 focus:ring-emerald-500">
                     <label for="formIsTaxExempt" class="text-xs font-bold text-emerald-400 flex items-center gap-1 cursor-pointer">
@@ -460,12 +579,10 @@
                     <div id="multiImagePreviewContainer" class="flex flex-wrap gap-2 pt-2"></div>
                 </div>
 
-                <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800 space-y-3">
-                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">Seller Direct Links</label>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <input type="text" id="formWhatsapp" placeholder="WhatsApp (e.g. 201012345678)" class="w-full px-3 py-2 bg-dark-input border border-gray-700 rounded-xl text-xs text-white">
-                        <input type="text" id="formTelegram" placeholder="Telegram Username / Link" class="w-full px-3 py-2 bg-dark-input border border-gray-700 rounded-xl text-xs text-white">
-                    </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Available Stock / الكمية المتاحة</label>
+                    <input type="number" id="formStock" required min="0" step="1" value="1" placeholder="e.g. 10" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white">
+                    <p class="text-[11px] text-gray-500 mt-1">Drops automatically with every purchase. At 0 the product shows a "Sold Out" badge.</p>
                 </div>
 
                 <div>
@@ -480,30 +597,255 @@
 
                 <div class="flex justify-end gap-3 pt-4 border-t border-gray-800">
                     <button type="button" onclick="closeProductModal()" class="px-5 py-2.5 rounded-xl border border-gray-700 text-gray-300 text-sm font-semibold">Cancel</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold">Save Device</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold">Save Device</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <footer class="border-t border-gray-800/80 bg-dark-bg/80 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-2">
-                <div class="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center">
-                    <i data-lucide="smartphone" class="w-4 h-4 text-white"></i>
+    <!-- Accessory Modal -->
+    <div id="accessoryModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-lg w-full rounded-3xl border border-white/10 p-6 sm:p-8 relative shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto">
+            <button onclick="closeAccessoryModal()" class="absolute top-4 right-4 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <h3 id="accessoryModalTitle" class="font-lux text-xl font-bold text-white mb-4">Add Accessory</h3>
+            <form id="accessoryForm" onsubmit="handleAccessorySubmit(event)" class="space-y-4">
+                <input type="hidden" id="accId">
+                <div><label class="block text-xs font-semibold text-gray-300 mb-1">Accessory Name / الاسم</label>
+                    <input type="text" id="accName" required maxlength="120" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500"></div>
+                <div><label class="block text-xs font-semibold text-gray-300 mb-1">Description / الوصف</label>
+                    <textarea id="accDescription" rows="3" required maxlength="500" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500"></textarea></div>
+                <div><label class="block text-xs font-semibold text-gray-300 mb-1">Price (EGP)</label>
+                    <input type="number" id="accPrice" required min="0" step="any" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500"></div>
+                <div><label class="block text-xs font-semibold text-gray-300 mb-1">Photo (optional, max 4MB)</label>
+                    <input type="file" id="accImageFile" accept="image/*" onchange="handleAccFile(event)" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gray-800 file:text-brand-400 cursor-pointer">
+                    <div id="accPreview" class="pt-2"></div></div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-gray-800">
+                    <button type="button" onclick="closeAccessoryModal()" class="px-5 py-2.5 rounded-xl border border-gray-700 text-gray-300 text-sm font-semibold">Cancel</button>
+                    <button type="submit" id="accSaveBtn" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold">Save Accessory</button>
                 </div>
-                <span class="font-extrabold text-white text-sm">NEXUS MOBILE EGYPT</span>
-            </div>
-            
-            <p class="text-xs text-gray-500">© 2026 NEXUS Store. Prices listed in Egyptian Pounds (EGP).</p>
+            </form>
+        </div>
+    </div>
 
-            <div class="flex items-center gap-3">
-                <a href="https://wa.me/201000000000" target="_blank" class="w-9 h-9 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 hover:bg-emerald-600 hover:text-white transition-all flex items-center justify-center">
-                    <i data-lucide="phone-call" class="w-4 h-4"></i>
-                </a>
-                <a href="https://t.me/nexus_mobile" target="_blank" class="w-9 h-9 rounded-xl bg-sky-600/20 border border-sky-500/40 text-sky-400 hover:bg-sky-600 hover:text-white transition-all flex items-center justify-center">
-                    <i data-lucide="send" class="w-4 h-4"></i>
-                </a>
+    <!-- Cart Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeCart()"></div>
+        <aside class="absolute right-0 top-0 h-full w-full max-w-md border-l border-white/10 flex flex-col shadow-2xl animate-slide-up" style="background:#0b0f14">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+                <h3 class="font-lux text-xl font-bold text-white flex items-center gap-2"><i data-lucide="shopping-cart" class="w-5 h-5 text-brand-500"></i> Your Cart</h3>
+                <button onclick="closeCart()" aria-label="Close cart" class="p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div id="cartItems" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
+            <div class="border-t border-gray-800 p-5 space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-400 font-semibold">Total</span>
+                    <span id="cartTotal" class="text-2xl font-extrabold text-white">0 EGP</span>
+                </div>
+                <button id="cartCheckoutBtn" onclick="openCheckout()" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                    <i data-lucide="credit-card" class="w-4 h-4"></i> Proceed to Checkout
+                </button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-2xl w-full rounded-3xl border border-white/10 p-6 sm:p-8 relative shadow-2xl animate-slide-up max-h-[92vh] overflow-y-auto" style="background:rgba(11,15,20,.96)">
+            <button onclick="closeCheckout()" aria-label="Close" class="absolute top-4 right-4 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all"><i data-lucide="x" class="w-5 h-5"></i></button>
+
+            <div id="checkoutFormView">
+                <h3 class="font-lux text-2xl font-bold text-white mb-4">Checkout</h3>
+                <div id="checkoutSummary" class="rounded-2xl border border-gray-800 bg-gray-900/50 p-4 mb-5 space-y-2 text-sm"></div>
+
+                <form id="checkoutForm" onsubmit="submitOrder(event)" class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Full Name / الاسم</label>
+                        <input type="text" id="chkName" required maxlength="100" autocomplete="name" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-2">Payment Method / طريقة الدفع</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button type="button" id="payBtnInstapay" onclick="selectPayMethod('instapay')" class="py-3 rounded-xl border text-sm font-bold transition-all flex items-center justify-center gap-2"><i data-lucide="landmark" class="w-4 h-4"></i> InstaPay</button>
+                            <button type="button" id="payBtnWallet" onclick="selectPayMethod('wallet')" class="py-3 rounded-xl border text-sm font-bold transition-all flex items-center justify-center gap-2"><i data-lucide="wallet" class="w-4 h-4"></i> E-Wallet</button>
+                        </div>
+                    </div>
+
+                    <div id="payInfo" class="rounded-xl p-4 bg-brand-900/30 border border-brand-500/30 text-sm text-gray-200"></div>
+
+                    <div id="fieldsInstapay">
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Your InstaPay Address / عنوان انستاباي</label>
+                        <input type="text" id="chkInstapay" maxlength="60" dir="ltr" placeholder="example@instapay" autocomplete="off" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div id="fieldsWallet" class="hidden">
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Sending Mobile Number / الرقم المحوّل منه</label>
+                        <input type="tel" id="chkSender" maxlength="20" placeholder="01xxxxxxxxx" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Payment Receipt Screenshot / صورة إيصال الدفع</label>
+                        <input type="file" id="chkReceipt" accept="image/*" required onchange="handleReceiptFile(event)" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gray-800 file:text-brand-400 hover:file:bg-gray-700 cursor-pointer">
+                        <div id="chkReceiptPreview" class="pt-2"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Delivery Address / عنوان التوصيل</label>
+                        <textarea id="chkAddress" rows="2" required maxlength="300" autocomplete="street-address" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">Contact Number / رقم التواصل <span class="text-red-400">*</span></label>
+                            <input type="tel" id="chkPhone" required maxlength="20" autocomplete="tel" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">Second Number (optional) / رقم إضافي</label>
+                            <input type="tel" id="chkPhone2" maxlength="20" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="openPolicies()" class="text-xs text-brand-400 hover:text-brand-300 underline underline-offset-2">View store policies</button>
+
+                    <button type="submit" id="chkSubmitBtn" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-60">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i> <span id="chkSubmitText">Confirm Order</span>
+                    </button>
+                </form>
+            </div>
+
+            <div id="checkoutSuccessView" class="hidden text-center py-8">
+                <div class="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mx-auto mb-4"><i data-lucide="check" class="w-8 h-8 text-emerald-400"></i></div>
+                <h3 class="font-lux text-2xl font-bold text-white mb-2">Order Received!</h3>
+                <p id="successText" class="text-sm text-gray-300 mb-6"></p>
+                <button onclick="closeCheckout()" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition-all">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hamburger Menu -->
+    <div id="menuDrawer" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeMenu()"></div>
+        <aside class="absolute right-0 top-0 h-full w-full max-w-xs border-l border-white/10 flex flex-col shadow-2xl animate-slide-up" style="background:#0b0f14">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+                <h3 class="font-lux text-xl font-bold text-white">Menu</h3>
+                <button onclick="closeMenu()" aria-label="Close menu" class="p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div id="menuUser" class="px-5 pt-4 pb-1 text-xs text-gray-400"></div>
+            <nav id="menuItems" class="p-3 space-y-1"></nav>
+        </aside>
+    </div>
+
+    <!-- Customer Login -->
+    <div id="custLoginModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full rounded-3xl border border-white/10 p-6 sm:p-8 relative shadow-2xl animate-slide-up" style="background:rgba(11,15,20,.96)">
+            <button onclick="cancelAuth()" aria-label="Close" class="absolute top-4 right-4 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="text-center mb-5">
+                <div class="w-12 h-12 bg-brand-600/20 border border-brand-500/30 rounded-2xl flex items-center justify-center mx-auto mb-3"><i data-lucide="log-in" class="w-6 h-6 text-brand-500"></i></div>
+                <h3 class="font-lux text-2xl font-bold text-white">Login</h3>
+                <p id="custLoginNotice" class="hidden mt-2 text-xs text-amber-300 bg-amber-500/10 border border-amber-500/30 rounded-xl px-3 py-2"></p>
+            </div>
+            <form id="custLoginForm" onsubmit="handleCustomerLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Username / اسم المستخدم</label>
+                    <input type="text" id="custLoginUser" required maxlength="20" autocomplete="username" autocapitalize="none" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Password / كلمة المرور</label>
+                    <input type="password" id="custLoginPass" required autocomplete="current-password" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <p id="custLoginError" class="text-xs text-red-400 min-h-[1rem]"></p>
+                <button type="submit" id="custLoginBtn" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-lg transition-all disabled:opacity-60">Login</button>
+            </form>
+            <p class="text-xs text-gray-400 text-center mt-4">New here? <button onclick="openAuth('signup')" class="text-brand-400 hover:text-brand-300 font-semibold underline underline-offset-2">Create an account</button></p>
+        </div>
+    </div>
+
+    <!-- Customer Sign Up -->
+    <div id="custSignupModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full rounded-3xl border border-white/10 p-6 sm:p-8 relative shadow-2xl animate-slide-up" style="background:rgba(11,15,20,.96)">
+            <button onclick="cancelAuth()" aria-label="Close" class="absolute top-4 right-4 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="text-center mb-5">
+                <div class="w-12 h-12 bg-brand-600/20 border border-brand-500/30 rounded-2xl flex items-center justify-center mx-auto mb-3"><i data-lucide="user-plus" class="w-6 h-6 text-brand-500"></i></div>
+                <h3 class="font-lux text-2xl font-bold text-white">Sign Up</h3>
+                <p id="custSignupNotice" class="hidden mt-2 text-xs text-amber-300 bg-amber-500/10 border border-amber-500/30 rounded-xl px-3 py-2"></p>
+            </div>
+            <form id="custSignupForm" onsubmit="handleCustomerSignup(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Choose a Username / اسم المستخدم</label>
+                    <input type="text" id="custSignupUser" required maxlength="20" autocomplete="username" autocapitalize="none" oninput="checkUsernameAvailability(this.value)" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                    <p id="usernameHint" class="text-xs mt-1 min-h-[1rem] text-gray-500">3-20 letters, numbers, dots or underscores.</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Password / كلمة المرور (min. 6 characters)</label>
+                    <input type="password" id="custSignupPass" required minlength="6" maxlength="72" autocomplete="new-password" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Confirm Password</label>
+                    <input type="password" id="custSignupPass2" required minlength="6" maxlength="72" autocomplete="new-password" class="w-full px-4 py-2.5 bg-dark-input border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <p id="custSignupError" class="text-xs text-red-400 min-h-[1rem]"></p>
+                <button type="submit" id="custSignupBtn" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-lg transition-all disabled:opacity-60">Create Account</button>
+            </form>
+            <p class="text-xs text-gray-400 text-center mt-4">Already have an account? <button onclick="openAuth('login')" class="text-brand-400 hover:text-brand-300 font-semibold underline underline-offset-2">Login</button></p>
+        </div>
+    </div>
+
+    <!-- My Orders -->
+    <div id="myOrdersModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-2xl w-full rounded-3xl border border-white/10 p-6 sm:p-8 relative shadow-2xl animate-slide-up max-h-[92vh] overflow-y-auto" style="background:rgba(11,15,20,.96)">
+            <button onclick="closeMyOrders()" aria-label="Close" class="absolute top-4 right-4 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <h3 class="font-lux text-2xl font-bold text-white mb-4 flex items-center gap-2"><i data-lucide="package" class="w-5 h-5 text-brand-500"></i> My Orders</h3>
+            <div id="myOrdersBody"></div>
+        </div>
+    </div>
+
+    <!-- Contact Us -->
+    <div id="contactModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full rounded-3xl border border-white/10 p-6 sm:p-8 relative shadow-2xl animate-slide-up max-h-[92vh] overflow-y-auto" style="background:rgba(11,15,20,.96)">
+            <button onclick="closeContact()" aria-label="Close" class="absolute top-4 right-4 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <h3 class="font-lux text-2xl font-bold text-white mb-4 flex items-center gap-2"><i data-lucide="phone" class="w-5 h-5 text-brand-500"></i> Contact Us</h3>
+            <div id="contactBody" class="space-y-3"></div>
+        </div>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div id="orderDetailModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-2xl w-full rounded-3xl border border-white/10 p-6 sm:p-8 relative shadow-2xl animate-slide-up max-h-[92vh] overflow-y-auto" style="background:rgba(11,15,20,.96)">
+            <button onclick="closeOrderDetail()" aria-label="Close" class="absolute top-4 right-4 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div id="orderDetailBody"></div>
+        </div>
+    </div>
+
+    <!-- Policies Modal -->
+    <div id="policiesModal" class="fixed inset-0 z-[60] bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-2xl w-full rounded-3xl border border-white/10 p-6 sm:p-8 relative shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto" style="background:rgba(11,15,20,.96)">
+            <button onclick="closePolicies()" aria-label="Close" class="absolute top-4 right-4 p-2 rounded-full bg-gray-800/80 text-gray-300 hover:text-white transition-all"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <h3 class="font-lux text-2xl font-bold text-white mb-4 flex items-center gap-2"><i data-lucide="file-text" class="w-5 h-5 text-brand-500"></i> Store Policies</h3>
+            <div id="policiesBody" class="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap"></div>
+        </div>
+    </div>
+
+        <footer class="border-t border-gray-800/80 bg-dark-bg/80 py-10 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <img src="logo-emblem.png" alt="Ahsan Nas logo" class="w-14 h-14 shrink-0 rounded-full">
+                        <div class="leading-tight">
+                            <div dir="rtl" class="font-ar text-2xl font-bold gold-text">احسن ناس</div>
+                            <div dir="rtl" class="text-xs font-bold text-brand-400">اليافطة الصفرا الاصلية مش التقليد</div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed max-w-xs">Original brass-finish signs, premium smartphones and accessories. All prices are in Egyptian Pounds (EGP).</p>
+                </div>
+                <div id="footerContact" class="space-y-2.5 text-sm text-gray-300"></div>
+                <div>
+                    <div class="text-xs uppercase tracking-widest text-gray-500 mb-3">Follow us</div>
+                    <div id="footerSocial" class="flex flex-wrap gap-3"></div>
+                </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-gray-800/80 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <p class="text-xs text-gray-500">© 2026 AHSAN NAS · احسن ناس. All rights reserved.</p>
+                <button onclick="openPolicies()" class="text-xs text-gray-400 hover:text-white underline underline-offset-2 transition-colors">Store Policies / سياسات الموقع</button>
             </div>
         </div>
     </footer>
@@ -521,8 +863,7 @@
                 images: ['https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80'],
                 storage: '256GB / 512GB / 1TB',
                 description: 'Titanium design, A17 Pro chip, Action button, and 5x Optical Zoom camera.',
-                whatsapp: '201000000000',
-                telegram: 'nexus_store'
+                stock: 5
             },
             {
                 id: '2',
@@ -535,70 +876,105 @@
                 images: ['https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80'],
                 storage: '256GB / 512GB',
                 description: 'Built-in S Pen stylus with Galaxy AI features and 200MP camera.',
-                whatsapp: '201000000000',
-                telegram: 'nexus_store'
+                stock: 5
             }
         ];
 
-        // --- SUPABASE LIVE INTEGRATION ---
-        const SUPABASE_URL = "https://cpfpiuckpcnfbyzoyepm.supabase.co";
-        const SUPABASE_KEY = "sb_publishable_DFa7Om4Knq_CeV9tvoeiuw_W5LBfyUV";
+        // ===================== CLOUD CONFIG (edit these 3 lines) =====================
+        const SUPABASE_URL = 'https://cpfpiuckpcnfbyzoyepm.supabase.co';          // e.g. https://abcdxyz.supabase.co
+        const SUPABASE_ANON_KEY = 'sb_publishable_DFa7Om4Knq_CeV9tvoeiuw_W5LBfyUV'; // the public "anon" key ONLY, never the secret/service key
+        const STORE_WHATSAPP = '201000000000';                       // number used for accessory orders
+        // =============================================================================
+        const IMAGE_BUCKET = 'store-images';
+        const FALLBACK_IMG = 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80';
 
-        let supabase = null;
+        const CLOUD_READY = /^https:\/\/[a-z0-9-]+\.supabase\.co/i.test(SUPABASE_URL) && SUPABASE_ANON_KEY.length > 40;
+        let sb = null;
         try {
-            if (window.supabase && SUPABASE_KEY) {
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            if (CLOUD_READY && window.supabase) {
+                sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true } });
             }
-        } catch (e) {
-            console.warn("Supabase initialization bypassed.");
-        }
+        } catch (e) { console.error('Supabase init failed', e); }
 
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const num = v => Number(v) || 0;
+
+        const rowToProduct = r => ({
+            id: r.id, title: r.title, price: num(r.price), hasDiscount: !!r.has_discount, discountPrice: num(r.discount_price),
+            isTaxExempt: !!r.is_tax_exempt, color: r.color || '', storage: r.storage || '', description: r.description || '',
+            images: (r.images && r.images.length) ? r.images : [FALLBACK_IMG], stock: num(r.stock)
+        });
+        const productToRow = p => ({
+            title: p.title, price: p.price, has_discount: p.hasDiscount, discount_price: p.discountPrice, is_tax_exempt: p.isTaxExempt,
+            color: p.color, storage: p.storage, description: p.description, images: p.images, stock: p.stock
+        });
+
+        let products = [];
+        let accessories = [];
+        let settings = { whatsapp: STORE_WHATSAPP, telegram: '', location: '', instapay: '', wallet: '', policies: '', facebook: '', instagram: '', tiktok: '', youtube: '' };
+        let adminSession = null;
+        let failedLogins = 0, lockUntil = 0;
+
+        // Auth is handled by Supabase Auth (passwords are hashed server-side, never stored in this page).
         const BackendServer = {
             async init() {
-                if (!localStorage.getItem('nexus_admin_user')) {
-                    const defaultHash = dcodeIO.bcrypt.hashSync('admin123', 10);
-                    localStorage.setItem('nexus_admin_user', JSON.stringify({
-                        username: 'admin',
-                        passwordHash: defaultHash
-                    }));
-                }
+                if (!sb) return;
+                const { data } = await sb.auth.getSession();
+                adminSession = data.session;
+                sb.auth.onAuthStateChange((_evt, session) => {
+                    adminSession = session;
+                    if (!session && currentView === 'admin') goStore();
+                    renderMenu();
+                });
             },
-            async login(username, password) {
-                // Instant Local Login Check (Prevents Dashboard Freeze)
-                const storedUser = JSON.parse(localStorage.getItem('nexus_admin_user'));
-                if (username === storedUser.username) {
-                    const isPasswordValid = await dcodeIO.bcrypt.compare(password, storedUser.passwordHash);
-                    if (isPasswordValid) {
-                        const token = btoa(JSON.stringify({ username: storedUser.username, exp: Date.now() + 7200000 }));
-                        sessionStorage.setItem('nexus_admin_token', token);
-                        return { success: true, token };
-                    }
+            async login(email, password) {
+                if (!sb) return { success: false, message: 'Cloud not configured. Add your Supabase keys first.' };
+                if (Date.now() < lockUntil) return { success: false, message: `Too many attempts. Try again in ${Math.ceil((lockUntil - Date.now()) / 1000)}s` };
+                const { data, error } = await sb.auth.signInWithPassword({ email: email.trim().toLowerCase(), password });
+                if (error) {
+                    if (++failedLogins >= 5) { lockUntil = Date.now() + 60000; failedLogins = 0; }
+                    return { success: false, message: 'Invalid credentials' };
                 }
-                return { success: false, message: 'Invalid credentials' };
-            },
-            isAuthenticated() {
-                const token = sessionStorage.getItem('nexus_admin_token');
-                if (!token) return false;
-                try {
-                    const parsed = JSON.parse(atob(token));
-                    return parsed.exp > Date.now();
-                } catch (e) {
-                    return false;
-                }
-            },
-            logout() { sessionStorage.removeItem('nexus_admin_token'); },
-            async updateCredentials(currPassword, newUsername, newPassword) {
-                if (!this.isAuthenticated()) return { success: false, message: 'Unauthorized' };
-                const storedUser = JSON.parse(localStorage.getItem('nexus_admin_user'));
-                const isPasswordValid = await dcodeIO.bcrypt.compare(currPassword, storedUser.passwordHash);
-                if (!isPasswordValid) return { success: false, message: 'Current password incorrect' };
-                const newHash = await dcodeIO.bcrypt.hash(newPassword, 10);
-                localStorage.setItem('nexus_admin_user', JSON.stringify({ username: newUsername, passwordHash: newHash }));
+                failedLogins = 0; adminSession = data.session;
                 return { success: true };
+            },
+            isAuthenticated() { return !!adminSession; },
+            logout() { adminSession = null; if (sb) sb.auth.signOut(); },
+            async updateCredentials(currPassword, newPassword) {
+                if (!this.isAuthenticated()) return { success: false, message: 'Unauthorized' };
+                if (newPassword.length < 8) return { success: false, message: 'Password must be at least 8 characters' };
+                const chk = await sb.auth.signInWithPassword({ email: adminSession.user.email, password: currPassword });
+                if (chk.error) return { success: false, message: 'Current password incorrect' };
+                const { error } = await sb.auth.updateUser({ password: newPassword });
+                return error ? { success: false, message: error.message } : { success: true };
             }
         };
 
-        let products = JSON.parse(localStorage.getItem('nexus_products')) || initialProducts;
+        const Cloud = {
+            async load() {
+                if (!sb) { products = [...initialProducts]; accessories = []; return false; }
+                const [p, a, st] = await Promise.all([
+                    sb.from('products').select('*').order('created_at', { ascending: false }),
+                    sb.from('accessories').select('*').order('created_at', { ascending: false }),
+                    sb.from('settings').select('*').eq('id', 1).maybeSingle()
+                ]);
+                if (p.error || a.error) { console.error(p.error || a.error); products = [...initialProducts]; accessories = []; return false; }
+                products = p.data.map(rowToProduct);
+                accessories = a.data;
+                if (st && st.data) settings = { ...settings, ...Object.fromEntries(Object.entries(st.data).filter(([, v]) => v !== null)) };
+                renderFooter();
+                return true;
+            },
+            async uploadImage(srcUrl) {
+                if (!srcUrl.startsWith('data:')) return srcUrl;
+                const blob = await (await fetch(srcUrl)).blob();
+                const ext = (blob.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg').replace(/[^a-z0-9]/g, '');
+                const path = `${crypto.randomUUID()}.${ext}`;
+                const { error } = await sb.storage.from(IMAGE_BUCKET).upload(path, blob, { contentType: blob.type, cacheControl: '31536000' });
+                if (error) throw error;
+                return sb.storage.from(IMAGE_BUCKET).getPublicUrl(path).data.publicUrl;
+            }
+        };
         let currentView = 'customer';
         let searchQuery = '';
         let showOnlyOffers = false;
@@ -606,39 +982,784 @@
 
         window.addEventListener('DOMContentLoaded', async () => {
             await BackendServer.init();
-            await fetchCloudProducts();
+            loadStoredCustomer();
+            await refreshCustomer();
+            const ok = await Cloud.load().catch(() => false);
+            if (!sb) showBanner('Demo mode: add your Supabase keys in the code to enable cloud storage and admin login.');
+            else if (!ok) showBanner('Could not reach the cloud database. Check your Supabase setup guide.');
             renderProducts();
-            if (window.lucide) lucide.createIcons();
+            renderAccessories();
+            renderFooter(); renderCart(); renderMenu();
+            initFx();
+            lucide.createIcons();
         });
 
-        async function fetchCloudProducts() {
-            if (!supabase) return;
-            try {
-                const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
-                if (!error && data && data.length > 0) {
-                    products = data.map(p => ({
-                        id: p.id,
-                        title: p.title,
-                        price: Number(p.price),
-                        color: p.color,
-                        isTaxExempt: p.is_tax_exempt,
-                        hasDiscount: p.has_discount,
-                        discountPrice: Number(p.discount_price),
-                        images: p.images || [],
-                        whatsapp: p.whatsapp,
-                        telegram: p.telegram,
-                        storage: p.storage,
-                        description: p.description
-                    }));
-                    saveProductsLocally();
-                }
-            } catch (err) {
-                console.warn("Using offline cached products.");
-            }
+        let revealObserver = null;
+        function observeReveals() {
+            const els = document.querySelectorAll('.reveal:not(.in)');
+            if (!('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('in')); return; }
+            if (!revealObserver) revealObserver = new IntersectionObserver(entries => entries.forEach(en => {
+                if (en.isIntersecting) { en.target.classList.add('in'); revealObserver.unobserve(en.target); }
+            }), { threshold: 0.08 });
+            els.forEach(e => revealObserver.observe(e));
+        }
+        function initFx() {
+            observeReveals();
+            document.addEventListener('pointermove', e => {
+                const c = e.target.closest && e.target.closest('.spot');
+                if (!c) return;
+                const r = c.getBoundingClientRect();
+                c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+                c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+            });
+        }
+        function showBanner(msg) {
+            const b = document.createElement('div');
+            b.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 z-50 max-w-[92vw] px-4 py-3 rounded-xl bg-amber-600/90 text-white text-xs font-semibold shadow-xl';
+            b.textContent = msg;
+            document.body.appendChild(b);
+            setTimeout(() => b.remove(), 9000);
         }
 
-        function saveProductsLocally() {
-            localStorage.setItem('nexus_products', JSON.stringify(products));
+        // ---------- Accessories ----------
+        function accessoryCard(a, i) {
+            const img = a.image_url
+                ? `<img src="${esc(a.image_url)}" alt="${esc(a.name)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.style.display='none'">`
+                : `<i data-lucide="headphones" class="w-12 h-12 text-brand-500/70"></i>`;
+            return `
+            <div class="reveal h-full" style="animation-delay:${Math.min(i, 8) * 70}ms">
+                <div class="product-card spot glass-card glow-effect-hover group rounded-2xl p-5 border border-white/5 hover:border-brand-500/40 flex flex-col justify-between h-full">
+                    <div>
+                        <div class="w-full h-40 rounded-xl bg-gray-900/40 mb-4 flex items-center justify-center overflow-hidden">${img}</div>
+                        <h3 class="font-lux text-lg font-bold text-white group-hover:text-brand-500 transition-colors">${esc(a.name)}</h3>
+                        <p class="text-xs text-gray-400 mt-1 mb-4 line-clamp-3">${esc(a.description)}</p>
+                    </div>
+                    <div class="flex items-center justify-between gap-3">
+                        <span class="text-xl font-extrabold text-white">${num(a.price).toLocaleString()} <span class="text-xs text-gray-400 font-semibold">EGP</span></span>
+                        <button onclick="orderAccessory('${esc(a.id)}')" class="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md transition-all flex items-center gap-1.5">
+                            <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Order
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+        }
+        function renderAccessories() {
+            document.getElementById('accessoryCount').innerText = `${accessories.length} Items`;
+            document.getElementById('accessoryGrid').innerHTML = accessories.map(accessoryCard).join('');
+            document.getElementById('accessoryEmpty').classList.toggle('hidden', accessories.length > 0);
+            lucide.createIcons();
+            observeReveals();
+        }
+        function orderAccessory(id) {
+            const a = accessories.find(x => x.id === id);
+            if (!a) return;
+            const msg = encodeURIComponent(`Hello, I would like to order the accessory "${a.name}" listed for ${num(a.price)} EGP.`);
+            window.open(`https://wa.me/${(settings.whatsapp || STORE_WHATSAPP).replace(/[^0-9]/g, '')}?text=${msg}`, '_blank', 'noopener');
+        }
+        function renderAdminAccessories() {
+            document.getElementById('adminAccessoryTable').innerHTML = accessories.length ? accessories.map(a => `
+                <tr class="hover:bg-gray-800/40 transition-colors">
+                    <td class="px-6 py-4"><div class="flex items-center gap-3">${a.image_url ? `<img src="${esc(a.image_url)}" class="w-10 h-10 object-cover rounded bg-gray-900">` : ''}<span class="font-bold text-white">${esc(a.name)}</span></div></td>
+                    <td class="px-6 py-4 text-xs text-gray-400 max-w-xs truncate">${esc(a.description)}</td>
+                    <td class="px-6 py-4 font-bold text-white">${num(a.price).toLocaleString()} EGP</td>
+                    <td class="px-6 py-4 text-right space-x-2">
+                        <button onclick="openAccessoryModal('${esc(a.id)}')" class="p-2 rounded-lg bg-gray-800 hover:bg-brand-600 text-gray-300 hover:text-white transition-all"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                        <button onclick="deleteAccessory('${esc(a.id)}')" class="p-2 rounded-lg bg-gray-800 hover:bg-red-600 text-gray-300 hover:text-white transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </td>
+                </tr>`).join('') : `<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500 text-xs">No accessories yet. Click "Add Accessory".</td></tr>`;
+            lucide.createIcons();
+        }
+        let accImageSrc = '';
+        function renderAccPreview() {
+            document.getElementById('accPreview').innerHTML = accImageSrc ? `<img src="${esc(accImageSrc)}" class="w-16 h-16 object-cover rounded-lg border border-gray-700">` : '';
+        }
+        function handleAccFile(e) {
+            const f = e.target.files[0];
+            if (!f) return;
+            if (f.size > 4 * 1024 * 1024) { showToast('Image too large (max 4MB)', 'error'); e.target.value = ''; return; }
+            const r = new FileReader();
+            r.onload = ev => { accImageSrc = ev.target.result; renderAccPreview(); };
+            r.readAsDataURL(f);
+        }
+        function openAccessoryModal(id = null) {
+            if (!BackendServer.isAuthenticated()) return;
+            document.getElementById('accessoryForm').reset();
+            document.getElementById('accId').value = '';
+            accImageSrc = '';
+            document.getElementById('accessoryModalTitle').innerText = id ? 'Edit Accessory' : 'Add Accessory';
+            const a = id ? accessories.find(x => x.id === id) : null;
+            if (a) {
+                document.getElementById('accId').value = a.id;
+                document.getElementById('accName').value = a.name;
+                document.getElementById('accDescription').value = a.description || '';
+                document.getElementById('accPrice').value = a.price;
+                accImageSrc = a.image_url || '';
+            }
+            renderAccPreview();
+            document.getElementById('accessoryModal').classList.remove('hidden');
+        }
+        function closeAccessoryModal() { document.getElementById('accessoryModal').classList.add('hidden'); }
+        async function handleAccessorySubmit(e) {
+            e.preventDefault();
+            if (!BackendServer.isAuthenticated() || !sb) return;
+            const btn = document.getElementById('accSaveBtn');
+            btn.disabled = true; btn.textContent = 'Saving...';
+            try {
+                const id = document.getElementById('accId').value;
+                const row = {
+                    name: document.getElementById('accName').value.trim(),
+                    description: document.getElementById('accDescription').value.trim(),
+                    price: parseFloat(document.getElementById('accPrice').value),
+                    image_url: accImageSrc ? await Cloud.uploadImage(accImageSrc) : null
+                };
+                const { error } = id ? await sb.from('accessories').update(row).eq('id', id) : await sb.from('accessories').insert(row);
+                if (error) throw error;
+                await Cloud.load();
+                closeAccessoryModal(); renderAccessories(); renderAdminAccessories();
+                showToast('Accessory saved to cloud', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('Save failed: ' + (err.message || 'check Supabase setup'), 'error');
+            } finally { btn.disabled = false; btn.textContent = 'Save Accessory'; }
+        }
+        async function deleteAccessory(id) {
+            if (!BackendServer.isAuthenticated() || !sb) return;
+            if (!confirm('Remove this accessory?')) return;
+            const { error } = await sb.from('accessories').delete().eq('id', id);
+            if (error) { showToast('Delete failed: ' + error.message, 'error'); return; }
+            accessories = accessories.filter(a => a.id !== id);
+            renderAccessories(); renderAdminAccessories();
+            showToast('Accessory removed', 'error');
+        }
+
+                // ---------- Stock helpers ----------
+        function stockLabel(p) {
+            if (p.stock <= 0) return `<span class="text-xs font-bold text-red-400">Sold Out</span>`;
+            const cls = p.stock <= 5 ? 'text-amber-400' : 'text-emerald-400';
+            return `<span class="text-xs font-semibold ${cls}">Available: ${p.stock}${p.stock <= 5 ? ' (low stock)' : ''}</span>`;
+        }
+        function soldBadge(p) {
+            return p.stock > 0 ? '' : `<div class="absolute inset-0 z-10 flex items-center justify-center bg-black/50"><span class="px-4 py-1.5 rounded-lg bg-red-600 text-white text-sm font-extrabold uppercase tracking-widest -rotate-6 shadow-xl">Sold Out</span></div>`;
+        }
+
+        // ---------- Shopping cart ----------
+        const CART_KEY = 'ahsannas_cart_v1';
+        let cart = [];
+        try {
+            cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]').filter(i => i && typeof i.id === 'string' && Number.isInteger(i.qty) && i.qty > 0);
+        } catch (e) { cart = []; }
+        function saveCart() { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {} }
+        const unitPrice = p => (p.hasDiscount && p.discountPrice > 0) ? p.discountPrice : p.price;
+        function pruneCart() {
+            cart = cart.map(i => {
+                const p = products.find(x => x.id === i.id);
+                return (p && p.stock > 0) ? { id: i.id, qty: Math.min(i.qty, p.stock) } : null;
+            }).filter(Boolean);
+            saveCart();
+        }
+        function cartLines() { return cart.map(i => ({ p: products.find(x => x.id === i.id), qty: i.qty })).filter(l => l.p); }
+        function cartTotal() { return cartLines().reduce((s, l) => s + unitPrice(l.p) * l.qty, 0); }
+
+        function addToCart(id, silent = false) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            if (p.stock <= 0) { showToast('This item is sold out', 'error'); return; }
+            const line = cart.find(i => i.id === id);
+            if ((line ? line.qty : 0) >= p.stock) { showToast(`Only ${p.stock} available`, 'error'); return; }
+            if (line) line.qty++; else cart.push({ id, qty: 1 });
+            saveCart(); renderCart();
+            if (!silent) showToast('Added to cart', 'success');
+        }
+        function buyNow(id) {
+            const p = products.find(x => x.id === id);
+            if (!p || p.stock <= 0) { showToast('This item is sold out', 'error'); return; }
+            if (!cart.find(i => i.id === id)) addToCart(id, true);
+            openCheckout();
+        }
+        function changeQty(id, delta) {
+            const line = cart.find(i => i.id === id), p = products.find(x => x.id === id);
+            if (!line || !p) return;
+            const next = line.qty + delta;
+            if (next < 1) { removeFromCart(id); return; }
+            if (next > p.stock) { showToast(`Only ${p.stock} available`, 'error'); return; }
+            line.qty = next; saveCart(); renderCart();
+        }
+        function removeFromCart(id) { cart = cart.filter(i => i.id !== id); saveCart(); renderCart(); }
+
+        function renderCart() {
+            pruneCart();
+            const lines = cartLines();
+            const count = lines.reduce((s, l) => s + l.qty, 0);
+            const badge = document.getElementById('cartBadge');
+            badge.textContent = count;
+            badge.classList.toggle('hidden', count === 0);
+            document.getElementById('cartTotal').textContent = cartTotal().toLocaleString() + ' EGP';
+            document.getElementById('cartCheckoutBtn').disabled = lines.length === 0;
+            document.getElementById('cartItems').innerHTML = lines.length ? lines.map(({ p, qty }) => `
+                <div class="flex gap-3 p-3 rounded-2xl bg-gray-900/50 border border-gray-800">
+                    <img src="${esc(p.images[0])}" alt="" class="w-16 h-16 object-contain rounded-lg bg-gray-900 p-1" onerror="this.src='${FALLBACK_IMG}'">
+                    <div class="flex-1 min-w-0">
+                        <div class="font-bold text-white text-sm truncate">${esc(p.title)}</div>
+                        <div class="text-xs text-gray-400">${unitPrice(p).toLocaleString()} EGP each</div>
+                        <div class="flex items-center justify-between mt-2">
+                            <div class="flex items-center gap-2">
+                                <button onclick="changeQty('${esc(p.id)}',-1)" aria-label="Decrease" class="w-7 h-7 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-bold">−</button>
+                                <span class="text-sm font-bold text-white w-5 text-center">${qty}</span>
+                                <button onclick="changeQty('${esc(p.id)}',1)" aria-label="Increase" class="w-7 h-7 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-bold">+</button>
+                            </div>
+                            <span class="text-sm font-extrabold text-white">${(unitPrice(p) * qty).toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <button onclick="removeFromCart('${esc(p.id)}')" aria-label="Remove" class="self-start p-1.5 rounded-lg text-gray-500 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                </div>`).join('') : `<div class="text-center text-gray-500 text-sm py-16"><i data-lucide="shopping-cart" class="w-12 h-12 mx-auto mb-3 text-gray-600"></i>Your cart is empty.</div>`;
+            lucide.createIcons();
+        }
+        function openCart() { renderCart(); document.getElementById('cartDrawer').classList.remove('hidden'); }
+        function closeCart() { document.getElementById('cartDrawer').classList.add('hidden'); }
+
+        // ---------- Checkout ----------
+        let payMethod = 'instapay';
+        let receiptFile = null;
+        const RECEIPT_TYPES = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
+        const MOBILE_RE = /^(\+?20|0)1[0125]\d{8}$/;
+        const CONTACT_RE = /^\+?[0-9]{8,15}$/;
+        const INSTA_RE = /^[A-Za-z0-9._-]{2,50}@[A-Za-z0-9._-]{2,30}$/;
+        const cleanNum = v => String(v || '').replace(/[\s-]/g, '');
+
+        function openCheckout() {
+            pruneCart();
+            if (!cartLines().length) { showToast('Your cart is empty', 'error'); return; }
+            closeCart(); closeDetailModal();
+            if (!customer) { pendingCheckout = true; openAuth('login', 'Please log in or sign up to complete your purchase.'); return; }
+            document.getElementById('checkoutForm').reset();
+            document.getElementById('chkName').value = customer.full_name || '';
+            document.getElementById('chkPhone').value = customer.phone || '';
+            document.getElementById('chkAddress').value = customer.address || '';
+            receiptFile = null;
+            document.getElementById('chkReceiptPreview').innerHTML = '';
+            document.getElementById('checkoutFormView').classList.remove('hidden');
+            document.getElementById('checkoutSuccessView').classList.add('hidden');
+            renderCheckoutSummary();
+            selectPayMethod('instapay');
+            document.getElementById('checkoutModal').classList.remove('hidden');
+        }
+        function closeCheckout() { document.getElementById('checkoutModal').classList.add('hidden'); }
+        function renderCheckoutSummary() {
+            const lines = cartLines();
+            document.getElementById('checkoutSummary').innerHTML = lines.map(({ p, qty }) => `
+                <div class="flex justify-between gap-3"><span class="text-gray-300">${esc(p.title)} <span class="text-gray-500">× ${qty}</span></span><span class="text-white font-semibold whitespace-nowrap">${(unitPrice(p) * qty).toLocaleString()} EGP</span></div>`).join('')
+                + `<div class="flex justify-between pt-3 mt-1 border-t border-gray-800 text-base"><span class="font-bold text-white">Total</span><span class="font-extrabold text-brand-400">${cartTotal().toLocaleString()} EGP</span></div>`;
+        }
+        function selectPayMethod(m) {
+            payMethod = m;
+            const on = 'bg-brand-600 border-brand-500 text-white', off = 'bg-gray-800/50 border-gray-700 text-gray-300 hover:bg-gray-800';
+            document.getElementById('payBtnInstapay').className = `py-3 rounded-xl border text-sm font-bold transition-all flex items-center justify-center gap-2 ${m === 'instapay' ? on : off}`;
+            document.getElementById('payBtnWallet').className = `py-3 rounded-xl border text-sm font-bold transition-all flex items-center justify-center gap-2 ${m === 'wallet' ? on : off}`;
+            document.getElementById('fieldsInstapay').classList.toggle('hidden', m !== 'instapay');
+            document.getElementById('fieldsWallet').classList.toggle('hidden', m !== 'wallet');
+            document.getElementById('chkInstapay').required = m === 'instapay';
+            document.getElementById('chkSender').required = m === 'wallet';
+            const details = (m === 'instapay' ? settings.instapay : settings.wallet) || '';
+            document.getElementById('payInfo').innerHTML = `<div class="font-bold mb-1">Transfer <span class="text-white">${cartTotal().toLocaleString()} EGP</span> to:</div>`
+                + (details ? `<div class="whitespace-pre-wrap">${esc(details)}</div>` : `<div class="text-gray-400">Payment details are not published yet. Please contact the store.</div>`);
+        }
+        function handleReceiptFile(e) {
+            const f = e.target.files[0];
+            receiptFile = null;
+            document.getElementById('chkReceiptPreview').innerHTML = '';
+            if (!f) return;
+            if (!RECEIPT_TYPES[f.type]) { showToast('Receipt must be a JPG, PNG or WebP image', 'error'); e.target.value = ''; return; }
+            if (f.size > 5 * 1024 * 1024) { showToast('Receipt image too large (max 5MB)', 'error'); e.target.value = ''; return; }
+            receiptFile = f;
+            const url = URL.createObjectURL(f);
+            document.getElementById('chkReceiptPreview').innerHTML = `<img src="${url}" class="w-24 h-24 object-cover rounded-lg border border-gray-700" alt="Receipt preview">`;
+        }
+        async function submitOrder(e) {
+            e.preventDefault();
+            if (!sb) { showToast('Checkout is unavailable until the store cloud is configured', 'error'); return; }
+            if (!customer) { closeCheckout(); pendingCheckout = true; openAuth('login', 'Please log in to complete your purchase.'); return; }
+            pruneCart();
+            const lines = cartLines();
+            if (!lines.length) { showToast('Your cart is empty', 'error'); closeCheckout(); return; }
+            const v = id => document.getElementById(id).value.trim();
+            const name = v('chkName'), address = v('chkAddress'), phone = cleanNum(v('chkPhone')), phone2 = cleanNum(v('chkPhone2'));
+            const instagram = v('chkInstapay'), sender = cleanNum(v('chkSender'));
+            if (!CONTACT_RE.test(phone)) { showToast('Enter a valid contact number', 'error'); return; }
+            if (phone2 && !CONTACT_RE.test(phone2)) { showToast('The optional second number is not valid', 'error'); return; }
+            if (payMethod === 'instapay' && !INSTA_RE.test(instagram)) { showToast('Enter a valid InstaPay address (like name@instapay)', 'error'); return; }
+            if (payMethod === 'wallet' && !MOBILE_RE.test(sender)) { showToast('Enter the mobile number you sent the payment from', 'error'); return; }
+            if (!receiptFile) { showToast('Please attach the payment receipt screenshot', 'error'); return; }
+
+            const btn = document.getElementById('chkSubmitBtn'), txt = document.getElementById('chkSubmitText');
+            btn.disabled = true; txt.textContent = 'Placing order...';
+            const total = cartTotal();
+            try {
+                const path = `${crypto.randomUUID()}.${RECEIPT_TYPES[receiptFile.type]}`;
+                const up = await sb.storage.from('receipts').upload(path, receiptFile, { contentType: receiptFile.type, upsert: false });
+                if (up.error) throw up.error;
+                const { data, error } = await sb.rpc('place_order', {
+                    p_customer: {
+                        name, address, phone, phone2: phone2 || null, payment_method: payMethod,
+                        instagram: payMethod === 'instapay' ? instagram : null,
+                        sender_number: payMethod === 'wallet' ? sender : null, receipt_path: path
+                    },
+                    p_items: cart.map(i => ({ id: i.id, qty: i.qty })),
+                    p_token: customer.token
+                });
+                if (error) throw error;
+                customer = { ...customer, full_name: name, phone, address };
+                const ref = String(data).slice(0, 8).toUpperCase();
+                cart = []; saveCart();
+                await Cloud.load();
+                renderProducts(); renderCart();
+                document.getElementById('successText').textContent = `Thank you ${name}! Order #${ref} (${total.toLocaleString()} EGP) was received. We will verify your payment and contact you on ${phone}. Track its status any time from the menu: My Orders.`;
+                document.getElementById('checkoutFormView').classList.add('hidden');
+                document.getElementById('checkoutSuccessView').classList.remove('hidden');
+            } catch (err) {
+                console.error(err);
+                const m = String(err.message || '');
+                if (m.includes('LOGIN_REQUIRED')) {
+                    customer = null; saveCustomer(); renderMenu(); closeCheckout(); pendingCheckout = true;
+                    openAuth('login', 'Your session expired. Please log in again.');
+                } else if (m.includes('OUT_OF_STOCK')) {
+                    const t = m.split('OUT_OF_STOCK:')[1] || 'An item';
+                    showToast(`"${t.trim()}" no longer has enough stock. Your cart was updated.`, 'error');
+                    await Cloud.load(); pruneCart(); renderProducts(); renderCart();
+                    if (cartLines().length) { renderCheckoutSummary(); selectPayMethod(payMethod); } else closeCheckout();
+                } else {
+                    showToast('Could not place the order: ' + (m || 'please try again'), 'error');
+                }
+            } finally { btn.disabled = false; txt.textContent = 'Confirm Order'; }
+        }
+
+        // ---------- Store settings, footer, policies ----------
+        const digitsOnly = v => String(v || '').replace(/[^0-9]/g, '');
+        function safeUrl(u) {
+            u = String(u || '').trim();
+            if (!u) return '';
+            if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
+            return /^https?:\/\/[^\s"'<>]+$/i.test(u) ? u : '';
+        }
+        function telegramUrl(v) {
+            v = String(v || '').trim();
+            if (!v) return '';
+            if (/^https?:\/\//i.test(v) || /^t\.me\//i.test(v)) return safeUrl(v);
+            const h = v.replace(/^@/, '').replace(/[^A-Za-z0-9_]/g, '');
+            return h ? 'https://t.me/' + h : '';
+        }
+        const SOCIALS = [
+            { key: 'facebook', icon: 'facebook', label: 'Facebook' },
+            { key: 'instagram', icon: 'instagram', label: 'Instagram' },
+            { key: 'tiktok', icon: 'music-2', label: 'TikTok' },
+            { key: 'youtube', icon: 'youtube', label: 'YouTube' }
+        ];
+        function renderFooter() {
+            const wa = digitsOnly(settings.whatsapp), tg = telegramUrl(settings.telegram), loc = (settings.location || '').trim();
+            const rows = [];
+            if (wa) rows.push(`<a href="https://wa.me/${wa}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-white transition-colors"><i data-lucide="phone-call" class="w-4 h-4 text-emerald-400"></i> WhatsApp: <span dir="ltr">+${wa}</span></a>`);
+            if (tg) rows.push(`<a href="${esc(tg)}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-white transition-colors"><i data-lucide="send" class="w-4 h-4 text-sky-400"></i> Telegram</a>`);
+            if (loc) rows.push(`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}" target="_blank" rel="noopener noreferrer" class="flex items-start gap-2 hover:text-white transition-colors"><i data-lucide="map-pin" class="w-4 h-4 mt-0.5 text-brand-500 shrink-0"></i><span>${esc(loc)}</span></a>`);
+            document.getElementById('footerContact').innerHTML = `<div class="text-xs uppercase tracking-widest text-gray-500 mb-3">Contact us</div>` + (rows.join('') || `<div class="text-xs text-gray-500">Contact details coming soon.</div>`);
+            const socials = SOCIALS.map(s => ({ ...s, url: safeUrl(settings[s.key]) })).filter(s => s.url);
+            document.getElementById('footerSocial').innerHTML = socials.length
+                ? socials.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" aria-label="${s.label}" class="w-10 h-10 rounded-xl bg-gray-800/70 border border-gray-700 text-gray-300 hover:bg-brand-600 hover:text-white hover:border-brand-500 transition-all flex items-center justify-center"><i data-lucide="${s.icon}" class="w-4 h-4"></i></a>`).join('')
+                : `<span class="text-xs text-gray-500">Coming soon.</span>`;
+            lucide.createIcons();
+        }
+        function openPolicies() {
+            document.getElementById('policiesBody').textContent = (settings.policies || '').trim() || 'Store policies have not been published yet.';
+            document.getElementById('policiesModal').classList.remove('hidden');
+        }
+        function closePolicies() { document.getElementById('policiesModal').classList.add('hidden'); }
+
+        const SETTING_FIELDS = { whatsapp: 'setWhatsapp', telegram: 'setTelegram', location: 'setLocation', instapay: 'setInstapay', wallet: 'setWallet', policies: 'setPolicies', facebook: 'setFacebook', instagram: 'setInstagram', tiktok: 'setTiktok', youtube: 'setYoutube' };
+        function fillSettingsForm() {
+            for (const [k, id] of Object.entries(SETTING_FIELDS)) document.getElementById(id).value = settings[k] || '';
+        }
+        async function saveSettings(e) {
+            e.preventDefault();
+            if (!BackendServer.isAuthenticated() || !sb) return;
+            const row = { id: 1 };
+            for (const [k, id] of Object.entries(SETTING_FIELDS)) row[k] = document.getElementById(id).value.trim();
+            if (row.whatsapp && digitsOnly(row.whatsapp).length < 10) { showToast('WhatsApp number looks too short', 'error'); return; }
+            row.whatsapp = digitsOnly(row.whatsapp);
+            const btn = document.getElementById('settingsSaveBtn');
+            btn.disabled = true;
+            const { error } = await sb.from('settings').upsert(row);
+            btn.disabled = false;
+            if (error) { showToast('Save failed: ' + error.message, 'error'); return; }
+            settings = { ...settings, ...row };
+            renderFooter();
+            showToast('Settings saved', 'success');
+        }
+
+        // ---------- Admin orders ----------
+        let adminOrders = [];
+        const ACCEPTED = ['confirmed', 'shipped', 'delivered'];
+        const ALL_STATUSES = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
+        const STATUS_LABELS = { pending: 'Awaiting verification', confirmed: 'Verified by Admin', shipped: 'Shipped', delivered: 'Delivered', cancelled: 'Rejected / Cancelled' };
+        const statusLabel = st => STATUS_LABELS[st] || st;
+        const statusSelect = (id, cur) => `<select onchange="updateOrderStatus('${esc(id)}', this.value)" class="bg-dark-input border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white">${ALL_STATUSES.map(st => `<option value="${st}" ${cur === st ? 'selected' : ''}>${statusLabel(st)}</option>`).join('')}</select>`;
+        const orderRef = o => String(o.id).slice(0, 8).toUpperCase();
+        const orderPay = o => o.payment_method === 'instapay'
+            ? `InstaPay<br><span class="text-xs text-gray-400" dir="ltr">${esc(o.instagram || '')}</span>`
+            : `E-Wallet<br><span class="text-xs text-gray-400" dir="ltr">${esc(o.sender_number || '')}</span>`;
+        const orderItems = o => (o.items || []).map(i => `${esc(i.title)} ×${num(i.qty)}`).join('<br>');
+        const emptyRow = (cols, msg) => `<tr><td colspan="${cols}" class="px-6 py-8 text-center text-gray-500 text-xs">${msg}</td></tr>`;
+
+        async function loadAdminOrders() {
+            if (!sb || !BackendServer.isAuthenticated()) return;
+            const { data, error } = await sb.from('orders').select('*').order('created_at', { ascending: false }).limit(500);
+            if (error) {
+                const msg = `<tr><td colspan="7" class="px-6 py-8 text-center text-red-400 text-xs">Could not load orders: ${esc(error.message)}</td></tr>`;
+                document.getElementById('adminPendingTable').innerHTML = msg;
+                document.getElementById('adminAcceptedTable').innerHTML = msg;
+                return;
+            }
+            adminOrders = data;
+            renderAdminOrders();
+        }
+        function renderAdminOrders() { renderPendingOrders(); renderAcceptedOrders(); lucide.createIcons(); }
+
+        function renderPendingOrders() {
+            const list = adminOrders.filter(o => o.status === 'pending');
+            document.getElementById('pendingCount').textContent = list.length;
+            document.getElementById('adminPendingTable').innerHTML = list.length ? list.map(o => `
+                <tr class="align-top hover:bg-gray-800/40 transition-colors">
+                    <td class="px-4 py-4 text-xs text-gray-400 whitespace-nowrap">#${esc(orderRef(o))}<br>${esc(new Date(o.created_at).toLocaleString())}</td>
+                    <td class="px-4 py-4 text-xs max-w-[240px]"><div class="font-bold text-white text-sm">${esc(o.customer_name)}</div><div dir="ltr">${esc(o.phone)}${o.phone2 ? ' / ' + esc(o.phone2) : ''}</div><div class="text-gray-400 mt-1">${esc(o.address)}</div></td>
+                    <td class="px-4 py-4 text-xs">${orderPay(o)}</td>
+                    <td class="px-4 py-4 text-xs">${orderItems(o)}</td>
+                    <td class="px-4 py-4 font-bold text-white whitespace-nowrap">${num(o.total).toLocaleString()} EGP</td>
+                    <td class="px-4 py-4"><button onclick="viewReceipt('${esc(o.receipt_path)}')" class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-brand-600 text-xs font-semibold text-gray-200 transition-all">View</button></td>
+                    <td class="px-4 py-4 text-right whitespace-nowrap space-x-2">
+                        <button onclick="openOrderDetail('${esc(o.id)}')" class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-brand-600 text-xs font-semibold text-gray-200 transition-all">Order details</button>
+                        <button onclick="updateOrderStatus('${esc(o.id)}','confirmed')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white transition-all">Verify</button>
+                        <button onclick="rejectOrder('${esc(o.id)}')" class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-red-600 text-xs font-semibold text-gray-200 transition-all">Reject</button>
+                        <button onclick="deleteOrder('${esc(o.id)}')" aria-label="Delete order" class="px-2.5 py-1.5 rounded-lg bg-gray-800 hover:bg-red-600 text-gray-300 hover:text-white transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5 inline"></i></button>
+                    </td>
+                </tr>`).join('') : emptyRow(7, 'No orders waiting for review.');
+        }
+
+        function renderAcceptedOrders() {
+            const accepted = adminOrders.filter(o => ACCEPTED.includes(o.status));
+            document.getElementById('accStatCount').textContent = accepted.length;
+            document.getElementById('accStatRevenue').textContent = accepted.reduce((t, o) => t + num(o.total), 0).toLocaleString() + ' EGP';
+            document.getElementById('accStatDelivered').textContent = accepted.filter(o => o.status === 'delivered').length;
+
+            const f = document.getElementById('accFilter').value;
+            const q = document.getElementById('accSearch').value.trim().toLowerCase();
+            let list = f === 'accepted' ? accepted : adminOrders.filter(o => o.status === f);
+            if (q) list = list.filter(o => [orderRef(o), o.customer_name, o.phone, o.phone2, o.address, ...(o.items || []).map(i => i.title)].join(' ').toLowerCase().includes(q));
+
+            document.getElementById('adminAcceptedTable').innerHTML = list.length ? list.map(o => `
+                <tr class="align-top hover:bg-gray-800/40 transition-colors">
+                    <td class="px-4 py-4 text-xs text-gray-400 whitespace-nowrap">#${esc(orderRef(o))}<br>${esc(new Date(o.created_at).toLocaleDateString())}</td>
+                    <td class="px-4 py-4 text-xs"><div class="font-bold text-white text-sm">${esc(o.customer_name)}</div><div dir="ltr">${esc(o.phone)}</div></td>
+                    <td class="px-4 py-4 text-xs">${orderItems(o)}</td>
+                    <td class="px-4 py-4 font-bold text-white whitespace-nowrap">${num(o.total).toLocaleString()} EGP</td>
+                    <td class="px-4 py-4">${statusSelect(o.id, o.status)}</td>
+                    <td class="px-4 py-4 text-right whitespace-nowrap space-x-2"><button onclick="openOrderDetail('${esc(o.id)}')" class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-brand-600 text-xs font-semibold text-gray-200 transition-all">Order details</button><button onclick="deleteOrder('${esc(o.id)}')" aria-label="Delete order" class="px-2.5 py-1.5 rounded-lg bg-gray-800 hover:bg-red-600 text-gray-300 hover:text-white transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5 inline"></i></button></td>
+                </tr>`).join('') : emptyRow(6, 'No orders match.');
+        }
+
+        function openOrderDetail(id) {
+            const o = adminOrders.find(x => x.id === id);
+            if (!o) return;
+            const lines = (o.items || []).map(i => `<tr><td class="py-2 pr-3 text-gray-200">${esc(i.title)}</td><td class="py-2 text-center text-gray-400">${num(i.qty)}</td><td class="py-2 text-right text-gray-300 whitespace-nowrap">${num(i.unit_price).toLocaleString()} EGP</td><td class="py-2 text-right text-white font-semibold whitespace-nowrap">${(num(i.unit_price) * num(i.qty)).toLocaleString()} EGP</td></tr>`).join('');
+            const row = (k, v) => `<div class="flex justify-between gap-4 py-2 border-b border-gray-800 text-sm"><span class="text-gray-400">${k}</span><span class="text-gray-100 font-semibold text-right">${v}</span></div>`;
+            document.getElementById('orderDetailBody').innerHTML = `
+                <h3 class="font-lux text-2xl font-bold text-white">Order #${esc(orderRef(o))}</h3>
+                <p class="text-xs text-gray-400 mb-4">${esc(new Date(o.created_at).toLocaleString())} · Status: <b class="text-gray-200">${esc(o.status === 'pending' ? 'awaiting verification' : statusLabel(o.status))}</b></p>
+                <div class="mb-5">
+                    ${row('Customer', esc(o.customer_name))}
+                    ${o.customer_username ? row('Account username', esc(o.customer_username)) : ''}
+                    ${row('Contact number', `<span dir="ltr">${esc(o.phone)}</span>`)}
+                    ${o.phone2 ? row('Second number', `<span dir="ltr">${esc(o.phone2)}</span>`) : ''}
+                    ${row('Delivery address', esc(o.address))}
+                    ${row('Payment method', o.payment_method === 'instapay' ? 'InstaPay' : 'E-Wallet')}
+                    ${o.payment_method === 'instapay' ? row('InstaPay address', `<span dir="ltr">${esc(o.instagram || '')}</span>`) : row('Sent from number', `<span dir="ltr">${esc(o.sender_number || '')}</span>`)}
+                </div>
+                <table class="w-full text-sm mb-2"><thead><tr class="text-xs uppercase text-gray-500 border-b border-gray-700"><th class="text-left py-2">Item</th><th class="py-2">Qty</th><th class="text-right py-2">Unit</th><th class="text-right py-2">Subtotal</th></tr></thead><tbody>${lines}</tbody></table>
+                <div class="flex justify-between items-center py-3 border-t border-gray-700 mb-5"><span class="font-bold text-white">Total</span><span class="text-xl font-extrabold text-emerald-400">${num(o.total).toLocaleString()} EGP</span></div>
+                <button onclick="viewReceipt('${esc(o.receipt_path)}')" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-lg transition-all flex items-center justify-center gap-2"><i data-lucide="image" class="w-4 h-4"></i> View payment receipt</button>
+                ${o.status === 'pending' ? `<div class="grid grid-cols-2 gap-3 mt-3">
+                    <button onclick="verifyFromModal('${esc(o.id)}')" class="py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition-all flex items-center justify-center gap-2"><i data-lucide="badge-check" class="w-4 h-4"></i> Verify order</button>
+                    <button onclick="rejectFromModal('${esc(o.id)}')" class="py-3 rounded-xl bg-gray-800 hover:bg-red-600 text-gray-200 font-semibold text-sm transition-all">Reject</button>
+                </div>` : ''}
+                <div class="mt-5 pt-4 border-t border-gray-800 flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
+                    <div class="flex items-center gap-2"><span class="text-xs text-gray-400">Status</span>${statusSelect(o.id, o.status)}</div>
+                    <button onclick="deleteOrder('${esc(o.id)}', true)" class="px-4 py-2.5 rounded-xl bg-red-600/20 hover:bg-red-600 border border-red-500/40 text-red-300 hover:text-white text-sm font-semibold transition-all flex items-center justify-center gap-2"><i data-lucide="trash-2" class="w-4 h-4"></i> Delete order</button>
+                </div>`;
+            lucide.createIcons();
+            document.getElementById('orderDetailModal').classList.remove('hidden');
+        }
+        function closeOrderDetail() { document.getElementById('orderDetailModal').classList.add('hidden'); }
+        function verifyFromModal(id) { closeOrderDetail(); updateOrderStatus(id, 'confirmed'); }
+        function rejectFromModal(id) { closeOrderDetail(); rejectOrder(id); }
+
+        async function viewReceipt(path) {
+            if (!sb) return;
+            const w = window.open('about:blank', '_blank');
+            const { data, error } = await sb.storage.from('receipts').createSignedUrl(path, 300);
+            if (error || !data) { if (w) w.close(); showToast('Could not open receipt', 'error'); return; }
+            if (w) w.location = data.signedUrl; else showToast('Allow pop-ups to view receipts', 'error');
+        }
+        async function updateOrderStatus(id, status) {
+            if (!sb || !ALL_STATUSES.includes(status)) return;
+            const { error } = await sb.from('orders').update({ status }).eq('id', id);
+            if (error) { showToast('Update failed: ' + error.message, 'error'); loadAdminOrders(); return; }
+            const o = adminOrders.find(x => x.id === id);
+            if (o) o.status = status;
+            renderAdminOrders();
+            showToast(status === 'confirmed' ? 'Order verified' : 'Status changed to: ' + statusLabel(status), 'success');
+            if (!document.getElementById('orderDetailModal').classList.contains('hidden')) openOrderDetail(id);
+        }
+        function rejectOrder(id) {
+            if (!confirm('Reject this order? Stock is NOT returned automatically.')) return;
+            updateOrderStatus(id, 'cancelled');
+        }
+
+        // ---------- Hamburger menu ----------
+        function openMenu() { renderMenu(); document.getElementById('menuDrawer').classList.remove('hidden'); }
+        function closeMenu() { document.getElementById('menuDrawer').classList.add('hidden'); }
+        function menuBtn(icon, label, fn) {
+            return `<button onclick="closeMenu();${fn}" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-gray-800/70 text-left text-sm font-semibold text-gray-200 transition-all"><i data-lucide="${icon}" class="w-5 h-5 text-brand-500"></i>${label}</button>`;
+        }
+        function renderMenu() {
+            const adminIn = BackendServer.isAuthenticated();
+            const items = [];
+            if (customer) {
+                items.push(menuBtn('package', 'My Orders', 'openMyOrders()'), menuBtn('log-out', 'Logout', 'customerLogout()'));
+            } else {
+                items.push(menuBtn('log-in', 'Login', "openAuth('login')"), menuBtn('user-plus', 'Sign Up', "openAuth('signup')"));
+            }
+            if (adminIn) {
+                items.push(menuBtn('layout-dashboard', 'Admin Dashboard', 'showAdminView()'));
+                if (currentView === 'admin') items.push(menuBtn('store', 'View Store', 'goStore()'));
+                items.push(menuBtn('shield-off', 'Logout Admin', 'adminLogout()'));
+            } else {
+                items.push(menuBtn('shield', 'Admin Login', 'openAdminLoginModal()'));
+            }
+            items.push(menuBtn('phone', 'Contact Us', 'openContact()'));
+            document.getElementById('menuItems').innerHTML = items.join('');
+            document.getElementById('menuUser').innerHTML = customer ? `Signed in as <b class="text-white">${esc(customer.username)}</b>` : 'Browsing as a guest. Log in to buy.';
+            const label = document.getElementById('menuUserLabel');
+            label.textContent = customer ? customer.username : '';
+            label.classList.toggle('hidden', !customer);
+            label.classList.toggle('sm:inline', !!customer);
+            lucide.createIcons();
+        }
+        function goStore() {
+            currentView = 'customer';
+            document.getElementById('adminView').classList.add('hidden');
+            document.getElementById('customerView').classList.remove('hidden');
+            renderProducts(); renderMenu(); window.scrollTo(0, 0);
+        }
+        function adminLogout() { BackendServer.logout(); goStore(); showToast('Admin logged out'); }
+
+        // ---------- Customer accounts (username + password) ----------
+        const CUST_KEY = 'ahsannas_customer_v1';
+        const USER_RE = /^[A-Za-z0-9_.]{3,20}$/;
+        let customer = null;          // { token, username, full_name, phone, address }
+        let pendingCheckout = false;
+        function loadStoredCustomer() {
+            try {
+                const j = JSON.parse(localStorage.getItem(CUST_KEY) || 'null');
+                if (j && typeof j.token === 'string' && typeof j.username === 'string') customer = { token: j.token, username: j.username };
+            } catch (e) { customer = null; }
+        }
+        function saveCustomer() {
+            try {
+                if (customer) localStorage.setItem(CUST_KEY, JSON.stringify({ token: customer.token, username: customer.username }));
+                else localStorage.removeItem(CUST_KEY);
+            } catch (e) {}
+        }
+        async function refreshCustomer() {
+            if (!customer || !sb) { renderMenu(); return; }
+            const { data, error } = await sb.rpc('customer_me', { p_token: customer.token });
+            if (!error) {
+                if (!data) { customer = null; saveCustomer(); }
+                else customer = { ...customer, ...data };
+            }
+            renderMenu();
+        }
+        function setText(id, msg) { document.getElementById(id).textContent = msg || ''; }
+        function openAuth(mode, notice = '') {
+            closeMenu();
+            const login = mode === 'login';
+            document.getElementById('custLoginForm').reset();
+            document.getElementById('custSignupForm').reset();
+            setText('custLoginError', ''); setText('custSignupError', '');
+            const hint = document.getElementById('usernameHint');
+            hint.className = 'text-xs mt-1 min-h-[1rem] text-gray-500';
+            hint.textContent = '3-20 letters, numbers, dots or underscores.';
+            document.getElementById('custLoginModal').classList.toggle('hidden', !login);
+            document.getElementById('custSignupModal').classList.toggle('hidden', login);
+            const n = document.getElementById(login ? 'custLoginNotice' : 'custSignupNotice');
+            n.textContent = notice; n.classList.toggle('hidden', !notice);
+            document.getElementById('custLoginNotice').classList.toggle('hidden', !login || !notice);
+            document.getElementById('custSignupNotice').classList.toggle('hidden', login || !notice);
+            if (!login) document.getElementById('custSignupNotice').textContent = notice;
+            else document.getElementById('custLoginNotice').textContent = notice;
+        }
+        function closeAuthModals() {
+            document.getElementById('custLoginModal').classList.add('hidden');
+            document.getElementById('custSignupModal').classList.add('hidden');
+        }
+        function cancelAuth() { pendingCheckout = false; closeAuthModals(); }
+        async function authSuccess(res, msg) {
+            customer = { token: res.token, username: res.username };
+            saveCustomer();
+            await refreshCustomer();
+            closeAuthModals();
+            showToast(msg, 'success');
+            if (pendingCheckout) { pendingCheckout = false; openCheckout(); }
+        }
+        async function handleCustomerLogin(e) {
+            e.preventDefault();
+            if (!sb) { setText('custLoginError', 'The store cloud is not configured yet.'); return; }
+            const btn = document.getElementById('custLoginBtn');
+            btn.disabled = true; setText('custLoginError', '');
+            const { data, error } = await sb.rpc('customer_login', {
+                p_username: document.getElementById('custLoginUser').value.trim(),
+                p_password: document.getElementById('custLoginPass').value
+            });
+            btn.disabled = false;
+            if (error) { console.error(error); setText('custLoginError', 'Could not log in right now. Please try again.'); return; }
+            if (data && data.error === 'ACCOUNT_LOCKED') { setText('custLoginError', 'Too many wrong attempts. Please try again in 10 minutes.'); return; }
+            if (!data || data.error) { setText('custLoginError', 'Wrong username or password.'); return; }
+            await authSuccess(data, `Welcome back, ${data.username}!`);
+        }
+        async function handleCustomerSignup(e) {
+            e.preventDefault();
+            if (!sb) { setText('custSignupError', 'The store cloud is not configured yet.'); return; }
+            const user = document.getElementById('custSignupUser').value.trim();
+            const pass = document.getElementById('custSignupPass').value;
+            if (!USER_RE.test(user)) { setText('custSignupError', 'Username must be 3-20 letters, numbers, dots or underscores.'); return; }
+            if (pass.length < 6) { setText('custSignupError', 'Password must be at least 6 characters.'); return; }
+            if (pass !== document.getElementById('custSignupPass2').value) { setText('custSignupError', 'The two passwords do not match.'); return; }
+            const btn = document.getElementById('custSignupBtn');
+            btn.disabled = true; setText('custSignupError', '');
+            const { data, error } = await sb.rpc('customer_signup', { p_username: user, p_password: pass });
+            btn.disabled = false;
+            if (error) {
+                const m = String(error.message || '');
+                if (m.includes('USERNAME_TAKEN')) {
+                    setText('custSignupError', 'This username is already taken. Please choose another one.');
+                    const hint = document.getElementById('usernameHint');
+                    hint.className = 'text-xs mt-1 min-h-[1rem] text-red-400'; hint.textContent = 'This username is already taken.';
+                } else if (m.includes('INVALID_USERNAME')) setText('custSignupError', 'Username must be 3-20 letters, numbers, dots or underscores.');
+                else if (m.includes('INVALID_PASSWORD')) setText('custSignupError', 'Password must be 6-72 characters.');
+                else { console.error(error); setText('custSignupError', 'Could not create the account right now. Please try again.'); }
+                return;
+            }
+            await authSuccess(data, `Account created. Welcome, ${data.username}!`);
+        }
+        let unameTimer = null, unameSeq = 0;
+        function checkUsernameAvailability(v) {
+            const hint = document.getElementById('usernameHint');
+            v = v.trim(); clearTimeout(unameTimer); unameSeq++;
+            const set = (cls, txt) => { hint.className = 'text-xs mt-1 min-h-[1rem] ' + cls; hint.textContent = txt; };
+            if (!v) { set('text-gray-500', '3-20 letters, numbers, dots or underscores.'); return; }
+            if (!USER_RE.test(v)) { set('text-red-400', 'Use 3-20 letters, numbers, dots or underscores.'); return; }
+            if (!sb) return;
+            set('text-gray-400', 'Checking...');
+            const seq = unameSeq;
+            unameTimer = setTimeout(async () => {
+                const { data, error } = await sb.rpc('username_available', { p_username: v });
+                if (seq !== unameSeq || error) return;
+                if (data) set('text-emerald-400', 'This username is available.');
+                else set('text-red-400', 'This username is already taken. Please choose another one.');
+            }, 400);
+        }
+        async function customerLogout() {
+            const t = customer && customer.token;
+            customer = null; saveCustomer(); renderMenu();
+            if (sb && t) sb.rpc('customer_logout', { p_token: t });
+            showToast('Logged out');
+        }
+
+        // ---------- My Orders (customer) ----------
+        const BADGE = {
+            pending: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+            confirmed: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+            shipped: 'bg-sky-500/20 text-sky-400 border-sky-500/30',
+            delivered: 'bg-emerald-600/30 text-emerald-300 border-emerald-500/40',
+            cancelled: 'bg-red-500/20 text-red-400 border-red-500/30'
+        };
+        const statusBadge = st => `<span class="text-[11px] font-bold px-2.5 py-1 rounded-full border whitespace-nowrap ${BADGE[st] || BADGE.pending}">${esc(statusLabel(st))}</span>`;
+        const FLOW = [['pending', 'Placed'], ['confirmed', 'Verified'], ['shipped', 'Shipped'], ['delivered', 'Delivered']];
+        function progressBar(status) {
+            if (status === 'cancelled') return `<div class="text-xs font-semibold text-red-400 bg-red-500/10 border border-red-500/30 rounded-xl px-3 py-2 my-3">This order was rejected or cancelled by the store. Please contact us for details.</div>`;
+            const idx = FLOW.findIndex(f => f[0] === status);
+            return `<div class="flex items-start gap-1.5 my-3">${FLOW.map((f, i) => `<div class="flex-1"><div class="h-1.5 rounded-full ${i <= idx ? 'bg-emerald-500' : 'bg-gray-700'}"></div><div class="text-[10px] mt-1 ${i <= idx ? 'text-emerald-400' : 'text-gray-500'}">${f[1]}</div></div>`).join('')}</div>`;
+        }
+        function closeMyOrders() { document.getElementById('myOrdersModal').classList.add('hidden'); }
+        async function openMyOrders() {
+            if (!customer) { openAuth('login', 'Please log in to see your orders.'); return; }
+            const body = document.getElementById('myOrdersBody');
+            body.innerHTML = '<div class="text-center text-gray-500 text-sm py-10">Loading your orders...</div>';
+            document.getElementById('myOrdersModal').classList.remove('hidden');
+            const { data, error } = await sb.rpc('customer_orders', { p_token: customer.token });
+            if (error) { body.innerHTML = `<div class="text-center text-red-400 text-sm py-10">Could not load your orders: ${esc(error.message)}</div>`; return; }
+            const info = `<div class="rounded-2xl bg-gray-900/50 border border-gray-800 p-4 mb-4 text-sm">
+                <div class="text-xs uppercase tracking-widest text-gray-500 mb-1">Account</div>
+                <div class="font-bold text-white">${esc(customer.username)}</div>
+                ${customer.phone ? `<div class="text-gray-400 text-xs mt-1" dir="ltr">${esc(customer.phone)}</div>` : ''}
+                ${customer.address ? `<div class="text-gray-400 text-xs mt-0.5">${esc(customer.address)}</div>` : ''}
+            </div>`;
+            if (!data || !data.length) { body.innerHTML = info + '<div class="text-center text-gray-500 text-sm py-10">You have no orders yet.</div>'; return; }
+            body.innerHTML = info + `<div class="space-y-3">${data.map(o => {
+                const lines = (o.items || []).map(i => `<tr><td class="py-1.5 pr-2 text-gray-200">${esc(i.title)}</td><td class="py-1.5 text-center text-gray-400">×${num(i.qty)}</td><td class="py-1.5 text-right text-white font-semibold whitespace-nowrap">${(num(i.unit_price) * num(i.qty)).toLocaleString()} EGP</td></tr>`).join('');
+                return `<details class="rounded-2xl border border-gray-800 bg-gray-900/40 open:border-brand-500/40">
+                    <summary class="list-none cursor-pointer p-4 flex items-center justify-between gap-3">
+                        <div><div class="font-bold text-white text-sm">Order #${esc(String(o.id).slice(0, 8).toUpperCase())}</div><div class="text-xs text-gray-400">${esc(new Date(o.created_at).toLocaleString())}</div></div>
+                        <div class="text-right space-y-1">${statusBadge(o.status)}<div class="text-sm font-extrabold text-white">${num(o.total).toLocaleString()} EGP</div></div>
+                    </summary>
+                    <div class="px-4 pb-4">
+                        ${progressBar(o.status)}
+                        <table class="w-full text-sm mb-2"><tbody>${lines}</tbody></table>
+                        <div class="text-xs text-gray-400 space-y-1 pt-2 border-t border-gray-800">
+                            <div><span class="text-gray-500">Payment:</span> ${o.payment_method === 'instapay' ? 'InstaPay' : 'E-Wallet'}</div>
+                            <div><span class="text-gray-500">Delivery address:</span> ${esc(o.address)}</div>
+                            <div><span class="text-gray-500">Contact:</span> <span dir="ltr">${esc(o.phone)}${o.phone2 ? ' / ' + esc(o.phone2) : ''}</span></div>
+                        </div>
+                    </div>
+                </details>`;
+            }).join('')}</div>`;
+        }
+
+        // ---------- Contact Us ----------
+        function closeContact() { document.getElementById('contactModal').classList.add('hidden'); }
+        function openContact() {
+            const wa = digitsOnly(settings.whatsapp), tg = telegramUrl(settings.telegram), loc = (settings.location || '').trim();
+            const card = (href, icon, color, title, sub) => `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3.5 rounded-2xl bg-gray-900/50 border border-gray-800 hover:border-brand-500/50 transition-all"><div class="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center shrink-0"><i data-lucide="${icon}" class="w-5 h-5 ${color}"></i></div><div class="min-w-0"><div class="text-sm font-bold text-white">${title}</div><div class="text-xs text-gray-400 truncate">${sub}</div></div></a>`;
+            const parts = [];
+            if (wa) parts.push(card(`https://wa.me/${wa}`, 'phone-call', 'text-emerald-400', 'WhatsApp', `<span dir="ltr">+${wa}</span>`));
+            if (tg) parts.push(card(tg, 'send', 'text-sky-400', 'Telegram', esc(tg.replace(/^https?:\/\//, ''))));
+            if (loc) parts.push(card(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}`, 'map-pin', 'text-brand-500', 'Our store', esc(loc)));
+            const socials = SOCIALS.map(x => ({ ...x, url: safeUrl(settings[x.key]) })).filter(x => x.url);
+            if (socials.length) parts.push(`<div class="flex flex-wrap gap-3 pt-2">${socials.map(x => `<a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer" aria-label="${x.label}" class="w-10 h-10 rounded-xl bg-gray-800/70 border border-gray-700 text-gray-300 hover:bg-brand-600 hover:text-white transition-all flex items-center justify-center"><i data-lucide="${x.icon}" class="w-4 h-4"></i></a>`).join('')}</div>`);
+            document.getElementById('contactBody').innerHTML = parts.join('') || '<div class="text-center text-gray-500 text-sm py-6">Contact details are coming soon.</div>';
+            document.getElementById('contactModal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        // ---------- Admin: delete an order ----------
+        async function deleteOrder(id, fromModal = false) {
+            if (!sb || !BackendServer.isAuthenticated()) return;
+            const o = adminOrders.find(x => x.id === id);
+            if (!o) return;
+            if (!confirm(`Permanently delete order #${orderRef(o)} from ${o.customer_name}? This cannot be undone, and the stock is NOT returned.`)) return;
+            const { data, error } = await sb.from('orders').delete().eq('id', id).select();
+            if (error) { showToast('Delete failed: ' + error.message, 'error'); return; }
+            if (!data || !data.length) { showToast('Not deleted. Run ahsan-nas-setup.sql in Supabase first.', 'error'); return; }
+            if (o.receipt_path) { try { await sb.storage.from('receipts').remove([o.receipt_path]); } catch (e) {} }
+            adminOrders = adminOrders.filter(x => x.id !== id);
+            if (fromModal) closeOrderDetail();
+            renderAdminOrders();
+            showToast('Order deleted', 'success');
         }
 
         function setOffersTab(offersOnly) {
@@ -685,18 +1806,18 @@
             if (filtered.length === 0) {
                 grid.innerHTML = '';
                 emptyState.classList.remove('hidden');
-                if (window.lucide) lucide.createIcons();
                 return;
             }
 
             emptyState.classList.add('hidden');
-            grid.innerHTML = filtered.map(p => {
+            grid.innerHTML = filtered.map((p, i) => {
                 const isDiscount = p.hasDiscount && p.discountPrice > 0;
                 const cardGlowClass = isDiscount ? 'red-glow-card' : 'glow-effect-hover';
                 const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.image || '');
 
                 return `
-                <div class="product-card glass-card rounded-2xl p-5 border border-white/5 flex flex-col justify-between group ${cardGlowClass}">
+                <div class="reveal h-full" style="animation-delay:${Math.min(i, 8) * 70}ms">
+                <div class="product-card spot glass-card rounded-2xl p-5 border border-white/5 flex flex-col justify-between group h-full ${cardGlowClass}">
                     <div>
                         <div class="relative w-full h-48 bg-gray-900/40 rounded-xl p-4 mb-4 flex items-center justify-center overflow-hidden">
                             ${isDiscount ? `
@@ -709,13 +1830,14 @@
                                     Zero Fees / معفي
                                 </span>
                             ` : ''}
-                            <img src="${mainImg}" alt="${p.title}" class="h-36 object-contain group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80'">
+                            ${soldBadge(p)}<img src="${esc(mainImg)}" alt="${esc(p.title)}" class="h-36 ${p.stock <= 0 ? 'opacity-40 grayscale ' : ''}object-contain group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80'">
                         </div>
-                        <h3 class="text-lg font-bold text-white group-hover:text-brand-500 transition-colors">${p.title}</h3>
-                        <div class="text-xs text-brand-400 font-semibold my-1">${p.color || ''}</div>
-                        <p class="text-xs text-gray-400 line-clamp-2 mt-1 mb-3">${p.description}</p>
+                        <h3 class="text-lg font-bold text-white group-hover:text-brand-500 transition-colors">${esc(p.title)}</h3>
+                        <div class="text-xs text-brand-400 font-semibold my-1">${esc(p.color || '')}</div>
+                        <p class="text-xs text-gray-400 line-clamp-2 mt-1 mb-3">${esc(p.description)}</p>
                     </div>
                     <div>
+                        <div class="mb-2">${stockLabel(p)}</div>
                         <div class="flex items-baseline justify-between mb-4">
                             <div>
                                 ${isDiscount ? `
@@ -725,21 +1847,26 @@
                                     <span class="text-xl font-extrabold text-white">${p.price.toLocaleString()} EGP</span>
                                 `}
                             </div>
-                            <span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">${p.storage || ''}</span>
+                            <span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">${esc(p.storage || '')}</span>
                         </div>
                         <div class="flex gap-2">
-                            <button onclick="openDetailModal('${p.id}')" class="flex-1 py-2.5 rounded-xl border border-gray-700 hover:border-gray-600 bg-gray-800/50 hover:bg-gray-800 text-xs font-semibold text-gray-300 transition-all flex items-center justify-center gap-1.5">
-                                <i data-lucide="eye" class="w-3.5 h-3.5"></i> Details
+                            <button onclick="openDetailModal('${p.id}')" aria-label="Details" class="px-3 py-2.5 rounded-xl border border-gray-700 hover:border-gray-600 bg-gray-800/50 hover:bg-gray-800 text-gray-300 transition-all flex items-center justify-center">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
                             </button>
-                            <button onclick="openContactSellerModal('${p.id}')" class="flex-1 py-2.5 rounded-xl ${isDiscount ? 'bg-red-600 hover:bg-red-500' : 'bg-brand-600 hover:bg-brand-500'} text-white text-xs font-semibold shadow-md transition-all flex items-center justify-center gap-1">
-                                <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Contact
+                            <button onclick="addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''} aria-label="Add to cart" class="px-3 py-2.5 rounded-xl border border-gray-700 hover:border-brand-500 bg-gray-800/50 hover:bg-gray-800 text-gray-200 transition-all flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed">
+                                <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="buyNow('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''} class="flex-1 py-2.5 rounded-xl ${isDiscount ? 'bg-red-600 hover:bg-red-500' : 'bg-brand-600 hover:bg-brand-700'} text-white text-xs font-semibold shadow-md transition-all flex items-center justify-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed">
+                                <i data-lucide="zap" class="w-3.5 h-3.5"></i> ${p.stock <= 0 ? 'Sold Out' : 'Buy Now'}
                             </button>
                         </div>
                     </div>
                 </div>
+                </div>
             `}).join('');
 
-            if (window.lucide) lucide.createIcons();
+            lucide.createIcons();
+            observeReveals();
         }
 
         function renderAdminTable() {
@@ -749,16 +1876,17 @@
                 return `
                 <tr class="hover:bg-gray-800/40 transition-colors">
                     <td class="px-6 py-4 flex items-center gap-3">
-                        <img src="${mainImg}" class="w-10 h-10 object-contain rounded bg-gray-900 p-1">
+                        <img src="${esc(mainImg)}" class="w-10 h-10 object-contain rounded bg-gray-900 p-1">
                         <div>
-                            <div class="font-bold text-white">${p.title}</div>
-                            <div class="text-xs text-gray-400">${p.storage || ''}</div>
+                            <div class="font-bold text-white">${esc(p.title)}</div>
+                            <div class="text-xs text-gray-400">${esc(p.storage || '')}</div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 font-semibold text-gray-300">${p.color || '-'}</td>
+                    <td class="px-6 py-4 font-semibold text-gray-300">${esc(p.color || '-')}</td>
                     <td class="px-6 py-4">
                         ${p.isTaxExempt ? `<span class="text-xs font-bold px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg border border-emerald-500/30">معفي / Zero Fees</span>` : `<span class="text-xs text-gray-500">غير معفي</span>`}
                     </td>
+                    <td class="px-6 py-4 font-semibold ${p.stock <= 0 ? 'text-red-400' : 'text-gray-300'}">${p.stock <= 0 ? 'Sold Out' : p.stock}</td>
                     <td class="px-6 py-4 font-bold text-white">${p.price.toLocaleString()} EGP</td>
                     <td class="px-6 py-4">
                         ${p.hasDiscount ? `<span class="text-xs font-bold px-2 py-1 bg-red-500/20 text-red-400 rounded-lg border border-red-500/30">${p.discountPrice.toLocaleString()} EGP</span>` : `<span class="text-xs text-gray-500">None</span>`}
@@ -774,31 +1902,14 @@
                 </tr>
             `}).join('');
 
-            if (window.lucide) lucide.createIcons();
+            lucide.createIcons();
         }
 
-        function openContactSellerModal(id) {
-            const product = products.find(p => p.id === id);
-            if (!product) return;
-
-            document.getElementById('contactDeviceTitle').innerText = `${product.title} (${product.hasDiscount ? product.discountPrice : product.price} EGP)`;
-
-            const encodedMsg = encodeURIComponent(`Hello, I am inquiring about buying the ${product.title} listed for ${product.hasDiscount ? product.discountPrice : product.price} EGP.`);
-            
-            const waNum = product.whatsapp ? product.whatsapp.replace(/[^0-9]/g, '') : '201000000000';
-            document.getElementById('sellerWhatsappLink').href = `https://wa.me/${waNum}?text=${encodedMsg}`;
-            
-            const tgUser = product.telegram ? product.telegram.replace('@', '') : 'nexus_mobile';
-            document.getElementById('sellerTelegramLink').href = `https://t.me/${tgUser}`;
-
-            document.getElementById('contactSellerModal').classList.remove('hidden');
-        }
-
-        function closeContactModal() { document.getElementById('contactSellerModal').classList.add('hidden'); }
-
+        
         function handleMultiFileUpload(event) {
             const files = Array.from(event.target.files).slice(0, 5 - activeUploadedImages.length);
             files.forEach(file => {
+                if (file.size > 4 * 1024 * 1024) { showToast('Image too large (max 4MB): ' + file.name, 'error'); return; }
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     if (activeUploadedImages.length < 5) {
@@ -812,7 +1923,7 @@
 
         function handleMultiUrlInput(val) {
             if (!val) return;
-            const urls = val.split(',').map(u => u.trim()).filter(u => u);
+            const urls = val.split(',').map(u => u.trim()).filter(u => /^https:\/\//i.test(u));
             urls.forEach(url => {
                 if (activeUploadedImages.length < 5) {
                     activeUploadedImages.push(url);
@@ -830,13 +1941,13 @@
             const container = document.getElementById('multiImagePreviewContainer');
             container.innerHTML = activeUploadedImages.map((src, idx) => `
                 <div class="relative w-16 h-16 rounded-lg bg-gray-900 border border-gray-700 overflow-hidden">
-                    <img src="${src}" class="w-full h-full object-contain">
+                    <img src="${esc(src)}" class="w-full h-full object-contain">
                     <button type="button" onclick="removeImage(${idx})" class="absolute top-0 right-0 bg-red-600 text-white rounded-bl p-0.5 text-xs">
                         <i data-lucide="x" class="w-3 h-3"></i>
                     </button>
                 </div>
             `).join('');
-            if (window.lucide) lucide.createIcons();
+            lucide.createIcons();
         }
 
         function toggleDiscountInputs(enabled) {
@@ -878,36 +1989,17 @@
             const storageMatch = text.match(/(128|256|512|1TB|١٢٨|٢٥٦|٥١٢)\s*(جيجا|جيجابايت|GB|تيرابايت)/i);
             if (storageMatch) document.getElementById('formStorage').value = storageMatch[0].trim();
 
-            const waMatch = text.match(/(20\d{10}|01\d{9}|\d{11})/);
-            if (waMatch) document.getElementById('formWhatsapp').value = waMatch[0];
-
-            const tgMatch = text.match(/@([a-zA-Z0-9_]+)/);
-            if (tgMatch) document.getElementById('formTelegram').value = tgMatch[1];
-
             showToast('تم استخراج البيانات وتعبئة الحقول بنجاح!', 'success');
-        }
-
-        function handleAdminDashboardClick() {
-            if (currentView === 'admin') {
-                BackendServer.logout();
-                currentView = 'customer';
-                document.getElementById('adminView').classList.add('hidden');
-                document.getElementById('customerView').classList.remove('hidden');
-                document.getElementById('adminBtnText').innerText = 'Admin Dashboard';
-                showToast('Logged out');
-                renderProducts();
-            } else {
-                if (BackendServer.isAuthenticated()) showAdminView();
-                else openAdminLoginModal();
-            }
         }
 
         function showAdminView() {
             currentView = 'admin';
             document.getElementById('customerView').classList.add('hidden');
             document.getElementById('adminView').classList.remove('hidden');
-            document.getElementById('adminBtnText').innerText = 'Logout Admin';
+            fillSettingsForm(); loadAdminOrders();
             renderAdminTable();
+            renderAdminAccessories();
+            renderMenu(); window.scrollTo(0, 0);
         }
 
         function openAdminLoginModal() {
@@ -935,7 +2027,6 @@
 
         function openCredentialsModal() {
             document.getElementById('currPassword').value = '';
-            document.getElementById('newUsername').value = '';
             document.getElementById('newPassword').value = '';
             document.getElementById('credentialsModal').classList.remove('hidden');
         }
@@ -944,17 +2035,12 @@
 
         async function handleUpdateCredentials(e) {
             e.preventDefault();
-            const currPass = document.getElementById('currPassword').value;
-            const newUser = document.getElementById('newUsername').value;
-            const newPass = document.getElementById('newPassword').value;
-
-            const res = await BackendServer.updateCredentials(currPass, newUser, newPass);
-            if (res.success) {
-                closeCredentialsModal();
-                showToast('Credentials updated!', 'success');
-            } else {
-                showToast(res.message, 'error');
-            }
+            const btn = document.getElementById('updateCredsBtn');
+            btn.disabled = true;
+            const res = await BackendServer.updateCredentials(document.getElementById('currPassword').value, document.getElementById('newPassword').value);
+            btn.disabled = false;
+            if (res.success) { closeCredentialsModal(); showToast('Password updated in the cloud!', 'success'); }
+            else showToast(res.message, 'error');
         }
 
         function handleSearch(val) { searchQuery = val; renderProducts(); }
@@ -980,7 +2066,7 @@
 
             const thumbsContainer = document.getElementById('detailThumbnails');
             thumbsContainer.innerHTML = imgs.map((src, i) => `
-                <img src="${src}" onclick="document.getElementById('detailImage').src='${src}'" class="w-12 h-12 object-contain rounded-lg bg-gray-800 border border-gray-700 cursor-pointer hover:border-brand-500">
+                <img src="${esc(src)}" onclick="document.getElementById('detailImage').src=this.src" class="w-12 h-12 object-contain rounded-lg bg-gray-800 border border-gray-700 cursor-pointer hover:border-brand-500">
             `).join('');
 
             const taxBadge = document.getElementById('detailTaxBadge');
@@ -1003,8 +2089,13 @@
             document.getElementById('specColor').innerText = product.color || '-';
             document.getElementById('specStorage').innerText = product.storage || '-';
 
-            const contactBtn = document.getElementById('detailContactBtn');
-            contactBtn.onclick = () => { closeDetailModal(); openContactSellerModal(product.id); };
+            document.getElementById('specStock').innerHTML = stockLabel(product);
+            const soldOut = product.stock <= 0;
+            const buyBtn = document.getElementById('detailBuyBtn'), cartBtn = document.getElementById('detailCartBtn');
+            buyBtn.disabled = soldOut; cartBtn.disabled = soldOut;
+            buyBtn.querySelector('span').textContent = soldOut ? 'Sold Out' : 'Buy Now';
+            buyBtn.onclick = () => buyNow(product.id);
+            cartBtn.onclick = () => addToCart(product.id);
 
             document.getElementById('productDetailModal').classList.remove('hidden');
         }
@@ -1035,11 +2126,10 @@
                     toggleDiscountInputs(!!product.hasDiscount);
                     document.getElementById('formDiscountPrice').value = product.discountPrice || '';
                     
-                    activeUploadedImages = product.images && product.images.length > 0 ? [...product.images] : (product.image ? [product.image] : []);
+                    activeUploadedImages = product.images && product.images.length > 0 ? [...product.images] : [product.image];
                     renderImagePreviews();
 
-                    document.getElementById('formWhatsapp').value = product.whatsapp || '';
-                    document.getElementById('formTelegram').value = product.telegram || '';
+                    document.getElementById('formStock').value = Number.isFinite(product.stock) ? product.stock : 0;
                     document.getElementById('formStorage').value = product.storage || '';
                     document.getElementById('formDescription').value = product.description || '';
                 }
@@ -1055,88 +2145,45 @@
 
         async function handleFormSubmit(e) {
             e.preventDefault();
-            if (!BackendServer.isAuthenticated()) return;
-
+            if (!BackendServer.isAuthenticated() || !sb) return;
+            const btn = e.target.querySelector('button[type="submit"]');
             const editId = document.getElementById('editProductId').value;
             const hasDiscount = document.getElementById('formHasDiscount').checked;
-            
-            const finalImages = activeUploadedImages.length > 0 ? activeUploadedImages : ['https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80'];
-
-            const productData = {
-                id: editId || Date.now().toString(),
-                title: document.getElementById('formTitle').value,
-                price: parseFloat(document.getElementById('formPrice').value),
-                color: document.getElementById('formColor').value,
-                isTaxExempt: document.getElementById('formIsTaxExempt').checked,
-                hasDiscount: hasDiscount,
-                discountPrice: hasDiscount ? parseFloat(document.getElementById('formDiscountPrice').value || 0) : 0,
-                images: finalImages,
-                whatsapp: document.getElementById('formWhatsapp').value,
-                telegram: document.getElementById('formTelegram').value,
-                storage: document.getElementById('formStorage').value,
-                description: document.getElementById('formDescription').value
-            };
-
-            if (editId) {
-                const index = products.findIndex(p => p.id === editId);
-                if (index !== -1) {
-                    products[index] = productData;
-                }
-            } else {
-                products.unshift(productData);
-            }
-
-            saveProductsLocally();
-
-            if (supabase) {
-                try {
-                    const cloudPayload = {
-                        id: productData.id,
-                        title: productData.title,
-                        price: productData.price,
-                        color: productData.color,
-                        is_tax_exempt: productData.isTaxExempt,
-                        has_discount: productData.hasDiscount,
-                        discount_price: productData.discountPrice,
-                        images: productData.images,
-                        whatsapp: productData.whatsapp,
-                        telegram: productData.telegram,
-                        storage: productData.storage,
-                        description: productData.description
-                    };
-
-                    await supabase.from('products').upsert(cloudPayload);
-                    showToast(editId ? 'Device updated globally!' : 'Device added globally!');
-                } catch (err) {
-                    showToast('Saved locally.', 'info');
-                }
-            } else {
-                showToast(editId ? 'Device updated!' : 'Device added!');
-            }
-
-            closeProductModal();
-            renderAdminTable();
-            renderProducts();
+            const price = parseFloat(document.getElementById('formPrice').value);
+            const discountPrice = hasDiscount ? parseFloat(document.getElementById('formDiscountPrice').value || 0) : 0;
+            if (hasDiscount && !(discountPrice > 0 && discountPrice < price)) { showToast('Discount price must be lower than the standard price', 'error'); return; }
+            btn.disabled = true; btn.textContent = 'Saving...';
+            try {
+                const sources = activeUploadedImages.length ? activeUploadedImages : [FALLBACK_IMG];
+                const images = [];
+                for (const s of sources) images.push(await Cloud.uploadImage(s));
+                const row = productToRow({
+                    title: document.getElementById('formTitle').value.trim(), price, color: document.getElementById('formColor').value.trim(),
+                    isTaxExempt: document.getElementById('formIsTaxExempt').checked, hasDiscount, discountPrice, images,
+                    stock: Math.max(0, parseInt(document.getElementById('formStock').value, 10) || 0),
+                    storage: document.getElementById('formStorage').value.trim(), description: document.getElementById('formDescription').value.trim()
+                });
+                const { error } = editId ? await sb.from('products').update(row).eq('id', editId) : await sb.from('products').insert(row);
+                if (error) throw error;
+                await Cloud.load();
+                closeProductModal(); renderAdminTable(); renderProducts();
+                showToast(editId ? 'Device updated in cloud!' : 'Device added to cloud!', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('Save failed: ' + (err.message || 'check Supabase setup'), 'error');
+            } finally { btn.disabled = false; btn.textContent = 'Save Device'; }
         }
 
         function editProduct(id) { openProductModal(id); }
 
         async function deleteProduct(id) {
-            if (!BackendServer.isAuthenticated()) return;
-            if (confirm('Remove device listing?')) {
-                products = products.filter(p => p.id !== id);
-                saveProductsLocally();
-                
-                if (supabase) {
-                    try {
-                        await supabase.from('products').delete().eq('id', id);
-                    } catch (e) {}
-                }
-
-                renderAdminTable();
-                renderProducts();
-                showToast('Listing removed', 'error');
-            }
+            if (!BackendServer.isAuthenticated() || !sb) return;
+            if (!confirm('Remove device listing?')) return;
+            const { error } = await sb.from('products').delete().eq('id', id);
+            if (error) { showToast('Delete failed: ' + error.message, 'error'); return; }
+            products = products.filter(p => p.id !== id);
+            renderAdminTable(); renderProducts();
+            showToast('Listing removed', 'error');
         }
 
         function showToast(message, type = 'info') {
@@ -1144,9 +2191,10 @@
             const toast = document.createElement('div');
             const bgColor = type === 'error' ? 'bg-red-600' : type === 'success' ? 'bg-emerald-600' : 'bg-brand-600';
             toast.className = `pointer-events-auto ${bgColor} text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 animate-fade-in transition-all duration-300`;
-            toast.innerHTML = `<i data-lucide="info" class="w-4 h-4"></i><span>${message}</span>`;
+            toast.innerHTML = `<i data-lucide="info" class="w-4 h-4"></i><span></span>`;
+            toast.querySelector('span').textContent = message;
             container.appendChild(toast);
-            if (window.lucide) lucide.createIcons();
+            lucide.createIcons();
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-2');
                 setTimeout(() => toast.remove(), 300);
